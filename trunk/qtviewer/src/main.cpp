@@ -1,17 +1,11 @@
 #include <QtGui>
 #include <QApplication>
 #include <QGridLayout>
-#include "std_msgs/String.h"
 #include "mappa.h"
 #include "rosnode.h"
 
 static RosNode *rn;
 static Mappa *mappa;
-
-typedef struct thread_arguments {
-    int arg_c;
-    char **arg_v;
-} thread_arguments;
 
 class Finestra: public QWidget {
 	public:
@@ -25,8 +19,6 @@ Finestra::Finestra(QWidget *parent, Qt::WFlags f) : QWidget(parent, f) {
 	connect(quit, SIGNAL(clicked()), qApp, SLOT(quit()));
 	connect(rn, SIGNAL(setPixel(int, int)), mappa, SLOT(drawPixel(int, int)));
 	connect(rn, SIGNAL(unsetPixel(int, int)), mappa, SLOT(undrawPixel(int, int)));
-
-	//mappa->setPixel(13, 2);
     
 	QGridLayout *grid = new QGridLayout(this);
 
@@ -42,7 +34,6 @@ int main(int argc, char **argv) {
     Finestra f;
     f.setGeometry(100, 100, MAP_WIDTH + 150, MAP_HEIGHT + 100);
     f.show();
-    //mappa->setPixel(12, 2);
  
     int result = app.exec();
 	return result;

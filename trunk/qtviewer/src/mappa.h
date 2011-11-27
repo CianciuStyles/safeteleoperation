@@ -10,7 +10,7 @@
 class Mappa : public QWidget {
 	Q_OBJECT
 	public:
-		Mappa(QWidget *parent = 0, Qt::WFlags f = 0);//, int h = 0, int w = 0);
+		Mappa(QWidget *parent = 0, Qt::WFlags f = 0);
 		bool pixels[MAP_WIDTH][MAP_HEIGHT];
 	protected:
 		void paintEvent(QPaintEvent *event);
