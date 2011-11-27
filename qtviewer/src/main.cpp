@@ -5,8 +5,8 @@
 #include "mappa.h"
 #include "rosnode.h"
 
-RosNode *rn;
-Mappa *mappa;
+static RosNode *rn;
+static Mappa *mappa;
 
 typedef struct thread_arguments {
     int arg_c;

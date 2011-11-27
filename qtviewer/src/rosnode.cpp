@@ -41,11 +41,11 @@ void RosNode::positionCallback(const occupancy_map::OccupancyMap::ConstPtr &msg)
 			else
 				emit unsetPixel(i, j);
 		}*/
-	/*for (int i = 0; i < MAP_WIDTH/PIXEL_SIZE; i++)
-		for (int j = 0; j < MAP_HEIGHT/PIXEL_SIZE; j++) {
-			if (msg->data[i][j])
+	for (int i = 0; i < msg->size_x; i++)
+		for (int j = 0; j < msg->size_y; j++) {
+			if (msg->map[i*msg->size_x+j])
 				emit setPixel(i, j);
 			else
 				emit unsetPixel(i, j);
-		}*/
+		}
 }

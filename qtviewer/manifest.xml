@@ -16,6 +16,7 @@
     dependencies) by commenting the roscpp dependency.  
   -->
   <depend package="roscpp"/>
+  <depend package="occupancy_map"/>
   
   <rosdep name="qt4"/>
   
