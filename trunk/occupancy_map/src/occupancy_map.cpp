@@ -59,7 +59,6 @@ void print_map()
 
 void laserCallback(const sensor_msgs::LaserScan& msg)
 {
-	
 	/* Clear map */
 	init_map();
 	
