@@ -2,7 +2,7 @@
 #define _ROSNODE_
 
 #include <ros/ros.h>
-#include <std_msgs/Int32.h>
+#include <occupancy_map/OccupancyMap.h>
 #include <QThread>
 #include <QObject>
 
@@ -13,7 +13,7 @@ class RosNode : public QThread {
 		~RosNode();
 		void init();
 		void run();
-		void positionCallback(const std_msgs::Int32::ConstPtr &msg);
+		void positionCallback(const occupancy_map::OccupancyMap::ConstPtr &msg);
 	private:
 		int init_argc;
 		char **init_argv;
