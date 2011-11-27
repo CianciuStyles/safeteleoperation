@@ -1,3 +1,5 @@
+/* Module that handles ros functions, extends QThread */
+
 #include <ros/ros.h>
 #include <string>
 #include <std_msgs/Int32.h>
@@ -33,11 +35,10 @@ void RosNode::positionCallback(const std_msgs::Int32::ConstPtr &msg) {
 	int tmp[MAP_WIDTH/PIXEL_SIZE][MAP_HEIGHT/PIXEL_SIZE];
 	for (int i = 0; i < MAP_WIDTH/PIXEL_SIZE; i++)
 		for (int j = 0; j < MAP_HEIGHT/PIXEL_SIZE; j++) {
-			tmp[i][j] = rand()%2;
+			tmp[i][j] = rand()%2; //for now we generate a matrix with random 0s and 1s for test purposes
 			if (tmp[i][j] == 1)
 				emit setPixel(i, j);
 			else
 				emit unsetPixel(i, j);
 		}
-	//ROS_INFO("CIAO!\n");
 }

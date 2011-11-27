@@ -20,7 +20,6 @@ class Finestra: public QWidget {
 
 Finestra::Finestra(QWidget *parent, Qt::WFlags f) : QWidget(parent, f) {
 	QPushButton *quit = new QPushButton("Quit", this);
-	//QPushButton *print = new QPushButton("Print", this);
 	mappa = new Mappa(this, 0);
 
 	connect(quit, SIGNAL(clicked()), qApp, SLOT(quit()));
@@ -37,15 +36,6 @@ Finestra::Finestra(QWidget *parent, Qt::WFlags f) : QWidget(parent, f) {
 }
 
 int main(int argc, char **argv) {
-	/*int i;
-	void *status;
-	pthread_t tid;
-	thread_arguments *targs;
-    
-    targs = (thread_arguments*)malloc(sizeof(thread_arguments));
-    targs->arg_c = argc;
-    targs->arg_v = argv;
-    i = pthread_create(&tid, NULL, rosFunction, (void*)targs);*/
 	rn = new RosNode(argc, argv);
 	rn->init();
     QApplication app(argc, argv);
@@ -55,7 +45,5 @@ int main(int argc, char **argv) {
     //mappa->setPixel(12, 2);
  
     int result = app.exec();
-	//pthread_cancel(tid);
-	//pthread_join(tid, &status);
 	return result;
 }
