@@ -30,3 +30,4 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 #target_link_libraries(example ${PROJECT_NAME})
 
 rosbuild_add_executable(occupancy_map_generator src/occupancy_map.cpp)
+target_link_libraries(occupancy_map_generator m)
