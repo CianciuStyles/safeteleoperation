@@ -5,7 +5,7 @@
 Mappa::Mappa(QWidget *parent, Qt::WFlags f) : QWidget(parent, f) {
 	for (int k = 0; k < MAP_HEIGHT; k++)
 		for (int w = 0; w < MAP_WIDTH; w++)
-			pixels[k] = {0};
+			pixels[k] = {false};
 	setPalette(QPalette(QColor(255, 255, 255)));
 	
 }
@@ -32,24 +32,24 @@ void Mappa::paintEvent(QPaintEvent *event) {
 	p.setBrush(Qt::black);
 	for (int k = 0; k < MAP_HEIGHT; k++)
 		for (int w = 0; w < MAP_WIDTH; w++)
-			if (pixels[k][w] == 1) {
+			if (pixels[k][w]) {
 				QRect rect = QRect(k*PIXEL_SIZE, w*PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
 				p.drawRect(rect);
 			}	
 }
 
 void Mappa::drawPixel(int x, int y) {
-	if (pixels[x][y] == 1)
+	if (pixels[x][y])
 		return;
-	pixels[x][y] = 1;
+	pixels[x][y] = true;
 	QRect rect = QRect(x*PIXEL_SIZE, y*PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
 	repaint(rect);
 }
 
 void Mappa::undrawPixel(int x, int y) {
-	if (pixels[x][y] == 0)
+	if (!pixels[x][y])
 		return;
-	pixels[x][y] = 0;
+	pixels[x][y] = false;
 	QRect rect = QRect(x*PIXEL_SIZE, y*PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
 	repaint(rect);
 }

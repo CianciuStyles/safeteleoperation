@@ -2,7 +2,7 @@
 
 #include <ros/ros.h>
 #include <string>
-#include <std_msgs/Int32.h>
+#include <occupancy_map/OccupancyMap.h>
 #include <cstdlib> 
 
 #include "mappa.h"
@@ -31,8 +31,8 @@ void RosNode::run() {
 	ros::spin();
 }
 
-void RosNode::positionCallback(const std_msgs::Int32::ConstPtr &msg) {
-	int tmp[MAP_WIDTH/PIXEL_SIZE][MAP_HEIGHT/PIXEL_SIZE];
+void RosNode::positionCallback(const occupancy_map::OccupancyMap::ConstPtr &msg) {
+	/*int tmp[MAP_WIDTH/PIXEL_SIZE][MAP_HEIGHT/PIXEL_SIZE];
 	for (int i = 0; i < MAP_WIDTH/PIXEL_SIZE; i++)
 		for (int j = 0; j < MAP_HEIGHT/PIXEL_SIZE; j++) {
 			tmp[i][j] = rand()%2; //for now we generate a matrix with random 0s and 1s for test purposes
@@ -40,5 +40,12 @@ void RosNode::positionCallback(const std_msgs::Int32::ConstPtr &msg) {
 				emit setPixel(i, j);
 			else
 				emit unsetPixel(i, j);
-		}
+		}*/
+	/*for (int i = 0; i < MAP_WIDTH/PIXEL_SIZE; i++)
+		for (int j = 0; j < MAP_HEIGHT/PIXEL_SIZE; j++) {
+			if (msg->data[i][j])
+				emit setPixel(i, j);
+			else
+				emit unsetPixel(i, j);
+		}*/
 }
