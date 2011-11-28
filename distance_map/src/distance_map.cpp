@@ -1,4 +1,9 @@
 #include <stdio.h>
+#include <ros/ros.h>
+#include <occupancy_map/OccupancyMap.h>
+#include <distance_map/DistanceMap.h>
+
+static ros::Publisher distance;
 
 double getMin(double a,double b,double c){
 	
@@ -12,28 +17,20 @@ double getMin(double a,double b,double c){
 	
 }
 
-
-void show(double dm[][4]){
-	
-	int dim = sizeof(dm[0])/sizeof(dm[0][0]);
-	int i;
-	int j;
-	
-	for(i=0;i<dim;i++){
-		printf("\n");
-		for(j=0;j<dim;j++){		
-			printf(" %f ",dm[i][j]);
+void obstacleCallback(const occupancy_map::OccupancyMap& msg)
+{
+	int mat[msg.size_x][msg.size_y];
+	double dm[msg.size_x][msg.size_y];
+	for (int i = 0; i < msg.size_y; i++) {
+		for (int j = 0; j < msg.size_x; j++) {
+			if (msg.map[i*msg.size_x+j])
+				mat[i][j] = 0;
+			else
+				mat[i][j] = 1;
 		}
-		printf("\n");
 	}
-	printf("\n");
-	return;
-
-}
-
-void getDistanceMap(int mat[][4], double dm[][4]){
-
-	int dim = sizeof(mat[0])/sizeof(mat[0][0]);
+	
+	int dim = msg.size_x;
 	int i,x,y;
 	double MAX = 1000;
 	
@@ -188,23 +185,54 @@ void getDistanceMap(int mat[][4], double dm[][4]){
 				
 				
 		}
-	}	
+	}
+	
+	distance_map::DistanceMap msg_o;
+	msg_o.size_x = msg.size_x;
+	msg_o.size_y = msg.size_y;
+	std::vector<double> matrix(msg.size_x*msg.size_y);
+	for (int j = 0; j < msg.size_y; j++)
+		for (int i = 0; i < msg.size_x; i++)
+			matrix[j*msg.size_x+i] = dm[i][j];
+	msg_o.map = matrix;
+	distance.publish(msg_o);
+	
+	/*
+	for(int i=0;i<dim;i++){
+		printf("\n");
+		for(int j=0;j<dim;j++){		
+			printf(" %2.1f ",dm[i][j]);
+		}
+		printf("\n");
+	}
+	printf("\n");
+	*/
+	
+	ros::Rate loop_rate(2);
+	loop_rate.sleep();
 
 }
 
 
 
+
 int main(int argc, char **argv)
 {
+	/*
 	int mat[4][4] = {{0,1,1,1},
 					{1,1,1,0},
 					{1,1,1,1},
 					{1,0,0,1}};
-	
-		
 	double dm[4][4];
 	getDistanceMap(mat,dm);
 	show(dm);
+	*/
+	ros::init(argc, argv, "distance_map_generator");
+	ros::NodeHandle n;
+	ros::Subscriber obstacle = n.subscribe("obstacle_map", 1, obstacleCallback);
+	distance = n.advertise<distance_map::DistanceMap>("distance_map", 1);
+	
+	ros::spin();
 	
 	return 0;
 }
