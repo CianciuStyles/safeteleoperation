@@ -3,9 +3,9 @@
 
 #include <QWidget>
 
-#define MAP_WIDTH 500
-#define MAP_HEIGHT 500
-#define PIXEL_SIZE 10
+#define MAP_WIDTH 250
+#define MAP_HEIGHT 250
+#define PIXEL_SIZE 5
 
 class Mappa : public QWidget {
 	Q_OBJECT
