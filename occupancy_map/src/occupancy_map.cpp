@@ -1,5 +1,6 @@
 #include <ros/ros.h>
 #include <sensor_msgs/LaserScan.h>
+#include <occupancy_map/OccupancyMap.h>
 
 #include <stdio.h>
 #include <math.h>
@@ -13,6 +14,7 @@
 #define M_PI 3.14159265358979323846
 #endif
 
+ros::Publisher obstacle;
 static bool map[X_SIZE*Y_SIZE];
 static int version_map = 0;
 
@@ -99,10 +101,20 @@ void laserCallback(const sensor_msgs::LaserScan& msg)
 		
 	}
 	
-	print_map();
+	//print_map();
 	//exit(0);
 	
-	ros::Rate loop_rate(0.03);
+	occupancy_map::OccupancyMap msg_o;
+	msg_o.size_x = X_SIZE;
+	msg_o.size_y = Y_SIZE;
+	std::vector<uint8_t> matrix(X_SIZE*Y_SIZE);
+	for (int i = 0; i < X_SIZE*Y_SIZE; i++)
+		matrix[i] = map[i];
+	msg_o.map = matrix;
+	obstacle.publish(msg_o);
+	
+	
+	ros::Rate loop_rate(2);
 	loop_rate.sleep();
 
 }
@@ -114,6 +126,8 @@ int main(int argc, char **argv)
 	ros::NodeHandle n;
 
 	ros::Subscriber laser = n.subscribe("base_scan", 1, laserCallback);
+	obstacle = n.advertise<occupancy_map::OccupancyMap>("obstacle_map2", 1);
+	
 	init_map();
 	
 	/*
