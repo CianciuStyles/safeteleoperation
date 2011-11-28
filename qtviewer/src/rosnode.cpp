@@ -23,7 +23,7 @@ void RosNode::init() {
 	ros::init(init_argc, init_argv, "qtviewer");
 	ros::start();
     ros::NodeHandle n;
-	sub = n.subscribe("obstacle_map2", 1000, &RosNode::positionCallback, this);
+	sub = n.subscribe("obstacle_map", 1000, &RosNode::positionCallback, this);
 	start();
 }
 
@@ -41,7 +41,7 @@ void RosNode::positionCallback(const occupancy_map::OccupancyMap::ConstPtr &msg)
 			else
 				emit unsetPixel(i, j);
 		}*/
-	ROS_INFO("received");
+	//ROS_INFO("received");
 	for (int i = 0; i < msg->size_y; i++)
 		for (int j = 0; j < msg->size_x; j++) {
 			if (msg->map[i*msg->size_x+j])
