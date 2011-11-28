@@ -18,7 +18,7 @@ void Mappa::paintEvent(QPaintEvent *event) {
 	
 	/* draw the robot in the center */
 	p.setBrush(Qt::red);
-	QRect robot = QRect((rows/2)*PIXEL_SIZE, (cols/2)*PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
+	QRect robot = QRect((rows/2)*PIXEL_SIZE, (cols/2)*PIXEL_SIZE, 2*PIXEL_SIZE, 2*PIXEL_SIZE);
 	p.drawRect(robot);
 	
 	/* draw the grid */

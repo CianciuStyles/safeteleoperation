@@ -5,7 +5,10 @@
 #include "rosnode.h"
 
 static RosNode *rn;
-static Mappa *mappa;
+static Mappa *mappa1;
+static Mappa *mappa2;
+static Mappa *mappa3;
+static Mappa *mappa4;
 
 class Finestra: public QWidget {
 	public:
@@ -13,18 +16,26 @@ class Finestra: public QWidget {
 };
 
 Finestra::Finestra(QWidget *parent, Qt::WFlags f) : QWidget(parent, f) {
-	QPushButton *quit = new QPushButton("Quit", this);
-	mappa = new Mappa(this, 0);
+	//QPushButton *quit = new QPushButton("Quit", this);
+	//mappa1 = new Mappa(this, 0);
+	mappa2 = new Mappa(this, 0);
+	mappa3 = new Mappa(this, 0);
+	mappa4 = new Mappa(this, 0);
 
-	connect(quit, SIGNAL(clicked()), qApp, SLOT(quit()));
-	connect(rn, SIGNAL(setPixel(int, int)), mappa, SLOT(drawPixel(int, int)));
-	connect(rn, SIGNAL(unsetPixel(int, int)), mappa, SLOT(undrawPixel(int, int)));
+	//connect(quit, SIGNAL(clicked()), qApp, SLOT(quit()));
+	connect(rn, SIGNAL(setPixel(int, int)), mappa2, SLOT(drawPixel(int, int)));
+	connect(rn, SIGNAL(unsetPixel(int, int)), mappa2, SLOT(undrawPixel(int, int)));
     
 	QGridLayout *grid = new QGridLayout(this);
 
-    grid->addWidget(quit, 0, 0);
-    grid->addWidget(mappa, 1, 1 );
-    grid->setColumnStretch(1, 10 );
+    //grid->addWidget(quit, 0, 0);
+    //grid->addWidget(mappa1, 0, 0 );
+    grid->addWidget(mappa2, 0, 1 );
+    grid->addWidget(mappa3, 1, 0 );
+    grid->addWidget(mappa4, 1, 1 );
+    //grid->setColumnStretch(0, 10 );
+    //grid->setColumnStretch(1, 10 );
+    grid->setSpacing(10);
 }
 
 int main(int argc, char **argv) {
@@ -32,7 +43,7 @@ int main(int argc, char **argv) {
 	rn->init();
     QApplication app(argc, argv);
     Finestra f;
-    f.setGeometry(100, 100, MAP_WIDTH + 150, MAP_HEIGHT + 100);
+    f.setGeometry(100, 10, MAP_WIDTH*2 + 20, MAP_HEIGHT*2 + 20);
     f.show();
  
     int result = app.exec();
