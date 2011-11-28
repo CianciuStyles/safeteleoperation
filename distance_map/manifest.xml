@@ -1,0 +1,16 @@
+<package>
+  <description brief="distance_map">
+
+     distance_map
+
+  </description>
+  <author>marco</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/distance_map</url>
+  <depend package="roscpp"/>
+  <depend package="occupancy_map"/>
+
+</package>
+
+
