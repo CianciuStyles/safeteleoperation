@@ -33,7 +33,6 @@ void RosNode::run() {
 }
 
 void RosNode::occupancyCallback(const occupancy_map::OccupancyMap::ConstPtr &msg) {
-	return;
 	for (int i = 0; i < msg->size_y; i++)
 		for (int j = 0; j < msg->size_x; j++) {
 			if (msg->map[i*msg->size_x+j])

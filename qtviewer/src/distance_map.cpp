@@ -1,9 +1,10 @@
 #include <QPainter>
 #include <QColor>
+#include <stdio.h>
 #include "distance_map.h"
 #include "distance_map.moc"
 #include "settings.h"
-
+int qwerty = 0;
 DistanceMap::DistanceMap(QWidget *parent, Qt::WFlags f) : QWidget(parent, f) {
 	for (int k = 0; k < MAP_HEIGHT; k++)
 		for (int w = 0; w < MAP_WIDTH; w++)
@@ -29,7 +30,7 @@ void DistanceMap::paintEvent(QPaintEvent *event) {
 	p.setBrush(Qt::red);
 	QRect robot = QRect((rows/2)*PIXEL_SIZE, (cols/2)*PIXEL_SIZE, 2*PIXEL_SIZE, 2*PIXEL_SIZE);
 	p.drawRect(robot);
-	
+	printf("%d ", qwerty++);
 	/* draw pixels according to distances */
 	for (int k = 0; k < MAP_HEIGHT; k++)
 		for (int w = 0; w < MAP_WIDTH; w++) {
