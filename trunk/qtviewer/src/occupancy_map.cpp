@@ -1,7 +1,9 @@
 #include <QPainter>
+#include <stdio.h>
 #include "occupancy_map.h"
 #include "occupancy_map.moc"
 
+static int qwerty = 0;
 OccupancyMap::OccupancyMap(QWidget *parent, Qt::WFlags f) : QWidget(parent, f) {
 	for (int k = 0; k < MAP_HEIGHT; k++)
 		for (int w = 0; w < MAP_WIDTH; w++)
@@ -27,7 +29,7 @@ void OccupancyMap::paintEvent(QPaintEvent *event) {
 		p.drawLine (i, 0, i, MAP_HEIGHT);
 	for (int j = 0; j <= MAP_HEIGHT; j+=PIXEL_SIZE)
 		p.drawLine (0, j, MAP_WIDTH, j);
-	
+	printf("O %d ", qwerty++);
 	/* draw pixels with obstacles */
 	p.setBrush(Qt::black);
 	for (int k = 0; k < MAP_HEIGHT; k++)
