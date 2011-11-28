@@ -126,7 +126,7 @@ int main(int argc, char **argv)
 	ros::NodeHandle n;
 
 	ros::Subscriber laser = n.subscribe("base_scan", 1, laserCallback);
-	obstacle = n.advertise<occupancy_map::OccupancyMap>("obstacle_map2", 1);
+	obstacle = n.advertise<occupancy_map::OccupancyMap>("obstacle_map", 1);
 	
 	init_map();
 	
