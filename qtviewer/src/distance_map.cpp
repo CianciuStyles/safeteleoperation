@@ -10,7 +10,7 @@ int qwerty = 0;
 DistanceMap::DistanceMap(QWidget *parent, Qt::WFlags f) : QWidget(parent, f) {
 	for (int k = 0; k < MAP_HEIGHT; k++)
 		for (int w = 0; w < MAP_WIDTH; w++)
-			pixels[k][w] = 0;
+			pixels[k][w] = -1;
 	setPalette(QPalette(QColor(255, 255, 255)));
 }
 
@@ -54,6 +54,7 @@ void DistanceMap::paintEvent(QPaintEvent *event) {
 		for (int w = 0; w < MAP_WIDTH; w++) {
 			QRect rect = QRect(k*PIXEL_SIZE, w*PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
 			double c = pixels[k][w];
+			if (c < 0) continue;
 			
 			int g = 256;
 			for (g = 0; c > 0; g+=10)
