@@ -3,6 +3,7 @@
 
 #include <ros/ros.h>
 #include <occupancy_map/OccupancyMap.h>
+#include <distance_map/DistanceMap.h>
 #include <QThread>
 #include <QObject>
 
@@ -13,14 +14,19 @@ class RosNode : public QThread {
 		~RosNode();
 		void init();
 		void run();
-		void positionCallback(const occupancy_map::OccupancyMap::ConstPtr &msg);
+		void occupancyCallback(const occupancy_map::OccupancyMap::ConstPtr &msg);
+		void distanceCallback(const distance_map::DistanceMap::ConstPtr &msg);
 	private:
 		int init_argc;
 		char **init_argv;
-		ros::Subscriber sub;
+		ros::Subscriber occ_sub;
+		ros::Subscriber dist_sub;
 	signals:
-		void setPixel(int x, int y);
-		void unsetPixel(int x, int y);
+		void setOccupancyPixel(int x, int y);
+		void unsetOccupancyPixel(int x, int y);
+		void setDistancePixel(int x, int y, double color);
+		void setGradientPixel(int x, int y);
+		void unsetGradientPixel(int x, int y);
 };
 
 #endif

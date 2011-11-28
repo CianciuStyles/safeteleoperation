@@ -229,7 +229,7 @@ int main(int argc, char **argv)
 	*/
 	ros::init(argc, argv, "distance_map_generator");
 	ros::NodeHandle n;
-	ros::Subscriber obstacle = n.subscribe("obstacle_map", 1, obstacleCallback);
+	ros::Subscriber obstacle = n.subscribe("occupancy_map", 1, obstacleCallback);
 	distance = n.advertise<distance_map::DistanceMap>("distance_map", 1);
 	
 	ros::spin();

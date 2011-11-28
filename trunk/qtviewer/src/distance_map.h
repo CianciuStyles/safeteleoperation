@@ -8,12 +8,12 @@ class DistanceMap : public QWidget {
 	Q_OBJECT
 	public:
 		DistanceMap(QWidget *parent = 0, Qt::WFlags f = 0);
-		bool pixels[MAP_WIDTH][MAP_HEIGHT];
+		double pixels[MAP_WIDTH][MAP_HEIGHT];
 	protected:
 		void paintEvent(QPaintEvent *event);
 	public slots:
-		void drawPixel(int x, int y);
-		void undrawPixel(int x, int y);
+		void drawDistancePixel(int x, int y, double color);
+		//void undrawPixel(int x, int y);
 };
 
 #endif

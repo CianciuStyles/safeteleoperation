@@ -3,6 +3,7 @@
 #include <ros/ros.h>
 #include <string>
 #include <occupancy_map/OccupancyMap.h>
+#include <distance_map/DistanceMap.h>
 #include <cstdlib> 
 
 #include "rosnode.h"
@@ -22,7 +23,8 @@ void RosNode::init() {
 	ros::init(init_argc, init_argv, "qtviewer");
 	ros::start();
     ros::NodeHandle n;
-	sub = n.subscribe("obstacle_map", 1000, &RosNode::positionCallback, this);
+	occ_sub = n.subscribe("occupancy_map", 1, &RosNode::occupancyCallback, this);
+	dist_sub = n.subscribe("distance_map", 1, &RosNode::distanceCallback, this);
 	start();
 }
 
@@ -30,22 +32,20 @@ void RosNode::run() {
 	ros::spin();
 }
 
-void RosNode::positionCallback(const occupancy_map::OccupancyMap::ConstPtr &msg) {
-	/*int tmp[MAP_WIDTH/PIXEL_SIZE][MAP_HEIGHT/PIXEL_SIZE];
-	for (int i = 0; i < MAP_WIDTH/PIXEL_SIZE; i++)
-		for (int j = 0; j < MAP_HEIGHT/PIXEL_SIZE; j++) {
-			tmp[i][j] = rand()%2; //for now we generate a matrix with random 0s and 1s for test purposes
-			if (tmp[i][j] == 1)
-				emit setPixel(i, j);
-			else
-				emit unsetPixel(i, j);
-		}*/
-	//ROS_INFO("received");
+void RosNode::occupancyCallback(const occupancy_map::OccupancyMap::ConstPtr &msg) {
+	return;
 	for (int i = 0; i < msg->size_y; i++)
 		for (int j = 0; j < msg->size_x; j++) {
 			if (msg->map[i*msg->size_x+j])
-				emit setPixel(j, msg->size_y -1 - i);
+				emit setOccupancyPixel(j, msg->size_y -1 - i);
 			else
-				emit unsetPixel(j, msg->size_y -1 -i);
+				emit unsetOccupancyPixel(j, msg->size_y -1 -i);
+		}
+}
+
+void RosNode::distanceCallback(const distance_map::DistanceMap::ConstPtr &msg) {
+	for (int i = 0; i < msg->size_y; i++)
+		for (int j = 0; j < msg->size_x; j++) {
+			emit setDistancePixel(j, msg->size_y -1 - i, msg->map[i*msg->size_x+j]);
 		}
 }
