@@ -8,7 +8,7 @@ int qwerty = 0;
 DistanceMap::DistanceMap(QWidget *parent, Qt::WFlags f) : QWidget(parent, f) {
 	for (int k = 0; k < MAP_HEIGHT; k++)
 		for (int w = 0; w < MAP_WIDTH; w++)
-			pixels[k] = {0};
+			pixels[k][w] = 0;
 	setPalette(QPalette(QColor(255, 255, 255)));
 	
 }

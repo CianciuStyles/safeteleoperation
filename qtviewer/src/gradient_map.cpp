@@ -6,7 +6,7 @@
 GradientMap::GradientMap(QWidget *parent, Qt::WFlags f) : QWidget(parent, f) {
 	for (int k = 0; k < MAP_HEIGHT; k++)
 		for (int w = 0; w < MAP_WIDTH; w++)
-			pixels[k] = {false};
+			pixels[k][w] = false;
 	setPalette(QPalette(QColor(255, 255, 255)));
 	
 }
