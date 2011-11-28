@@ -1,8 +1,9 @@
 #include <QPainter>
-#include "mappa.h"
-#include "mappa.moc"
+#include "distance_map.h"
+#include "distance_map.moc"
+#include "settings.h"
 
-Mappa::Mappa(QWidget *parent, Qt::WFlags f) : QWidget(parent, f) {
+DistanceMap::DistanceMap(QWidget *parent, Qt::WFlags f) : QWidget(parent, f) {
 	for (int k = 0; k < MAP_HEIGHT; k++)
 		for (int w = 0; w < MAP_WIDTH; w++)
 			pixels[k] = {false};
@@ -10,7 +11,7 @@ Mappa::Mappa(QWidget *parent, Qt::WFlags f) : QWidget(parent, f) {
 	
 }
 
-void Mappa::paintEvent(QPaintEvent *event) {
+void DistanceMap::paintEvent(QPaintEvent *event) {
 	QPainter p(this);
 	
 	int rows = MAP_WIDTH/PIXEL_SIZE;
@@ -38,7 +39,7 @@ void Mappa::paintEvent(QPaintEvent *event) {
 			}	
 }
 
-void Mappa::drawPixel(int x, int y) {
+void DistanceMap::drawPixel(int x, int y) {
 	if (pixels[x][y])
 		return;
 	pixels[x][y] = true;
@@ -46,7 +47,7 @@ void Mappa::drawPixel(int x, int y) {
 	repaint(rect);
 }
 
-void Mappa::undrawPixel(int x, int y) {
+void DistanceMap::undrawPixel(int x, int y) {
 	if (!pixels[x][y])
 		return;
 	pixels[x][y] = false;

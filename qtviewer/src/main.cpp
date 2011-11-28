@@ -1,14 +1,16 @@
 #include <QtGui>
 #include <QApplication>
 #include <QGridLayout>
-#include "mappa.h"
+#include "occupancy_map.h"
+#include "distance_map.h"
+#include "gradient_map.h"
 #include "rosnode.h"
 
 static RosNode *rn;
-static Mappa *mappa1;
-static Mappa *mappa2;
-static Mappa *mappa3;
-static Mappa *mappa4;
+//static Mappa *mappa1;
+static OccupancyMap *mappa2;
+static DistanceMap *mappa3;
+static GradientMap *mappa4;
 
 class Finestra: public QWidget {
 	public:
@@ -18,9 +20,9 @@ class Finestra: public QWidget {
 Finestra::Finestra(QWidget *parent, Qt::WFlags f) : QWidget(parent, f) {
 	//QPushButton *quit = new QPushButton("Quit", this);
 	//mappa1 = new Mappa(this, 0);
-	mappa2 = new Mappa(this, 0);
-	mappa3 = new Mappa(this, 0);
-	mappa4 = new Mappa(this, 0);
+	mappa2 = new OccupancyMap(this, 0);
+	mappa3 = new DistanceMap(this, 0);
+	mappa4 = new GradientMap(this, 0);
 
 	//connect(quit, SIGNAL(clicked()), qApp, SLOT(quit()));
 	connect(rn, SIGNAL(setPixel(int, int)), mappa2, SLOT(drawPixel(int, int)));

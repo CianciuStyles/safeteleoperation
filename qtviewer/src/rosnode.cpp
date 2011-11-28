@@ -5,7 +5,6 @@
 #include <occupancy_map/OccupancyMap.h>
 #include <cstdlib> 
 
-#include "mappa.h"
 #include "rosnode.h"
 #include "rosnode.moc"
 
