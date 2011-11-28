@@ -113,7 +113,7 @@ void laserCallback(const sensor_msgs::LaserScan& msg)
 	msg_o.map = matrix;
 	obstacle.publish(msg_o);
 	
-	ros::Rate loop_rate(2);
+	ros::Rate loop_rate(20);
 	loop_rate.sleep();
 
 }
