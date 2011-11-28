@@ -12,6 +12,7 @@ class OccupancyMap : public QWidget {
 	protected:
 		void paintEvent(QPaintEvent *event);
 	public slots:
+		void setPixel(int x, int y, bool obstacle);
 		void drawPixel(int x, int y);
 		void undrawPixel(int x, int y);
 		

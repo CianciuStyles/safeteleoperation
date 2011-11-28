@@ -6,6 +6,9 @@
 #include <distance_map/DistanceMap.h>
 #include <QThread>
 #include <QObject>
+#include "occupancy_map.h"
+#include "distance_map.h"
+#include "gradient_map.h"
 
 class RosNode : public QThread {
 	Q_OBJECT
@@ -13,6 +16,8 @@ class RosNode : public QThread {
 		RosNode(int argc, char **argv);
 		~RosNode();
 		void init();
+		void setOccMap(OccupancyMap * map);
+		void setDistMap(DistanceMap * map);
 		void run();
 		void occupancyCallback(const occupancy_map::OccupancyMap::ConstPtr &msg);
 		void distanceCallback(const distance_map::DistanceMap::ConstPtr &msg);
@@ -21,6 +26,8 @@ class RosNode : public QThread {
 		char **init_argv;
 		ros::Subscriber occ_sub;
 		ros::Subscriber dist_sub;
+		OccupancyMap * occ_map;
+		DistanceMap * dist_map;
 	signals:
 		void setOccupancyPixel(int x, int y);
 		void unsetOccupancyPixel(int x, int y);

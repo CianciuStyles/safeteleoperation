@@ -49,6 +49,8 @@ int main(int argc, char **argv) {
 	rn->init();
     QApplication app(argc, argv);
     Finestra f;
+    rn->setOccMap(mappa2);
+    rn->setDistMap(mappa3);
     f.setGeometry(100, 10, MAP_WIDTH*2 + 20, MAP_HEIGHT*2 + 20);
     f.show();
  
