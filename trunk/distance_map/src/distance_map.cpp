@@ -193,7 +193,7 @@ void obstacleCallback(const occupancy_map::OccupancyMap& msg)
 	std::vector<double> matrix(msg.size_x*msg.size_y);
 	for (int j = 0; j < msg.size_y; j++)
 		for (int i = 0; i < msg.size_x; i++)
-			matrix[j*msg.size_x+i] = dm[i][j];
+			matrix[j*msg.size_x+i] = dm[j][i];
 	msg_o.map = matrix;
 	distance.publish(msg_o);
 	
@@ -208,7 +208,7 @@ void obstacleCallback(const occupancy_map::OccupancyMap& msg)
 	printf("\n");
 	*/
 	
-	ros::Rate loop_rate(2);
+	ros::Rate loop_rate(10);
 	loop_rate.sleep();
 
 }

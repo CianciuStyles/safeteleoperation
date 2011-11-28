@@ -13,7 +13,10 @@ class DistanceMap : public QWidget {
 		void paintEvent(QPaintEvent *event);
 	public slots:
 		void drawDistancePixel(int x, int y, double color);
+		void setPixel(int x, int y, double value);
 		//void undrawPixel(int x, int y);
+	private:
+		std::vector<QPainter*> painters;
 };
 
 #endif

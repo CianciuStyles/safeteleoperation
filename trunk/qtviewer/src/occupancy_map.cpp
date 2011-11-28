@@ -19,7 +19,7 @@ void OccupancyMap::paintEvent(QPaintEvent *event) {
 	int cols = MAP_HEIGHT/PIXEL_SIZE;
 	
 	/* draw the robot in the center */
-	p.setBrush(Qt::red);
+	p.setBrush(Qt::blue);
 	QRect robot = QRect((rows/2)*PIXEL_SIZE, (cols/2)*PIXEL_SIZE, 2*PIXEL_SIZE, 2*PIXEL_SIZE);
 	p.drawRect(robot);
 	
@@ -29,7 +29,7 @@ void OccupancyMap::paintEvent(QPaintEvent *event) {
 		p.drawLine (i, 0, i, MAP_HEIGHT);
 	for (int j = 0; j <= MAP_HEIGHT; j+=PIXEL_SIZE)
 		p.drawLine (0, j, MAP_WIDTH, j);
-	printf("O %d ", qwerty++);
+	//printf("O %d ", qwerty++);
 	/* draw pixels with obstacles */
 	p.setBrush(Qt::black);
 	for (int k = 0; k < MAP_HEIGHT; k++)
@@ -54,4 +54,9 @@ void OccupancyMap::undrawPixel(int x, int y) {
 	pixels[x][y] = false;
 	QRect rect = QRect(x*PIXEL_SIZE, y*PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
 	repaint(rect);
+}
+
+void OccupancyMap::setPixel(int x, int y, bool obstacle)
+{
+	pixels[x][y] = obstacle;
 }

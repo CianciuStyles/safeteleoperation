@@ -5,6 +5,7 @@
 #include <occupancy_map/OccupancyMap.h>
 #include <distance_map/DistanceMap.h>
 #include <cstdlib> 
+#include <stdio.h>
 
 #include "rosnode.h"
 #include "rosnode.moc"
@@ -32,19 +33,38 @@ void RosNode::run() {
 	ros::spin();
 }
 
-void RosNode::occupancyCallback(const occupancy_map::OccupancyMap::ConstPtr &msg) {
-	for (int i = 0; i < msg->size_y; i++)
-		for (int j = 0; j < msg->size_x; j++) {
-			if (msg->map[i*msg->size_x+j])
-				emit setOccupancyPixel(j, msg->size_y -1 - i);
-			else
-				emit unsetOccupancyPixel(j, msg->size_y -1 -i);
-		}
+void RosNode::setOccMap(OccupancyMap * map)
+{
+	occ_map = map;
 }
 
-void RosNode::distanceCallback(const distance_map::DistanceMap::ConstPtr &msg) {
+void RosNode::setDistMap(DistanceMap * map)
+{
+	dist_map = map;
+}
+
+int o = 0;
+void RosNode::occupancyCallback(const occupancy_map::OccupancyMap::ConstPtr &msg) {
+	//printf("O=%d\n", o++);
 	for (int i = 0; i < msg->size_y; i++)
 		for (int j = 0; j < msg->size_x; j++) {
-			emit setDistancePixel(j, msg->size_y -1 - i, msg->map[i*msg->size_x+j]);
+			if (msg->map[i*msg->size_x+j]) 
+				occ_map->setPixel(j, msg->size_y -1 - i, true);
+				//emit setOccupancyPixel(j, msg->size_y -1 - i);
+			else
+				//emit unsetOccupancyPixel(j, msg->size_y -1 -i);
+				occ_map->setPixel(j, msg->size_y -1 - i, false);
 		}
+	occ_map->update();
+}
+
+int d = 0;
+void RosNode::distanceCallback(const distance_map::DistanceMap::ConstPtr &msg) {
+	//printf("D=%d\n", d++);
+	for (int i = 0; i < msg->size_y; i++)
+		for (int j = 0; j < msg->size_x; j++) {
+			dist_map->setPixel(j, msg->size_y -1 - i, msg->map[i*msg->size_x+j]);
+			//emit setDistancePixel(j, msg->size_y -1 - i, msg->map[i*msg->size_x+j]);
+		}
+	dist_map->update();
 }
