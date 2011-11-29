@@ -1,5 +1,6 @@
 #include <QtGui>
 #include <QApplication>
+#include <QProcess>
 #include <QGridLayout>
 #include "occupancy_map.h"
 #include "distance_map.h"
@@ -15,6 +16,7 @@ static GradientMap *mappa4;
 class Finestra: public QWidget {
 	public:
 		Finestra(QWidget *parent = 0, Qt::WFlags f = 0);
+		void quit();
 };
 
 Finestra::Finestra(QWidget *parent, Qt::WFlags f) : QWidget(parent, f) {
@@ -44,16 +46,25 @@ Finestra::Finestra(QWidget *parent, Qt::WFlags f) : QWidget(parent, f) {
     grid->setSpacing(10);
 }
 
+void Finestra::quit() {
+	delete rn;
+}
+
 int main(int argc, char **argv) {
 	rn = new RosNode(argc, argv);
 	rn->init();
-    QApplication app(argc, argv);
-    Finestra f;
-    rn->setOccMap(mappa2);
-    rn->setDistMap(mappa3);
-    f.setGeometry(100, 10, MAP_WIDTH*2 + 20, MAP_HEIGHT*2 + 20);
-    f.show();
- 
-    int result = app.exec();
+	QApplication app(argc, argv);
+	//QProcess  process(this);
+	Finestra f;
+	rn->setOccMap(mappa2);
+	rn->setDistMap(mappa3);
+	rn->setGradMap(mappa4);
+	f.setGeometry(100, 10, MAP_WIDTH*2 + 20, MAP_HEIGHT*2 + 20);
+	f.show();
+	//QObject::connect(&process, SIGNAL(processExited()), &app, SLOT(quit()));
+	QObject::connect(&app, SIGNAL(aboutToQuit()), &f, SLOT(quit()));
+
+	int result = app.exec();
+
 	return result;
 }

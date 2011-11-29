@@ -18,6 +18,7 @@
   <depend package="roscpp"/>
   <depend package="occupancy_map"/>
   <depend package="distance_map"/>
+  <depend package="gradient_map"/>
   
   <rosdep name="qt4"/>
   
