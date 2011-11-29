@@ -1,0 +1,17 @@
+<package>
+  <description brief="gradient_map">
+
+     gradient_map
+
+  </description>
+  <author>gianluca</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/gradient_map</url>
+
+  <depend package="roscpp"/>
+  <depend package="distance_map"/>
+
+</package>
+
+
