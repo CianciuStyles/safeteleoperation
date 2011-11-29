@@ -17,11 +17,6 @@ void GradientMap::paintEvent(QPaintEvent *event) {
 	int rows = MAP_WIDTH/PIXEL_SIZE;
 	int cols = MAP_HEIGHT/PIXEL_SIZE;
 	
-	/* draw the robot in the center */
-	p.setBrush(Qt::red);
-	QRect robot = QRect((rows/2)*PIXEL_SIZE, (cols/2)*PIXEL_SIZE, 2*PIXEL_SIZE, 2*PIXEL_SIZE);
-	p.drawRect(robot);
-	
 	/* draw the grid */
 	p.setPen(Qt::gray);
 	for (int i = 0; i <= MAP_WIDTH; i+=PIXEL_SIZE)
@@ -37,6 +32,11 @@ void GradientMap::paintEvent(QPaintEvent *event) {
 				QRect rect = QRect(k*PIXEL_SIZE, w*PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
 				p.drawRect(rect);
 			}	
+			
+	/* draw the robot in the center */
+	p.setBrush(Qt::red);
+	QRect robot = QRect((rows/2)*PIXEL_SIZE, (cols/2)*PIXEL_SIZE, 2*PIXEL_SIZE, 2*PIXEL_SIZE);
+	p.drawRect(robot);
 }
 
 void GradientMap::drawPixel(int x, int y) {

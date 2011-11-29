@@ -3,7 +3,6 @@
 #include "occupancy_map.h"
 #include "occupancy_map.moc"
 
-static int qwerty = 0;
 OccupancyMap::OccupancyMap(QWidget *parent, Qt::WFlags f) : QWidget(parent, f) {
 	for (int k = 0; k < MAP_HEIGHT; k++)
 		for (int w = 0; w < MAP_WIDTH; w++)
@@ -17,11 +16,6 @@ void OccupancyMap::paintEvent(QPaintEvent *event) {
 	
 	int rows = MAP_WIDTH/PIXEL_SIZE;
 	int cols = MAP_HEIGHT/PIXEL_SIZE;
-	
-	/* draw the robot in the center */
-	p.setBrush(Qt::blue);
-	QRect robot = QRect((rows/2)*PIXEL_SIZE, (cols/2)*PIXEL_SIZE, 2*PIXEL_SIZE, 2*PIXEL_SIZE);
-	p.drawRect(robot);
 	
 	/* draw the grid */
 	p.setPen(Qt::gray);
@@ -38,6 +32,11 @@ void OccupancyMap::paintEvent(QPaintEvent *event) {
 				QRect rect = QRect(k*PIXEL_SIZE, w*PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
 				p.drawRect(rect);
 			}	
+	
+	/* draw the robot in the center */
+	p.setBrush(Qt::blue);
+	QRect robot = QRect((rows/2)*PIXEL_SIZE, (cols/2)*PIXEL_SIZE, 2*PIXEL_SIZE, 2*PIXEL_SIZE);
+	p.drawRect(robot);
 }
 
 void OccupancyMap::drawPixel(int x, int y) {
