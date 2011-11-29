@@ -27,6 +27,6 @@ rosbuild_genmsg()
 #rosbuild_add_boost_directories()
 #rosbuild_link_boost(${PROJECT_NAME} thread)
 
-rosbuild_add_executable(distance_map_generator src/distance_map.cpp)
+rosbuild_add_executable(distance_map_generator src/distance_map_generator.cpp)
 
 #target_link_libraries(example ${PROJECT_NAME})

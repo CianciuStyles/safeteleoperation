@@ -29,5 +29,5 @@ rosbuild_genmsg()
 #rosbuild_add_executable(example examples/example.cpp)
 #target_link_libraries(example ${PROJECT_NAME})
 
-rosbuild_add_executable(occupancy_map_generator src/occupancy_map.cpp)
+rosbuild_add_executable(occupancy_map_generator src/occupancy_map_generator.cpp)
 target_link_libraries(occupancy_map_generator m)
