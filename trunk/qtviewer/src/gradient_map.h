@@ -12,11 +12,12 @@ class GradientMap : public QWidget {
 	protected:
 		void paintEvent(QPaintEvent *event);
 	public slots:
-		void drawPixel(int x, int y);
-		void undrawPixel(int x, int y);
 		void setPixel(int x, int y, double value);
+		void resetMin();
+		void resetMax();
 	private:
-		std::vector<QPainter*> painters;
+		std::vector<QPainter*> painters_red;
+		std::vector<QPainter*> painters_green;
 };
 
 #endif

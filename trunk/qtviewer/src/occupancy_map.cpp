@@ -26,8 +26,8 @@ void OccupancyMap::paintEvent(QPaintEvent *event) {
 	//printf("O %d ", qwerty++);
 	/* draw pixels with obstacles */
 	p.setBrush(Qt::black);
-	for (int k = 0; k < MAP_HEIGHT; k++)
-		for (int w = 0; w < MAP_WIDTH; w++)
+	for (int k = 0; k < rows; k++)
+		for (int w = 0; w < cols; w++)
 			if (pixels[k][w]) {
 				QRect rect = QRect(k*PIXEL_SIZE, w*PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
 				p.drawRect(rect);
