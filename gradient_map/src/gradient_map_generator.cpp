@@ -7,7 +7,7 @@ static ros::Publisher gradient;
 void distanceCallback(const distance_map::DistanceMap& msg) {
 	std::vector<double> matrix(msg.size_x * msg.size_y);
 	gradient_map::GradientMap grad;
-	grad.map = matrix;
+	
 	grad.size_x = msg.size_x;
 	grad.size_y = msg.size_y;
 	double center = msg.map[msg.size_x*(msg.size_y/2 - 1) + msg.size_x/2 - 1];
@@ -17,9 +17,9 @@ void distanceCallback(const distance_map::DistanceMap& msg) {
 	center /= 4;
 	
 	for (int i = 0; i < msg.size_y*msg.size_x; i++) {
-		grad.map[i] = msg.map[i] - center;
+		matrix[i] = msg.map[i] - center;
 	}
-	
+	grad.map = matrix;
 	gradient.publish(grad);
 	ros::Rate loop_rate(20);
 	loop_rate.sleep();
