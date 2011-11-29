@@ -208,7 +208,7 @@ void obstacleCallback(const occupancy_map::OccupancyMap& msg)
 	printf("\n");
 	*/
 	
-	ros::Rate loop_rate(10);
+	ros::Rate loop_rate(20);
 	loop_rate.sleep();
 
 }
