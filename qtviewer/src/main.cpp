@@ -31,7 +31,7 @@ Finestra::Finestra(QWidget *parent, Qt::WFlags f) : QWidget(parent, f) {
 	connect(rn, SIGNAL(unsetOccupancyPixel(int, int)), occupancyMap, SLOT(undrawPixel(int, int)));
 	connect(rn, SIGNAL(setDistancePixel(int, int, double)), distanceMap, SLOT(drawDistancePixel(int, int, double)));
 	//connect(rn, SIGNAL(unsetDistancePixel(int, int)), distanceMap, SLOT(undrawPixel(int, int)));
-	connect(rn, SIGNAL(setGradientPixel(int, int)), gradientMap, SLOT(drawPixel(int, int)));
+	//connect(rn, SIGNAL(setGradientPixel(int, int)), gradientMap, SLOT(drawPixel(int, int)));
 	//connect(rn, SIGNAL(unsetGradientPixel(int, int)), gradientMap, SLOT(undrawPixel(int, int)));
 
 	QGridLayout *grid = new QGridLayout(this);

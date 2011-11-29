@@ -10,12 +10,14 @@ void distanceCallback(const distance_map::DistanceMap& msg) {
 	
 	grad.size_x = msg.size_x;
 	grad.size_y = msg.size_y;
+	double center = msg.map[msg.size_x*25 + 25];
+	/*
 	double center = msg.map[msg.size_x*(msg.size_y/2 - 1) + msg.size_x/2 - 1];
 	center += msg.map[msg.size_x*(msg.size_y/2 - 1) + msg.size_x/2];
 	center += msg.map[msg.size_x*(msg.size_y/2) + msg.size_x/2 - 1];
 	center += msg.map[msg.size_x*(msg.size_y/2) + msg.size_x/2];
 	center /= 4;
-	
+	*/
 	for (int i = 0; i < msg.size_y*msg.size_x; i++) {
 		matrix[i] = msg.map[i] - center;
 	}
