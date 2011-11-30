@@ -20,6 +20,8 @@ GradientMap::GradientMap(QWidget *parent, Qt::WFlags f) : QWidget(parent, f) {
 
 void GradientMap::paintEvent(QPaintEvent *event) {
 	
+	return;
+	
 	int rows = MAP_WIDTH/PIXEL_SIZE;
 	int cols = MAP_HEIGHT/PIXEL_SIZE;
 	
@@ -33,6 +35,8 @@ void GradientMap::paintEvent(QPaintEvent *event) {
 	
 	int increment_red = (-min) / 255;
 	if (increment_red <= 1) increment_red = 1;
+	int increment_green = max / 255;
+	if (increment_green <= 1) increment_green = 1;
 	
 	/* Init painters */
 	if (painters_red.size() == 0) {
@@ -46,9 +50,6 @@ void GradientMap::paintEvent(QPaintEvent *event) {
 		painters_red[255/increment_red]->setPen(Qt::gray);
 	}
 	
-	int increment_green = max / 255;
-	if (increment_green <= 1) increment_green = 1;
-	
 	if (painters_green.size() == 0) {
 		for (int i = 0; i < 255/increment_green; i++) {
 			painters_green.push_back(new QPainter(this));
@@ -61,7 +62,7 @@ void GradientMap::paintEvent(QPaintEvent *event) {
 	}
 	
 	/* draw pixels with obstacles */
-	p.setBrush(Qt::black);
+	p.setBrush(Qt::green);
 	for (int k = 0; k < rows; k++) {
 		for (int w = 0; w < cols; w++) {
 			QRect rect = QRect(k*PIXEL_SIZE, w*PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
@@ -78,6 +79,16 @@ void GradientMap::paintEvent(QPaintEvent *event) {
 						break;
 					}
 				}
+				/*
+				if (g*increment_red < 0 || g*increment_red > 255)
+					printf("Invalid RGB\n");
+				QPainter pp(this);
+				pp.setBrush(QColor(255, increment_red*g, increment_red*g));
+				pp.setPen(Qt::gray);
+				pp.drawRect(rect);
+				*/
+				if (g < 0 || g > painters_red.size() - 1) 
+					printf("Invalid index\n");
 				painters_red[g]->drawRect(rect);
 			} else {
 				while(c > 0) {
@@ -88,7 +99,17 @@ void GradientMap::paintEvent(QPaintEvent *event) {
 						break;
 					}
 				}
-				if (g < 0 || g > painters_green.size() - 1) printf("Invalid index\n");
+				/*
+				if (g*increment_green < 0 || g*increment_green > 255)
+					printf("Invalid RGB\n");
+				QPainter pp(this);
+				pp.setBrush(QColor(255 - g*increment_green, 255, 255 - g*increment_green));
+				pp.setPen(Qt::gray);
+				pp.drawRect(rect);
+				p.drawRect(rect);
+				*/
+				if (255/increment_green - g < 0 || 255/increment_green - g > painters_green.size() - 1) 
+					printf("Invalid index\n");
 				painters_green[255/increment_green - g]->drawRect(rect);
 			}
 
@@ -97,7 +118,7 @@ void GradientMap::paintEvent(QPaintEvent *event) {
 	
 	/* draw the robot in the center */
 	p.setBrush(Qt::blue);
-	QRect robot = QRect((rows/2)*PIXEL_SIZE, (cols/2)*PIXEL_SIZE, 2*PIXEL_SIZE, 2*PIXEL_SIZE);
+	QRect robot = QRect((rows/2 - 2)*PIXEL_SIZE, (cols/2 -2)*PIXEL_SIZE, 4*PIXEL_SIZE, 4*PIXEL_SIZE);
 	p.drawRect(robot);
 }
 

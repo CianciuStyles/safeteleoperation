@@ -35,7 +35,7 @@ void OccupancyMap::paintEvent(QPaintEvent *event) {
 	
 	/* draw the robot in the center */
 	p.setBrush(Qt::blue);
-	QRect robot = QRect((rows/2)*PIXEL_SIZE, (cols/2)*PIXEL_SIZE, 2*PIXEL_SIZE, 2*PIXEL_SIZE);
+	QRect robot = QRect((rows/2 - 2)*PIXEL_SIZE, (cols/2 -2)*PIXEL_SIZE, 4*PIXEL_SIZE, 4*PIXEL_SIZE);
 	p.drawRect(robot);
 }
 
