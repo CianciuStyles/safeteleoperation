@@ -1,0 +1,15 @@
+<package>
+  <description brief="safe_teleop">
+
+     safe_teleop
+
+  </description>
+  <author>gianluca</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/safe_teleop</url>
+  <depend package="distance_map"/>
+
+</package>
+
+

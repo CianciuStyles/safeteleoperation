@@ -91,6 +91,7 @@ void GradientMap::paintEvent(QPaintEvent *event) {
 					printf("Invalid index\n");
 				painters_red[g]->drawRect(rect);
 			} else {
+				
 				while(c > 0) {
 					g++;
 					c -= max / 255;
