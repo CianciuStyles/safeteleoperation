@@ -82,7 +82,7 @@ void DistanceMap::drawDistancePixel(int x, int y, double color) {
 }
 
 void DistanceMap::setPixel(int x, int y, double value) {
-	if (value > 5)
+	if (value > 7)
 		pixels[x][y] = -1;
 	else pixels[x][y] = value;
 }
