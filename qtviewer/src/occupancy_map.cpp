@@ -4,8 +4,8 @@
 #include "occupancy_map.moc"
 
 OccupancyMap::OccupancyMap(QWidget *parent, Qt::WFlags f) : QWidget(parent, f) {
-	for (int k = 0; k < MAP_HEIGHT; k++)
-		for (int w = 0; w < MAP_WIDTH; w++)
+	for (int k = 0; k < MAP_HEIGHT/PIXEL_SIZE; k++)
+		for (int w = 0; w < MAP_WIDTH/PIXEL_SIZE; w++)
 			pixels[k][w] = false;
 	setPalette(QPalette(QColor(255, 255, 255)));
 	

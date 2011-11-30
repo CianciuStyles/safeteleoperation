@@ -8,7 +8,7 @@ class GradientMap : public QWidget {
 	Q_OBJECT
 	public:
 		GradientMap(QWidget *parent = 0, Qt::WFlags f = 0);
-		double pixels[MAP_WIDTH][MAP_HEIGHT];
+		double pixels[MAP_WIDTH/PIXEL_SIZE][MAP_HEIGHT/PIXEL_SIZE];
 	protected:
 		void paintEvent(QPaintEvent *event);
 	public slots:
