@@ -9,11 +9,13 @@ using namespace ros;
 
 Subscriber distance_sub, vel_sub;
 Publisher vel_pub;
-double near_cells[20], decremento[4];
+double near_cells[20], new_vel[4];
 	
 void velCallback(const geometry_msgs::Twist::ConstPtr& msg) {
 		geometry_msgs::Twist twist;
-		twist.linear.x = msg->linear.x - decremento[0];
+		if (new_vel[0] < 0)
+			twist.linear.x = msg->linear.x;
+		else twist.linear.x = new_vel[0];
 		twist.linear.y = msg->linear.y;
 		twist.linear.z = msg->linear.z;
 		twist.angular.x = msg->angular.x; 
@@ -24,7 +26,7 @@ void velCallback(const geometry_msgs::Twist::ConstPtr& msg) {
 }
 
 void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
-	int size_x = msg->size_x, size_y = msg->size_y, n = msg->size_x*msg->size_y;
+	int size_x = msg->size_x, size_y = msg->size_y;
 	std::vector<double> map = msg->map;
 	near_cells[0] = map[(size_y/2 - 3)*size_x + (size_y/2 - 3)];
 	near_cells[1] = map[(size_y/2 - 3)*size_x + (size_y/2 - 2)];
@@ -50,10 +52,25 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 	near_cells[18] = map[(size_y/2 - 1)*size_x + (size_y/2 - 3)];
 	near_cells[19] = map[(size_y/2 - 2)*size_x + (size_y/2 - 3)];
 	
-	decremento[0] = (near_cells[3] >= 6) ? 0 : exp(near_cells[3]-1)-1; 
-	decremento[1] = (near_cells[8] >= 6) ? 0 : exp(near_cells[8]-1)-1; 
-	decremento[2] = (near_cells[13] >= 6) ? 0 : exp(near_cells[13]-1)-1; 
-	decremento[3] = (near_cells[18] >= 6) ? 0 : exp(near_cells[18]-1)-1; 
+	double min_back;
+	double min = 100;
+	for (int i = 1; i < 5; i ++) {
+		if (near_cells[i] < min) {
+			min = near_cells[i];
+			min_back = map[(size_y/2 - 2)*size_x + (size_y/2 - 3) + i];
+		}
+	}
+	printf("%f - %f\n", min, min_back);
+
+		if (min >= 16)
+			new_vel[0] = -1;
+		else if (min <= 8 && min - min_back > 0)
+			new_vel[0] = 0;
+		else new_vel[0] = 1;//(near_cells[3]); 
+	
+	new_vel[1] = (near_cells[8] >= 6) ? 0 : 1/20*exp(near_cells[8]-1)-1; 
+	new_vel[2] = (near_cells[13] >= 6) ? 0 : 1/20*exp(near_cells[13]-1)-1; 
+	new_vel[3] = (near_cells[18] >= 6) ? 0 : 1/20*exp(near_cells[18]-1)-1; 
 }
 
 int main(int argc, char **argv) {

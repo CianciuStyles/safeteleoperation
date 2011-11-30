@@ -3,7 +3,7 @@
 	<node name="occupancy_map" pkg="occupancy_map" type="occupancy_map_generator"/>
 	<node name="distance_map" pkg="distance_map" type="distance_map_generator"/>
 	<node name="gradient_map" pkg="gradient_map" type="gradient_map_generator"/>
-	<node name="safe_teleop" pkg="safe_teleop" type="safe_teleop"/>
+	<node name="safe_teleop" pkg="safe_teleop" type="safe_teleop" output="screen"/>
 	<node name="qtviewer" pkg="qtviewer" type="qtviewer" output="screen"/>
 	
 	<node respawn="true" pkg="joy" type="joy_node" name="joy" >
