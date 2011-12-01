@@ -1,9 +1,13 @@
 FILE(REMOVE_RECURSE
-  "CMakeFiles/qtviewer.dir/src/main.o"
-  "CMakeFiles/qtviewer.dir/src/mappa.o"
+  "CMakeFiles/qtviewer.dir/src/gradient_map.o"
   "CMakeFiles/qtviewer.dir/src/rosnode.o"
-  "mappa.moc"
+  "CMakeFiles/qtviewer.dir/src/main.o"
+  "CMakeFiles/qtviewer.dir/src/occupancy_map.o"
+  "CMakeFiles/qtviewer.dir/src/distance_map.o"
+  "gradient_map.moc"
   "rosnode.moc"
+  "occupancy_map.moc"
+  "distance_map.moc"
   "bin/qtviewer.pdb"
   "bin/qtviewer"
 )

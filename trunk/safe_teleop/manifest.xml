@@ -8,7 +8,8 @@
   <license>BSD</license>
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/safe_teleop</url>
-  <depend package="distance_map"/>
+  <depend package="teleop_joy" />
+  <depend package="gradient_map"/>
 
 </package>
 

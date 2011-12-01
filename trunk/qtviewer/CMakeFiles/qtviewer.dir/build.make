@@ -35,10 +35,10 @@ RM = /usr/bin/cmake -E remove -f
 CMAKE_EDIT_COMMAND = /usr/bin/ccmake
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/gianluca/ros_workspace/qtviewer
+CMAKE_SOURCE_DIR = /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/gianluca/ros_workspace/qtviewer
+CMAKE_BINARY_DIR = /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer
 
 # Include any dependencies generated for this target.
 include CMakeFiles/qtviewer.dir/depend.make
@@ -49,12 +49,60 @@ include CMakeFiles/qtviewer.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/qtviewer.dir/flags.make
 
+CMakeFiles/qtviewer.dir/src/gradient_map.o: CMakeFiles/qtviewer.dir/flags.make
+CMakeFiles/qtviewer.dir/src/gradient_map.o: src/gradient_map.cpp
+CMakeFiles/qtviewer.dir/src/gradient_map.o: gradient_map.moc
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/CMakeFiles $(CMAKE_PROGRESS_1)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/qtviewer.dir/src/gradient_map.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -o CMakeFiles/qtviewer.dir/src/gradient_map.o -c /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/src/gradient_map.cpp
+
+CMakeFiles/qtviewer.dir/src/gradient_map.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/qtviewer.dir/src/gradient_map.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -E /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/src/gradient_map.cpp > CMakeFiles/qtviewer.dir/src/gradient_map.i
+
+CMakeFiles/qtviewer.dir/src/gradient_map.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/qtviewer.dir/src/gradient_map.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -S /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/src/gradient_map.cpp -o CMakeFiles/qtviewer.dir/src/gradient_map.s
+
+CMakeFiles/qtviewer.dir/src/gradient_map.o.requires:
+.PHONY : CMakeFiles/qtviewer.dir/src/gradient_map.o.requires
+
+CMakeFiles/qtviewer.dir/src/gradient_map.o.provides: CMakeFiles/qtviewer.dir/src/gradient_map.o.requires
+	$(MAKE) -f CMakeFiles/qtviewer.dir/build.make CMakeFiles/qtviewer.dir/src/gradient_map.o.provides.build
+.PHONY : CMakeFiles/qtviewer.dir/src/gradient_map.o.provides
+
+CMakeFiles/qtviewer.dir/src/gradient_map.o.provides.build: CMakeFiles/qtviewer.dir/src/gradient_map.o
+
+CMakeFiles/qtviewer.dir/src/rosnode.o: CMakeFiles/qtviewer.dir/flags.make
+CMakeFiles/qtviewer.dir/src/rosnode.o: src/rosnode.cpp
+CMakeFiles/qtviewer.dir/src/rosnode.o: rosnode.moc
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/CMakeFiles $(CMAKE_PROGRESS_2)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/qtviewer.dir/src/rosnode.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -o CMakeFiles/qtviewer.dir/src/rosnode.o -c /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/src/rosnode.cpp
+
+CMakeFiles/qtviewer.dir/src/rosnode.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/qtviewer.dir/src/rosnode.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -E /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/src/rosnode.cpp > CMakeFiles/qtviewer.dir/src/rosnode.i
+
+CMakeFiles/qtviewer.dir/src/rosnode.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/qtviewer.dir/src/rosnode.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -S /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/src/rosnode.cpp -o CMakeFiles/qtviewer.dir/src/rosnode.s
+
+CMakeFiles/qtviewer.dir/src/rosnode.o.requires:
+.PHONY : CMakeFiles/qtviewer.dir/src/rosnode.o.requires
+
+CMakeFiles/qtviewer.dir/src/rosnode.o.provides: CMakeFiles/qtviewer.dir/src/rosnode.o.requires
+	$(MAKE) -f CMakeFiles/qtviewer.dir/build.make CMakeFiles/qtviewer.dir/src/rosnode.o.provides.build
+.PHONY : CMakeFiles/qtviewer.dir/src/rosnode.o.provides
+
+CMakeFiles/qtviewer.dir/src/rosnode.o.provides.build: CMakeFiles/qtviewer.dir/src/rosnode.o
+
 CMakeFiles/qtviewer.dir/src/main.o: CMakeFiles/qtviewer.dir/flags.make
 CMakeFiles/qtviewer.dir/src/main.o: src/main.cpp
 CMakeFiles/qtviewer.dir/src/main.o: manifest.xml
-CMakeFiles/qtviewer.dir/src/main.o: /opt/ros/electric/stacks/eros_license/manifest.xml
+CMakeFiles/qtviewer.dir/src/main.o: /home/cianciustyles/ros_workspace/eros_license/manifest.xml
 CMakeFiles/qtviewer.dir/src/main.o: /opt/ros/electric/ros/core/rosbuild/manifest.xml
-CMakeFiles/qtviewer.dir/src/main.o: /opt/ros/electric/stacks/eros_build/manifest.xml
+CMakeFiles/qtviewer.dir/src/main.o: /home/cianciustyles/ros_workspace/eros_build/manifest.xml
 CMakeFiles/qtviewer.dir/src/main.o: /opt/ros/electric/ros/core/roslang/manifest.xml
 CMakeFiles/qtviewer.dir/src/main.o: /opt/ros/electric/stacks/ros_comm/utilities/cpp_common/manifest.xml
 CMakeFiles/qtviewer.dir/src/main.o: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp_traits/manifest.xml
@@ -67,21 +115,45 @@ CMakeFiles/qtviewer.dir/src/main.o: /opt/ros/electric/stacks/ros_comm/tools/rosc
 CMakeFiles/qtviewer.dir/src/main.o: /opt/ros/electric/stacks/ros_comm/messages/std_msgs/manifest.xml
 CMakeFiles/qtviewer.dir/src/main.o: /opt/ros/electric/stacks/ros_comm/messages/rosgraph_msgs/manifest.xml
 CMakeFiles/qtviewer.dir/src/main.o: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/manifest.xml
+CMakeFiles/qtviewer.dir/src/main.o: /opt/ros/electric/stacks/ros_comm/clients/rospy/manifest.xml
+CMakeFiles/qtviewer.dir/src/main.o: /opt/ros/electric/ros/tools/rosclean/manifest.xml
+CMakeFiles/qtviewer.dir/src/main.o: /opt/ros/electric/stacks/ros_comm/tools/rosgraph/manifest.xml
+CMakeFiles/qtviewer.dir/src/main.o: /opt/ros/electric/stacks/ros_comm/tools/rosparam/manifest.xml
+CMakeFiles/qtviewer.dir/src/main.o: /opt/ros/electric/stacks/ros_comm/tools/rosmaster/manifest.xml
+CMakeFiles/qtviewer.dir/src/main.o: /opt/ros/electric/stacks/ros_comm/tools/rosout/manifest.xml
+CMakeFiles/qtviewer.dir/src/main.o: /opt/ros/electric/stacks/ros_comm/tools/roslaunch/manifest.xml
+CMakeFiles/qtviewer.dir/src/main.o: /opt/ros/electric/ros/tools/rosunit/manifest.xml
+CMakeFiles/qtviewer.dir/src/main.o: /opt/ros/electric/stacks/ros_comm/tools/rostest/manifest.xml
+CMakeFiles/qtviewer.dir/src/main.o: /opt/ros/electric/stacks/ros_comm/tools/topic_tools/manifest.xml
+CMakeFiles/qtviewer.dir/src/main.o: /opt/ros/electric/stacks/ros_comm/tools/rosbag/manifest.xml
+CMakeFiles/qtviewer.dir/src/main.o: /opt/ros/electric/stacks/ros_comm/tools/rosbagmigration/manifest.xml
+CMakeFiles/qtviewer.dir/src/main.o: /opt/ros/electric/stacks/common_msgs/geometry_msgs/manifest.xml
+CMakeFiles/qtviewer.dir/src/main.o: /opt/ros/electric/stacks/common_msgs/sensor_msgs/manifest.xml
+CMakeFiles/qtviewer.dir/src/main.o: /home/cianciustyles/ros_workspace/project_safeteleoperation/occupancy_map/manifest.xml
+CMakeFiles/qtviewer.dir/src/main.o: /home/cianciustyles/ros_workspace/project_safeteleoperation/distance_map/manifest.xml
+CMakeFiles/qtviewer.dir/src/main.o: /home/cianciustyles/ros_workspace/project_safeteleoperation/gradient_map/manifest.xml
 CMakeFiles/qtviewer.dir/src/main.o: /opt/ros/electric/stacks/ros_comm/messages/std_msgs/msg_gen/generated
 CMakeFiles/qtviewer.dir/src/main.o: /opt/ros/electric/stacks/ros_comm/messages/rosgraph_msgs/msg_gen/generated
 CMakeFiles/qtviewer.dir/src/main.o: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/msg_gen/generated
 CMakeFiles/qtviewer.dir/src/main.o: /opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/srv_gen/generated
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/gianluca/ros_workspace/qtviewer/CMakeFiles $(CMAKE_PROGRESS_1)
+CMakeFiles/qtviewer.dir/src/main.o: /opt/ros/electric/stacks/ros_comm/tools/topic_tools/srv_gen/generated
+CMakeFiles/qtviewer.dir/src/main.o: /opt/ros/electric/stacks/common_msgs/geometry_msgs/msg_gen/generated
+CMakeFiles/qtviewer.dir/src/main.o: /opt/ros/electric/stacks/common_msgs/sensor_msgs/msg_gen/generated
+CMakeFiles/qtviewer.dir/src/main.o: /opt/ros/electric/stacks/common_msgs/sensor_msgs/srv_gen/generated
+CMakeFiles/qtviewer.dir/src/main.o: /home/cianciustyles/ros_workspace/project_safeteleoperation/occupancy_map/msg_gen/generated
+CMakeFiles/qtviewer.dir/src/main.o: /home/cianciustyles/ros_workspace/project_safeteleoperation/distance_map/msg_gen/generated
+CMakeFiles/qtviewer.dir/src/main.o: /home/cianciustyles/ros_workspace/project_safeteleoperation/gradient_map/msg_gen/generated
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/CMakeFiles $(CMAKE_PROGRESS_3)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/qtviewer.dir/src/main.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -o CMakeFiles/qtviewer.dir/src/main.o -c /home/gianluca/ros_workspace/qtviewer/src/main.cpp
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -o CMakeFiles/qtviewer.dir/src/main.o -c /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/src/main.cpp
 
 CMakeFiles/qtviewer.dir/src/main.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/qtviewer.dir/src/main.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -E /home/gianluca/ros_workspace/qtviewer/src/main.cpp > CMakeFiles/qtviewer.dir/src/main.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -E /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/src/main.cpp > CMakeFiles/qtviewer.dir/src/main.i
 
 CMakeFiles/qtviewer.dir/src/main.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/qtviewer.dir/src/main.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -S /home/gianluca/ros_workspace/qtviewer/src/main.cpp -o CMakeFiles/qtviewer.dir/src/main.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -S /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/src/main.cpp -o CMakeFiles/qtviewer.dir/src/main.s
 
 CMakeFiles/qtviewer.dir/src/main.o.requires:
 .PHONY : CMakeFiles/qtviewer.dir/src/main.o.requires
@@ -91,82 +163,93 @@ CMakeFiles/qtviewer.dir/src/main.o.provides: CMakeFiles/qtviewer.dir/src/main.o.
 .PHONY : CMakeFiles/qtviewer.dir/src/main.o.provides
 
 CMakeFiles/qtviewer.dir/src/main.o.provides.build: CMakeFiles/qtviewer.dir/src/main.o
-.PHONY : CMakeFiles/qtviewer.dir/src/main.o.provides.build
 
-CMakeFiles/qtviewer.dir/src/mappa.o: CMakeFiles/qtviewer.dir/flags.make
-CMakeFiles/qtviewer.dir/src/mappa.o: src/mappa.cpp
-CMakeFiles/qtviewer.dir/src/mappa.o: mappa.moc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/gianluca/ros_workspace/qtviewer/CMakeFiles $(CMAKE_PROGRESS_2)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/qtviewer.dir/src/mappa.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -o CMakeFiles/qtviewer.dir/src/mappa.o -c /home/gianluca/ros_workspace/qtviewer/src/mappa.cpp
+CMakeFiles/qtviewer.dir/src/occupancy_map.o: CMakeFiles/qtviewer.dir/flags.make
+CMakeFiles/qtviewer.dir/src/occupancy_map.o: src/occupancy_map.cpp
+CMakeFiles/qtviewer.dir/src/occupancy_map.o: occupancy_map.moc
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/CMakeFiles $(CMAKE_PROGRESS_4)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/qtviewer.dir/src/occupancy_map.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -o CMakeFiles/qtviewer.dir/src/occupancy_map.o -c /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/src/occupancy_map.cpp
 
-CMakeFiles/qtviewer.dir/src/mappa.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/qtviewer.dir/src/mappa.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -E /home/gianluca/ros_workspace/qtviewer/src/mappa.cpp > CMakeFiles/qtviewer.dir/src/mappa.i
+CMakeFiles/qtviewer.dir/src/occupancy_map.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/qtviewer.dir/src/occupancy_map.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -E /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/src/occupancy_map.cpp > CMakeFiles/qtviewer.dir/src/occupancy_map.i
 
-CMakeFiles/qtviewer.dir/src/mappa.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/qtviewer.dir/src/mappa.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -S /home/gianluca/ros_workspace/qtviewer/src/mappa.cpp -o CMakeFiles/qtviewer.dir/src/mappa.s
+CMakeFiles/qtviewer.dir/src/occupancy_map.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/qtviewer.dir/src/occupancy_map.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -S /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/src/occupancy_map.cpp -o CMakeFiles/qtviewer.dir/src/occupancy_map.s
 
-CMakeFiles/qtviewer.dir/src/mappa.o.requires:
-.PHONY : CMakeFiles/qtviewer.dir/src/mappa.o.requires
+CMakeFiles/qtviewer.dir/src/occupancy_map.o.requires:
+.PHONY : CMakeFiles/qtviewer.dir/src/occupancy_map.o.requires
 
-CMakeFiles/qtviewer.dir/src/mappa.o.provides: CMakeFiles/qtviewer.dir/src/mappa.o.requires
-	$(MAKE) -f CMakeFiles/qtviewer.dir/build.make CMakeFiles/qtviewer.dir/src/mappa.o.provides.build
-.PHONY : CMakeFiles/qtviewer.dir/src/mappa.o.provides
+CMakeFiles/qtviewer.dir/src/occupancy_map.o.provides: CMakeFiles/qtviewer.dir/src/occupancy_map.o.requires
+	$(MAKE) -f CMakeFiles/qtviewer.dir/build.make CMakeFiles/qtviewer.dir/src/occupancy_map.o.provides.build
+.PHONY : CMakeFiles/qtviewer.dir/src/occupancy_map.o.provides
 
-CMakeFiles/qtviewer.dir/src/mappa.o.provides.build: CMakeFiles/qtviewer.dir/src/mappa.o
-.PHONY : CMakeFiles/qtviewer.dir/src/mappa.o.provides.build
+CMakeFiles/qtviewer.dir/src/occupancy_map.o.provides.build: CMakeFiles/qtviewer.dir/src/occupancy_map.o
 
-CMakeFiles/qtviewer.dir/src/rosnode.o: CMakeFiles/qtviewer.dir/flags.make
-CMakeFiles/qtviewer.dir/src/rosnode.o: src/rosnode.cpp
-CMakeFiles/qtviewer.dir/src/rosnode.o: rosnode.moc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/gianluca/ros_workspace/qtviewer/CMakeFiles $(CMAKE_PROGRESS_3)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/qtviewer.dir/src/rosnode.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -o CMakeFiles/qtviewer.dir/src/rosnode.o -c /home/gianluca/ros_workspace/qtviewer/src/rosnode.cpp
+CMakeFiles/qtviewer.dir/src/distance_map.o: CMakeFiles/qtviewer.dir/flags.make
+CMakeFiles/qtviewer.dir/src/distance_map.o: src/distance_map.cpp
+CMakeFiles/qtviewer.dir/src/distance_map.o: distance_map.moc
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/CMakeFiles $(CMAKE_PROGRESS_5)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/qtviewer.dir/src/distance_map.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -o CMakeFiles/qtviewer.dir/src/distance_map.o -c /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/src/distance_map.cpp
 
-CMakeFiles/qtviewer.dir/src/rosnode.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/qtviewer.dir/src/rosnode.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -E /home/gianluca/ros_workspace/qtviewer/src/rosnode.cpp > CMakeFiles/qtviewer.dir/src/rosnode.i
+CMakeFiles/qtviewer.dir/src/distance_map.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/qtviewer.dir/src/distance_map.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -E /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/src/distance_map.cpp > CMakeFiles/qtviewer.dir/src/distance_map.i
 
-CMakeFiles/qtviewer.dir/src/rosnode.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/qtviewer.dir/src/rosnode.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -S /home/gianluca/ros_workspace/qtviewer/src/rosnode.cpp -o CMakeFiles/qtviewer.dir/src/rosnode.s
+CMakeFiles/qtviewer.dir/src/distance_map.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/qtviewer.dir/src/distance_map.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -W -Wall -Wno-unused-parameter -fno-strict-aliasing -pthread -S /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/src/distance_map.cpp -o CMakeFiles/qtviewer.dir/src/distance_map.s
 
-CMakeFiles/qtviewer.dir/src/rosnode.o.requires:
-.PHONY : CMakeFiles/qtviewer.dir/src/rosnode.o.requires
+CMakeFiles/qtviewer.dir/src/distance_map.o.requires:
+.PHONY : CMakeFiles/qtviewer.dir/src/distance_map.o.requires
 
-CMakeFiles/qtviewer.dir/src/rosnode.o.provides: CMakeFiles/qtviewer.dir/src/rosnode.o.requires
-	$(MAKE) -f CMakeFiles/qtviewer.dir/build.make CMakeFiles/qtviewer.dir/src/rosnode.o.provides.build
-.PHONY : CMakeFiles/qtviewer.dir/src/rosnode.o.provides
+CMakeFiles/qtviewer.dir/src/distance_map.o.provides: CMakeFiles/qtviewer.dir/src/distance_map.o.requires
+	$(MAKE) -f CMakeFiles/qtviewer.dir/build.make CMakeFiles/qtviewer.dir/src/distance_map.o.provides.build
+.PHONY : CMakeFiles/qtviewer.dir/src/distance_map.o.provides
 
-CMakeFiles/qtviewer.dir/src/rosnode.o.provides.build: CMakeFiles/qtviewer.dir/src/rosnode.o
-.PHONY : CMakeFiles/qtviewer.dir/src/rosnode.o.provides.build
+CMakeFiles/qtviewer.dir/src/distance_map.o.provides.build: CMakeFiles/qtviewer.dir/src/distance_map.o
 
-mappa.moc: src/mappa.h
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/gianluca/ros_workspace/qtviewer/CMakeFiles $(CMAKE_PROGRESS_4)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Generating mappa.moc"
-	/usr/bin/moc-qt4 -I/home/gianluca/ros_workspace/qtviewer/include -I/opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/include -I/opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/msg_gen/cpp/include -I/opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/srv_gen/cpp/include -I/opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp_serialization/include -I/opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp_traits/include -I/opt/ros/electric/stacks/ros_comm/utilities/xmlrpcpp/src -I/opt/ros/electric/stacks/ros_comm/tools/rosconsole/include -I/opt/ros/electric/stacks/ros_comm/utilities/rostime/include -I/opt/ros/electric/stacks/ros_comm/utilities/cpp_common/include -I/opt/ros/electric/stacks/ros_comm/messages/rosgraph_msgs/msg_gen/cpp/include -I/opt/ros/electric/stacks/ros_comm/messages/std_msgs/include -I/opt/ros/electric/stacks/ros_comm/messages/std_msgs/msg_gen/cpp/include -I/opt/ros/electric/ros/core/roslib/msg_gen/cpp/include -I/opt/ros/electric/ros/core/roslib/include -I/opt/ros/electric/ros/tools/rospack -I/opt/ros/electric/ros/tools/rospack/include -I/usr/include -I/usr/include/qt4 -I/usr/include/qt4/QtGui -I/usr/include/qt4/QtCore -I/home/gianluca/ros_workspace/qtviewer -DQT_GUI_LIB -DQT_CORE_LIB -o /home/gianluca/ros_workspace/qtviewer/mappa.moc /home/gianluca/ros_workspace/qtviewer/src/mappa.h
+gradient_map.moc: src/gradient_map.h
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/CMakeFiles $(CMAKE_PROGRESS_6)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Generating gradient_map.moc"
+	/usr/bin/moc-qt4 -I/home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/include -I/home/cianciustyles/ros_workspace/project_safeteleoperation/gradient_map/msg_gen/cpp/include -I/home/cianciustyles/ros_workspace/project_safeteleoperation/distance_map/msg_gen/cpp/include -I/home/cianciustyles/ros_workspace/project_safeteleoperation/occupancy_map/msg_gen/cpp/include -I/opt/ros/electric/stacks/common_msgs/sensor_msgs/include -I/opt/ros/electric/stacks/common_msgs/sensor_msgs/msg_gen/cpp/include -I/opt/ros/electric/stacks/common_msgs/sensor_msgs/srv_gen/cpp/include -I/opt/ros/electric/stacks/common_msgs/geometry_msgs/msg_gen/cpp/include -I/opt/ros/electric/stacks/ros_comm/tools/rosbag/include -I/opt/ros/electric/stacks/ros_comm/tools/topic_tools/include -I/opt/ros/electric/stacks/ros_comm/tools/topic_tools/srv_gen/cpp/include -I/opt/ros/electric/stacks/ros_comm/tools/rostest/include -I/opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/include -I/opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/msg_gen/cpp/include -I/opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/srv_gen/cpp/include -I/opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp_serialization/include -I/opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp_traits/include -I/opt/ros/electric/stacks/ros_comm/utilities/xmlrpcpp/src -I/opt/ros/electric/stacks/ros_comm/messages/rosgraph_msgs/msg_gen/cpp/include -I/opt/ros/electric/stacks/ros_comm/messages/std_msgs/include -I/opt/ros/electric/stacks/ros_comm/messages/std_msgs/msg_gen/cpp/include -I/opt/ros/electric/ros/core/roslib/msg_gen/cpp/include -I/opt/ros/electric/ros/core/roslib/include -I/opt/ros/electric/ros/tools/rospack -I/opt/ros/electric/ros/tools/rospack/include -I/opt/ros/electric/stacks/ros_comm/tools/rosconsole/include -I/opt/ros/electric/stacks/ros_comm/utilities/rostime/include -I/opt/ros/electric/stacks/ros_comm/utilities/cpp_common/include -I/usr/include/qt4 -I/usr/include/qt4/QtGui -I/usr/include/qt4/QtCore -I/home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer -DQT_GUI_LIB -DQT_CORE_LIB -o /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/gradient_map.moc /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/src/gradient_map.h
 
 rosnode.moc: src/rosnode.h
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/gianluca/ros_workspace/qtviewer/CMakeFiles $(CMAKE_PROGRESS_5)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/CMakeFiles $(CMAKE_PROGRESS_7)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Generating rosnode.moc"
-	/usr/bin/moc-qt4 -I/home/gianluca/ros_workspace/qtviewer/include -I/opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/include -I/opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/msg_gen/cpp/include -I/opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/srv_gen/cpp/include -I/opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp_serialization/include -I/opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp_traits/include -I/opt/ros/electric/stacks/ros_comm/utilities/xmlrpcpp/src -I/opt/ros/electric/stacks/ros_comm/tools/rosconsole/include -I/opt/ros/electric/stacks/ros_comm/utilities/rostime/include -I/opt/ros/electric/stacks/ros_comm/utilities/cpp_common/include -I/opt/ros/electric/stacks/ros_comm/messages/rosgraph_msgs/msg_gen/cpp/include -I/opt/ros/electric/stacks/ros_comm/messages/std_msgs/include -I/opt/ros/electric/stacks/ros_comm/messages/std_msgs/msg_gen/cpp/include -I/opt/ros/electric/ros/core/roslib/msg_gen/cpp/include -I/opt/ros/electric/ros/core/roslib/include -I/opt/ros/electric/ros/tools/rospack -I/opt/ros/electric/ros/tools/rospack/include -I/usr/include -I/usr/include/qt4 -I/usr/include/qt4/QtGui -I/usr/include/qt4/QtCore -I/home/gianluca/ros_workspace/qtviewer -DQT_GUI_LIB -DQT_CORE_LIB -o /home/gianluca/ros_workspace/qtviewer/rosnode.moc /home/gianluca/ros_workspace/qtviewer/src/rosnode.h
+	/usr/bin/moc-qt4 -I/home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/include -I/home/cianciustyles/ros_workspace/project_safeteleoperation/gradient_map/msg_gen/cpp/include -I/home/cianciustyles/ros_workspace/project_safeteleoperation/distance_map/msg_gen/cpp/include -I/home/cianciustyles/ros_workspace/project_safeteleoperation/occupancy_map/msg_gen/cpp/include -I/opt/ros/electric/stacks/common_msgs/sensor_msgs/include -I/opt/ros/electric/stacks/common_msgs/sensor_msgs/msg_gen/cpp/include -I/opt/ros/electric/stacks/common_msgs/sensor_msgs/srv_gen/cpp/include -I/opt/ros/electric/stacks/common_msgs/geometry_msgs/msg_gen/cpp/include -I/opt/ros/electric/stacks/ros_comm/tools/rosbag/include -I/opt/ros/electric/stacks/ros_comm/tools/topic_tools/include -I/opt/ros/electric/stacks/ros_comm/tools/topic_tools/srv_gen/cpp/include -I/opt/ros/electric/stacks/ros_comm/tools/rostest/include -I/opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/include -I/opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/msg_gen/cpp/include -I/opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/srv_gen/cpp/include -I/opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp_serialization/include -I/opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp_traits/include -I/opt/ros/electric/stacks/ros_comm/utilities/xmlrpcpp/src -I/opt/ros/electric/stacks/ros_comm/messages/rosgraph_msgs/msg_gen/cpp/include -I/opt/ros/electric/stacks/ros_comm/messages/std_msgs/include -I/opt/ros/electric/stacks/ros_comm/messages/std_msgs/msg_gen/cpp/include -I/opt/ros/electric/ros/core/roslib/msg_gen/cpp/include -I/opt/ros/electric/ros/core/roslib/include -I/opt/ros/electric/ros/tools/rospack -I/opt/ros/electric/ros/tools/rospack/include -I/opt/ros/electric/stacks/ros_comm/tools/rosconsole/include -I/opt/ros/electric/stacks/ros_comm/utilities/rostime/include -I/opt/ros/electric/stacks/ros_comm/utilities/cpp_common/include -I/usr/include/qt4 -I/usr/include/qt4/QtGui -I/usr/include/qt4/QtCore -I/home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer -DQT_GUI_LIB -DQT_CORE_LIB -o /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/rosnode.moc /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/src/rosnode.h
+
+occupancy_map.moc: src/occupancy_map.h
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/CMakeFiles $(CMAKE_PROGRESS_8)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Generating occupancy_map.moc"
+	/usr/bin/moc-qt4 -I/home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/include -I/home/cianciustyles/ros_workspace/project_safeteleoperation/gradient_map/msg_gen/cpp/include -I/home/cianciustyles/ros_workspace/project_safeteleoperation/distance_map/msg_gen/cpp/include -I/home/cianciustyles/ros_workspace/project_safeteleoperation/occupancy_map/msg_gen/cpp/include -I/opt/ros/electric/stacks/common_msgs/sensor_msgs/include -I/opt/ros/electric/stacks/common_msgs/sensor_msgs/msg_gen/cpp/include -I/opt/ros/electric/stacks/common_msgs/sensor_msgs/srv_gen/cpp/include -I/opt/ros/electric/stacks/common_msgs/geometry_msgs/msg_gen/cpp/include -I/opt/ros/electric/stacks/ros_comm/tools/rosbag/include -I/opt/ros/electric/stacks/ros_comm/tools/topic_tools/include -I/opt/ros/electric/stacks/ros_comm/tools/topic_tools/srv_gen/cpp/include -I/opt/ros/electric/stacks/ros_comm/tools/rostest/include -I/opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/include -I/opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/msg_gen/cpp/include -I/opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/srv_gen/cpp/include -I/opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp_serialization/include -I/opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp_traits/include -I/opt/ros/electric/stacks/ros_comm/utilities/xmlrpcpp/src -I/opt/ros/electric/stacks/ros_comm/messages/rosgraph_msgs/msg_gen/cpp/include -I/opt/ros/electric/stacks/ros_comm/messages/std_msgs/include -I/opt/ros/electric/stacks/ros_comm/messages/std_msgs/msg_gen/cpp/include -I/opt/ros/electric/ros/core/roslib/msg_gen/cpp/include -I/opt/ros/electric/ros/core/roslib/include -I/opt/ros/electric/ros/tools/rospack -I/opt/ros/electric/ros/tools/rospack/include -I/opt/ros/electric/stacks/ros_comm/tools/rosconsole/include -I/opt/ros/electric/stacks/ros_comm/utilities/rostime/include -I/opt/ros/electric/stacks/ros_comm/utilities/cpp_common/include -I/usr/include/qt4 -I/usr/include/qt4/QtGui -I/usr/include/qt4/QtCore -I/home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer -DQT_GUI_LIB -DQT_CORE_LIB -o /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/occupancy_map.moc /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/src/occupancy_map.h
+
+distance_map.moc: src/distance_map.h
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/CMakeFiles $(CMAKE_PROGRESS_9)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Generating distance_map.moc"
+	/usr/bin/moc-qt4 -I/home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/include -I/home/cianciustyles/ros_workspace/project_safeteleoperation/gradient_map/msg_gen/cpp/include -I/home/cianciustyles/ros_workspace/project_safeteleoperation/distance_map/msg_gen/cpp/include -I/home/cianciustyles/ros_workspace/project_safeteleoperation/occupancy_map/msg_gen/cpp/include -I/opt/ros/electric/stacks/common_msgs/sensor_msgs/include -I/opt/ros/electric/stacks/common_msgs/sensor_msgs/msg_gen/cpp/include -I/opt/ros/electric/stacks/common_msgs/sensor_msgs/srv_gen/cpp/include -I/opt/ros/electric/stacks/common_msgs/geometry_msgs/msg_gen/cpp/include -I/opt/ros/electric/stacks/ros_comm/tools/rosbag/include -I/opt/ros/electric/stacks/ros_comm/tools/topic_tools/include -I/opt/ros/electric/stacks/ros_comm/tools/topic_tools/srv_gen/cpp/include -I/opt/ros/electric/stacks/ros_comm/tools/rostest/include -I/opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/include -I/opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/msg_gen/cpp/include -I/opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp/srv_gen/cpp/include -I/opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp_serialization/include -I/opt/ros/electric/stacks/ros_comm/clients/cpp/roscpp_traits/include -I/opt/ros/electric/stacks/ros_comm/utilities/xmlrpcpp/src -I/opt/ros/electric/stacks/ros_comm/messages/rosgraph_msgs/msg_gen/cpp/include -I/opt/ros/electric/stacks/ros_comm/messages/std_msgs/include -I/opt/ros/electric/stacks/ros_comm/messages/std_msgs/msg_gen/cpp/include -I/opt/ros/electric/ros/core/roslib/msg_gen/cpp/include -I/opt/ros/electric/ros/core/roslib/include -I/opt/ros/electric/ros/tools/rospack -I/opt/ros/electric/ros/tools/rospack/include -I/opt/ros/electric/stacks/ros_comm/tools/rosconsole/include -I/opt/ros/electric/stacks/ros_comm/utilities/rostime/include -I/opt/ros/electric/stacks/ros_comm/utilities/cpp_common/include -I/usr/include/qt4 -I/usr/include/qt4/QtGui -I/usr/include/qt4/QtCore -I/home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer -DQT_GUI_LIB -DQT_CORE_LIB -o /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/distance_map.moc /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/src/distance_map.h
 
 # Object files for target qtviewer
 qtviewer_OBJECTS = \
+"CMakeFiles/qtviewer.dir/src/gradient_map.o" \
+"CMakeFiles/qtviewer.dir/src/rosnode.o" \
 "CMakeFiles/qtviewer.dir/src/main.o" \
-"CMakeFiles/qtviewer.dir/src/mappa.o" \
-"CMakeFiles/qtviewer.dir/src/rosnode.o"
+"CMakeFiles/qtviewer.dir/src/occupancy_map.o" \
+"CMakeFiles/qtviewer.dir/src/distance_map.o"
 
 # External object files for target qtviewer
 qtviewer_EXTERNAL_OBJECTS =
 
-bin/qtviewer: CMakeFiles/qtviewer.dir/src/main.o
-bin/qtviewer: CMakeFiles/qtviewer.dir/src/mappa.o
+bin/qtviewer: CMakeFiles/qtviewer.dir/src/gradient_map.o
 bin/qtviewer: CMakeFiles/qtviewer.dir/src/rosnode.o
-bin/qtviewer: /usr/lib/libQtGui.so
-bin/qtviewer: /usr/lib/libQtCore.so
+bin/qtviewer: CMakeFiles/qtviewer.dir/src/main.o
+bin/qtviewer: CMakeFiles/qtviewer.dir/src/occupancy_map.o
+bin/qtviewer: CMakeFiles/qtviewer.dir/src/distance_map.o
+bin/qtviewer: /usr/lib/i386-linux-gnu/libQtGui.so
+bin/qtviewer: /usr/lib/i386-linux-gnu/libQtCore.so
 bin/qtviewer: CMakeFiles/qtviewer.dir/build.make
 bin/qtviewer: CMakeFiles/qtviewer.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --red --bold "Linking CXX executable bin/qtviewer"
@@ -176,17 +259,21 @@ bin/qtviewer: CMakeFiles/qtviewer.dir/link.txt
 CMakeFiles/qtviewer.dir/build: bin/qtviewer
 .PHONY : CMakeFiles/qtviewer.dir/build
 
-CMakeFiles/qtviewer.dir/requires: CMakeFiles/qtviewer.dir/src/main.o.requires
-CMakeFiles/qtviewer.dir/requires: CMakeFiles/qtviewer.dir/src/mappa.o.requires
+CMakeFiles/qtviewer.dir/requires: CMakeFiles/qtviewer.dir/src/gradient_map.o.requires
 CMakeFiles/qtviewer.dir/requires: CMakeFiles/qtviewer.dir/src/rosnode.o.requires
+CMakeFiles/qtviewer.dir/requires: CMakeFiles/qtviewer.dir/src/main.o.requires
+CMakeFiles/qtviewer.dir/requires: CMakeFiles/qtviewer.dir/src/occupancy_map.o.requires
+CMakeFiles/qtviewer.dir/requires: CMakeFiles/qtviewer.dir/src/distance_map.o.requires
 .PHONY : CMakeFiles/qtviewer.dir/requires
 
 CMakeFiles/qtviewer.dir/clean:
 	$(CMAKE_COMMAND) -P CMakeFiles/qtviewer.dir/cmake_clean.cmake
 .PHONY : CMakeFiles/qtviewer.dir/clean
 
-CMakeFiles/qtviewer.dir/depend: mappa.moc
+CMakeFiles/qtviewer.dir/depend: gradient_map.moc
 CMakeFiles/qtviewer.dir/depend: rosnode.moc
-	cd /home/gianluca/ros_workspace/qtviewer && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/gianluca/ros_workspace/qtviewer /home/gianluca/ros_workspace/qtviewer /home/gianluca/ros_workspace/qtviewer /home/gianluca/ros_workspace/qtviewer /home/gianluca/ros_workspace/qtviewer/CMakeFiles/qtviewer.dir/DependInfo.cmake --color=$(COLOR)
+CMakeFiles/qtviewer.dir/depend: occupancy_map.moc
+CMakeFiles/qtviewer.dir/depend: distance_map.moc
+	cd /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/CMakeFiles/qtviewer.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/qtviewer.dir/depend
 
