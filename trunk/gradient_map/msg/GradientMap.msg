@@ -1,3 +1,4 @@
 int32 size_x
 int32 size_y
-float64[] map
+float64[] map_scalar
+float64[] map_theta

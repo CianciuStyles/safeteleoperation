@@ -74,7 +74,8 @@ void RosNode::distanceCallback(const distance_map::DistanceMap::ConstPtr &msg) {
 }
 
 void RosNode::gradientCallback(const gradient_map::GradientMap::ConstPtr &msg) {
-	//printf("D=%d\n", d++);
+	/*
+	//printf("G=%d\n", d++);
 	grad_map->resetMin();
 	grad_map->resetMax();
 	for (int i = 0; i < msg->size_y; i++)
@@ -82,5 +83,6 @@ void RosNode::gradientCallback(const gradient_map::GradientMap::ConstPtr &msg) {
 			grad_map->setPixel(j, msg->size_y -1 - i, msg->map[i*msg->size_x+j]);
 			//emit setDistancePixel(j, msg->size_y -1 - i, msg->map[i*msg->size_x+j]);
 		}
+	*/
 	grad_map->update();
 }
