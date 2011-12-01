@@ -60,7 +60,7 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 			min_back = map[(size_y/2 - 2)*size_x + (size_y/2 - 3) + i];
 		}
 	}
-	printf("%f - %f\n", min, min_back);
+	//printf("%f - %f\n", min, min_back);
 
 		if (min >= 16)
 			new_vel[0] = -1;
