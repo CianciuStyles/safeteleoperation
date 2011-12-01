@@ -1,4 +1,4 @@
-#include <ros/ros.h>
+cd#include <ros/ros.h>
 #include <distance_map/DistanceMap.h>
 #include <gradient_map/GradientMap.h>
 
@@ -43,6 +43,8 @@ static bool robot(int x, int y, int size_x, int size_y)
 
 void distanceCallback(const distance_map::DistanceMap& msg)
 {
+	return;
+	
 	gradient_map::GradientMap grad;
 	std::vector<double> matrix_scalar(msg.size_x * msg.size_y);
 	std::vector<double> matrix_theta(msg.size_x * msg.size_y);
