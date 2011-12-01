@@ -12,6 +12,35 @@ static ros::Publisher gradient;
 #define M_PI 3.14159265358979323846
 #endif
 
+static bool robot(int x, int y, int size_x, int size_y)
+{
+	if (
+		
+		(x == (size_y/2 -2) && y == (size_x/2 -2)) ||
+		(x == (size_y/2 -2) && y == (size_x/2 -1)) ||
+		(x == (size_y/2 -2) && y == (size_x/2)) ||
+		(x == (size_y/2 -2) && y == (size_x/2 + 1)) ||
+		
+		(x == (size_y/2 -1) && y == (size_x/2 -2)) ||
+		(x == (size_y/2 -1) && y == (size_x/2 -1)) ||
+		(x == (size_y/2 -1) && y == (size_x/2)) ||
+		(x == (size_y/2 -1) && y == (size_x/2 + 1)) ||
+		
+		(x == (size_y/2) && y == (size_x/2 -2)) ||
+		(x == (size_y/2) && y == (size_x/2 -1)) ||
+		(x == (size_y/2) && y == (size_x/2)) ||
+		(x == (size_y/2) && y == (size_x/2 + 1)) ||
+		
+		(x == (size_y/2 +1) && y == (size_x/2 -2)) ||
+		(x == (size_y/2 +1) && y == (size_x/2 -1)) ||
+		(x == (size_y/2 +1) && y == (size_x/2)) ||
+		(x == (size_y/2 +1) && y == (size_x/2 + 1)) 
+		)
+		return true;
+	
+	return false;
+}
+
 void distanceCallback(const distance_map::DistanceMap& msg)
 {
 	gradient_map::GradientMap grad;
@@ -26,6 +55,9 @@ void distanceCallback(const distance_map::DistanceMap& msg)
 		for (int y = 0; y < msg.size_x; y++) {
 			
 			double center = msg.map[x*msg.size_x + y];
+			if (!(center == 1 || (center > 1.40 && center < 1.42)))
+				continue;
+			
 			double scalar = 1000;
 			double theta = -1;
 			
