@@ -35,10 +35,10 @@ RM = /usr/bin/cmake -E remove -f
 CMAKE_EDIT_COMMAND = /usr/bin/ccmake
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/gianluca/ros_workspace/qtviewer
+CMAKE_SOURCE_DIR = /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/gianluca/ros_workspace/qtviewer
+CMAKE_BINARY_DIR = /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer
 
 # Utility rule file for tests.
 
@@ -57,6 +57,6 @@ CMakeFiles/tests.dir/clean:
 .PHONY : CMakeFiles/tests.dir/clean
 
 CMakeFiles/tests.dir/depend:
-	cd /home/gianluca/ros_workspace/qtviewer && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/gianluca/ros_workspace/qtviewer /home/gianluca/ros_workspace/qtviewer /home/gianluca/ros_workspace/qtviewer /home/gianluca/ros_workspace/qtviewer /home/gianluca/ros_workspace/qtviewer/CMakeFiles/tests.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer /home/cianciustyles/ros_workspace/project_safeteleoperation/qtviewer/CMakeFiles/tests.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/tests.dir/depend
 

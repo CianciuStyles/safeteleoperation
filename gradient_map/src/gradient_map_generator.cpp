@@ -1,4 +1,4 @@
-cd#include <ros/ros.h>
+#include <ros/ros.h>
 #include <distance_map/DistanceMap.h>
 #include <gradient_map/GradientMap.h>
 
@@ -123,7 +123,7 @@ int main(int argc, char **argv)
 	ros::init(argc, argv, "gradient_map_generator");
 	ros::NodeHandle n;
 
-	ros::Subscriber occupancy = n.subscribe("distance_map", 1, distanceCallback);
+	ros::Subscriber occupancy = n.subscribe("/distance_map", 1, distanceCallback);
 	gradient = n.advertise<gradient_map::GradientMap>("gradient_map", 1);
 
 	ros::spin();
