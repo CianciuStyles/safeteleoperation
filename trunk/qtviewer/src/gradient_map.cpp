@@ -6,25 +6,18 @@
 #include "settings.h"
 #include <stdio.h>
 
-
-double min = 1000;
-double max = 0;
-
 GradientMap::GradientMap(QWidget *parent, Qt::WFlags f) : QWidget(parent, f) {
-	double random;
 	for (int k = 0; k < MAP_HEIGHT/PIXEL_SIZE; k++)
 		for (int w = 0; w < MAP_WIDTH/PIXEL_SIZE; w++) {
-			pixels[k][w] = 0;
 			intensity[k][w] = 0;
-			random = rand()%360;
 			angle[k][w] = 0;
 		}
 	
-	intensity[0][0] = -1;
+	/*intensity[0][0] = -1;
 	angle[0][0] = -1;
 	intensity[1][0] = -0.75;
 	angle[1][0] = 270;
-	/*intensity[2][0] = 255;
+	intensity[2][0] = 255;
 	angle[2][0] = 270;
 	intensity[3][0] = 255;
 	angle[3][0] = 270;
@@ -54,13 +47,9 @@ void GradientMap::paintEvent(QPaintEvent *event) {
 	int rows = MAP_WIDTH/PIXEL_SIZE;
 	int cols = MAP_HEIGHT/PIXEL_SIZE;
 	double random;
-	/*for (int k = 0; k < MAP_HEIGHT/PIXEL_SIZE; k++)
-		for (int w = 0; w < MAP_WIDTH/PIXEL_SIZE; w++) {
-			random = rand()%360;
-			angle[k][w] = random;
-		}
-	*/
+	
 	QPainter p(this);
+	
 	/* draw the grid */
 	p.setPen(Qt::gray);
 	for (int i = 0; i <= MAP_WIDTH; i+=PIXEL_SIZE)
@@ -68,10 +57,7 @@ void GradientMap::paintEvent(QPaintEvent *event) {
 	for (int j = 0; j <= MAP_HEIGHT; j+=PIXEL_SIZE)
 		p.drawLine (0, j, MAP_WIDTH, j);
 	
-	int increment_red = 1;//(-min) / 255;
-	/*if (increment_red <= 1) increment_red = 1;
-	int increment_green = max / 255;
-	if (increment_green <= 1) increment_green = 1;*/
+	int increment_red = 1;
 	
 	/* Init painters */
 	if (painters_red.size() == 0) {
@@ -118,12 +104,6 @@ void GradientMap::paintEvent(QPaintEvent *event) {
 				painters_red[256]->setPen(Qt::gray);
 				painters_red[256]->drawRect(QRect(k*PIXEL_SIZE, w*PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE));
 			}
-			/*else {
-				QRect rect = QRect(k*PIXEL_SIZE, w*PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
-				p.setBrush(Qt::transparent);
-				p.drawRect(rect);
-				
-			}*/
 		}
 	}
 	
@@ -133,14 +113,6 @@ void GradientMap::paintEvent(QPaintEvent *event) {
 
 	QRect robot = QRect((rows/2 - 2)*PIXEL_SIZE, (cols/2 -2)*PIXEL_SIZE, 4*PIXEL_SIZE, 4*PIXEL_SIZE);
 	p.drawRect(robot);
-}
-
-void GradientMap::resetMax() {
-	max = 0;
-}
-
-void GradientMap::resetMin() {
-	min = 1000;
 }
 
 /*void GradientMap::setPixel(int x, int y, double value) {
@@ -181,9 +153,9 @@ QPolygon GradientMap::getArrow(int x, int y, double angle) {
 }
 
 void GradientMap::setIntensity(int x, int y, double i) {
-        pixels[x][y] = i;
+        intensity[x][y] = i;
 }
 
 void GradientMap::setAngle(int x, int y, double a) {
-        pixels[x][y] = a;
+	angle[x][y] = a;
 }
