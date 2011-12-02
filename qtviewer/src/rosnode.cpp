@@ -79,11 +79,23 @@ void RosNode::gradientCallback(const gradient_map::GradientMap::ConstPtr &msg) {
 			grad_map->setPixel(j, msg->size_y -1 - i, msg->map[i*msg->size_x+j]);
 			//emit setDistancePixel(j, msg->size_y -1 - i, msg->map[i*msg->size_x+j]);
 		}*/
+	double max = 0;
+	double min = 100;
 	for (int i = 0; i < msg->size_y; i++)
 		for (int j = 0; j < msg->size_x; j++) {
-			grad_map->setIntensity(j, msg->size_y -1 - i, msg->map_scalar[i*msg->size_x+j]);
-			grad_map->setAngle(j, msg->size_y -1 - i, msg->map_theta[i*msg->size_x+j]);
+			//grad_map->setIntensity(j, msg->size_y -1 - i, msg->map_scalar[i*msg->size_x+j]);
+			if (msg->map_scalar[i*msg->size_x+j] < 99) {
+				grad_map->setIntensity(j, i, msg->map_scalar[i*msg->size_x+j]);
+				if (msg->map_scalar[i*msg->size_x+j] > max) max = msg->map_scalar[i*msg->size_x+j];
+				if (msg->map_scalar[i*msg->size_x+j] < min) min = msg->map_scalar[i*msg->size_x+j];
+				grad_map->setAngle(j, i, msg->map_theta[i*msg->size_x+j]);
+			} else {
+				grad_map->setIntensity(j, i, 100);
+				grad_map->setAngle(j, i, 0);
+			}
 			//emit setDistancePixel(j, msg->size_y -1 - i, msg->map[i*msg->size_x+j]);
 		}
+	//ROS_INFO("Min: %f", min);
+	//ROS_INFO("Max: %f", max);
 	grad_map->update();
 }
