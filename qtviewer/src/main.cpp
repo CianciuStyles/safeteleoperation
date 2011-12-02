@@ -53,8 +53,8 @@ int main(int argc, char **argv) {
 	QApplication app(argc, argv);
 	Finestra f;
 	f.setGeometry(200, 20, MAP_WIDTH*2 + 20, MAP_HEIGHT*2 + 20);
-	//f.setMinimumSize(MAP_WIDTH*2 + 20, MAP_HEIGHT*2 + 20);
-	//f.setMaximumSize(MAP_WIDTH*2 + 20, MAP_HEIGHT*2 + 20);
+	f.setMinimumSize(MAP_WIDTH*2 + 20, MAP_HEIGHT*2 + 20);
+	f.setMaximumSize(MAP_WIDTH*2 + 20, MAP_HEIGHT*2 + 20);
 	f.show();
 	
 	rn->setOccMap(occupancyMap);
