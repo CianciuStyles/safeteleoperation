@@ -9,10 +9,10 @@
 GradientMap::GradientMap(QWidget *parent, Qt::WFlags f) : QWidget(parent, f) {
 	for (int k = 0; k < MAP_HEIGHT/PIXEL_SIZE; k++)
 		for (int w = 0; w < MAP_WIDTH/PIXEL_SIZE; w++) {
-			intensity[k][w] = 0;
+			intensity[k][w] = 100;
 			angle[k][w] = 0;
 		}
-	
+	/*
 	/*intensity[0][0] = -1;
 	angle[0][0] = -1;
 	intensity[1][0] = -0.75;
@@ -44,6 +44,7 @@ GradientMap::GradientMap(QWidget *parent, Qt::WFlags f) : QWidget(parent, f) {
 #define RGB_DIVISOR 10
 
 void GradientMap::paintEvent(QPaintEvent *event) {
+	
 	int rows = MAP_WIDTH/PIXEL_SIZE;
 	int cols = MAP_HEIGHT/PIXEL_SIZE;
 	double random;
@@ -61,6 +62,15 @@ void GradientMap::paintEvent(QPaintEvent *event) {
 	
 	/* Init painters */
 	if (painters_red.size() == 0) {
+		for (int i = 0; i < 255/10; i++) {
+			painters_red.push_back(new QPainter(this));
+			painters_red[i]->setBrush(QColor(255, 10*i, 0));
+			painters_red[i]->setPen(Qt::gray);
+		}
+		painters_red.push_back(new QPainter(this));
+		painters_red[255/10]->setBrush(QColor(255, 255, 0));
+		painters_red[255/10]->setPen(Qt::gray);
+		/*
 		for (int i = 0; i < 255/increment_red; i++) {
 			painters_red.push_back(new QPainter(this));
 			painters_red[i]->setBrush(QColor(255, increment_red*i, 0));
@@ -72,6 +82,10 @@ void GradientMap::paintEvent(QPaintEvent *event) {
 		painters_red.push_back(new QPainter(this));
 		painters_red[255/increment_red + 1]->setBrush(QColor(255, 0, 0));//for drawing a QRect instead of an arrow
 		painters_red[255/increment_red + 1]->setPen(Qt::gray);
+		*/
+		painters_red.push_back(new QPainter(this));
+		painters_red[255/10 +1]->setBrush(QColor(255, 0, 0));//for drawing a QRect instead of an arrow
+		painters_red[255/10 +1]->setPen(Qt::gray);
 	}
 	
 	//p.setBrush(Qt::red);
@@ -80,29 +94,22 @@ void GradientMap::paintEvent(QPaintEvent *event) {
 			double c = intensity[k][w];
 			int g = 0;
 			if (!(angle[k][w] < 0)) {
+				
+				if (c > 5) continue;
 				QPolygon triangle = getArrow(k, w, angle[k][w]);
 				
-				g = 255+c*255;
-				if (g < 0)
-					g = 0;
-				else if (g > 255)
-					g = 255;
-				/*if (c > -1) {
-					while(c < 0) {
-						g--;
-						c += increment_red/255;
-						if (g < 0) {
-							g = 0;
-							break;
-					}
-				}*/
+				int g = 256;
+				for (g = 0; c > 0; g+=10)
+					c-=0.25;
 				
-				if (c < 0)
-					painters_red[g]->drawPolygon(triangle);
+				if (g > 255)
+					g = 255;
+				
+				painters_red[g/10]->drawPolygon(triangle);
 			}
 			else {
-				painters_red[256]->setPen(Qt::gray);
-				painters_red[256]->drawRect(QRect(k*PIXEL_SIZE, w*PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE));
+				painters_red[255/10 +1]->setPen(Qt::gray);
+				painters_red[255/10 +1]->drawRect(QRect(k*PIXEL_SIZE, w*PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE));
 			}
 		}
 	}
@@ -115,11 +122,6 @@ void GradientMap::paintEvent(QPaintEvent *event) {
 	p.drawRect(robot);
 }
 
-/*void GradientMap::setPixel(int x, int y, double value) {
-	if (value < min) min = value;
-	if (value > max) max = value;
-	pixels[x][y] = value;
-}*/
 
 QPolygon GradientMap::getArrow(int x, int y, double angle) {
 	QPolygon triangle;
@@ -128,7 +130,7 @@ QPolygon GradientMap::getArrow(int x, int y, double angle) {
 		triangle.setPoints(3, x*PIXEL_SIZE+5,y*PIXEL_SIZE+3, x*PIXEL_SIZE+2,y*PIXEL_SIZE+0, x*PIXEL_SIZE+2,y*PIXEL_SIZE+6);
 	}
 	else if (angle >= 22.5 && angle < 67.5) {
-		triangle.setPoints(3, x*PIXEL_SIZE+5,y*PIXEL_SIZE+1, x*PIXEL_SIZE+5,y*PIXEL_SIZE+5, x*PIXEL_SIZE+1,y*PIXEL_SIZE+5);
+		triangle.setPoints(3, x*PIXEL_SIZE+5,y*PIXEL_SIZE+2, x*PIXEL_SIZE+5,y*PIXEL_SIZE+6, x*PIXEL_SIZE+1,y*PIXEL_SIZE+2);
 	}
 	else if (angle >= 67.5 && angle < 112.5){
 		triangle.setPoints(3, x*PIXEL_SIZE+3,y*PIXEL_SIZE+1, x*PIXEL_SIZE+0,y*PIXEL_SIZE+4, x*PIXEL_SIZE+6,y*PIXEL_SIZE+4);
@@ -153,7 +155,7 @@ QPolygon GradientMap::getArrow(int x, int y, double angle) {
 }
 
 void GradientMap::setIntensity(int x, int y, double i) {
-        intensity[x][y] = i;
+	intensity[x][y] = i;
 }
 
 void GradientMap::setAngle(int x, int y, double a) {
