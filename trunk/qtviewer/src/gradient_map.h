@@ -15,7 +15,8 @@ class GradientMap : public QWidget {
 	protected:
 		void paintEvent(QPaintEvent *event);
 	public slots:
-		void setPixel(int x, int y, double value);
+		void setIntensity(int x, int y, double value);
+		void setAngle(int x, int y, double value);
 		void resetMin();
 		void resetMax();
 	private:
