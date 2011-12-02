@@ -47,9 +47,7 @@ void RosNode::setGradMap(GradientMap * map)
 	grad_map = map;
 }
 
-int o = 0;
 void RosNode::occupancyCallback(const occupancy_map::OccupancyMap::ConstPtr &msg) {
-	//printf("O=%d\n", o++);
 	for (int i = 0; i < msg->size_y; i++)
 		for (int j = 0; j < msg->size_x; j++) {
 			if (msg->map[i*msg->size_x+j]) 
@@ -62,9 +60,7 @@ void RosNode::occupancyCallback(const occupancy_map::OccupancyMap::ConstPtr &msg
 	occ_map->update();
 }
 
-int d = 0;
 void RosNode::distanceCallback(const distance_map::DistanceMap::ConstPtr &msg) {
-	//printf("D=%d\n", d++);
 	for (int i = 0; i < msg->size_y; i++)
 		for (int j = 0; j < msg->size_x; j++) {
 			dist_map->setPixel(j, msg->size_y -1 - i, msg->map[i*msg->size_x+j]);
@@ -82,7 +78,12 @@ void RosNode::gradientCallback(const gradient_map::GradientMap::ConstPtr &msg) {
 		for (int j = 0; j < msg->size_x; j++) {
 			grad_map->setPixel(j, msg->size_y -1 - i, msg->map[i*msg->size_x+j]);
 			//emit setDistancePixel(j, msg->size_y -1 - i, msg->map[i*msg->size_x+j]);
+		}*/
+	for (int i = 0; i < msg->size_y; i++)
+		for (int j = 0; j < msg->size_x; j++) {
+			grad_map->setIntensity(j, msg->size_y -1 - i, msg->map_scalar[i*msg->size_x+j]);
+			grad_map->setAngle(j, msg->size_y -1 - i, msg->map_theta[i*msg->size_x+j]);
+			//emit setDistancePixel(j, msg->size_y -1 - i, msg->map[i*msg->size_x+j]);
 		}
-	*/
 	grad_map->update();
 }

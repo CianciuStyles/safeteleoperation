@@ -82,7 +82,17 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 	//printf("min is %f at %d. min_back is %f. \n", min,index,min_back);
   //&& min - min_back > 0
 		
-	printf("min is %f", min);		
+	for (int i = 0; i < size_y; i++) {
+		printf("\n");
+		for (int j = 0; j < size_x; j++) {
+			printf ("%.2f ", msg->map[i*size_y+j]);
+		}
+	}
+	printf("--------------------------------------------\n");
+	printf("--------------------------------------------\n");
+	printf("--------------------------------------------\n");
+	//printf("min is %f\n", min);
+	//printf("min_back is %f\n", min_back);
 
 	//printf("%f - %f\n", min, min_back);
 
@@ -96,7 +106,7 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 
 		else new_vel[0] = -1;
 
-	printf(" new_vel is %f\n", new_vel[0]);
+	//printf(" new_vel is %f\n", new_vel[0]);
 		 
 
 	//new_vel[1] = (near_cells[8] >= 6) ? 0 : 1/20*exp(near_cells[8]-1)-1; 
