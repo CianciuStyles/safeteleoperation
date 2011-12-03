@@ -65,11 +65,11 @@ void GradientMap::paintEvent(QPaintEvent *event) {
 		for (int i = 0; i < 255/10; i++) {
 			painters_red.push_back(new QPainter(this));
 			painters_red[i]->setBrush(QColor(255, 10*i, 0));
-			painters_red[i]->setPen(Qt::gray);
+			painters_red[i]->setPen(QColor(255, 10*i, 0));
 		}
 		painters_red.push_back(new QPainter(this));
 		painters_red[255/10]->setBrush(QColor(255, 255, 0));
-		painters_red[255/10]->setPen(Qt::gray);
+		painters_red[255/10]->setPen(QColor(255, 255, 0));
 		/*
 		for (int i = 0; i < 255/increment_red; i++) {
 			painters_red.push_back(new QPainter(this));
@@ -99,6 +99,7 @@ void GradientMap::paintEvent(QPaintEvent *event) {
 				QPolygon triangle = getArrow(k, w, angle[k][w]);
 				
 				int g = 256;
+				c -= 1;
 				for (g = 0; c > 0; g+=10)
 					c-=0.25;
 				

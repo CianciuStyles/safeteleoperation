@@ -6,7 +6,7 @@
 	<node name="qtviewer" pkg="qtviewer" type="qtviewer" output="screen"/>
 	
 	<node respawn="true" pkg="joy" type="joy_node" name="joy" >
-    		<param name="dev" type="string" value="/dev/input/js1" />
+    		<param name="dev" type="string" value="/dev/joy" />
     		<param name="deadzone" value="0.12" />
   	</node>
 
