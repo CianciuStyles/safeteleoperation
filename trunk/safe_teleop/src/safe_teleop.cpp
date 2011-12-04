@@ -40,7 +40,7 @@ void velCallback(const geometry_msgs::Twist::ConstPtr& msg) {
 			twist.linear.x = msg->linear.x;
 		else {
 			twist.linear.x = new_velocity;
-			ROS_INFO("Actual velocity: %.2f", twist.linear.x);
+			//ROS_INFO("Actual velocity: %.2f", twist.linear.x);
 		}
 
 		twist.linear.y = msg->linear.y;
@@ -93,7 +93,7 @@ void gradientCallback(const gradient_map::GradientMap::ConstPtr& msg) {
 			}
 		}
 		
-		ROS_INFO("%.2f, %.2f", max_scalar, max_theta);
+		//ROS_INFO("%.2f, %.2f", max_scalar, max_theta);
 		
 		
 		//Calculate the smoothed deceleration
