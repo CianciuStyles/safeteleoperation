@@ -9,14 +9,11 @@ using namespace ros;
 
 Subscriber gradient_sub, vel_sub;
 Publisher vel_pub;
-//double linear_velocity, angular_velocity;
-double total_vector_modulus, total_vector_angle;
-double near_cells_scalar[20], near_cells_theta[20];// new_vel[4];
 
-double Degrees2Radians(double angle) {
-	return (angle*3.141592653589793238)/180.0;
-}
+double new_velocity;
+double near_cells_scalar[20], near_cells_theta[20];
 
+/*
 void vectorialSum(double firstVector_m, double firstVector_a, double secondVector_m, double secondVector_a, double* resultantVector_m, double* resultantVector_a) {
 	double firstVector_x = firstVector_m * cos(firstVector_a);
 	double firstVector_y = firstVector_m * sin(firstVector_a);
@@ -34,28 +31,23 @@ void vectorialSum(double firstVector_m, double firstVector_a, double secondVecto
 		*resultantVector_a = (double)((int)(*resultantVector_a + 180) % 360);
 	}
 }
+*/
 	
 void velCallback(const geometry_msgs::Twist::ConstPtr& msg) {
 		geometry_msgs::Twist twist;
-		double movement_vector_modulus = 0;
-		double movement_vector_angle = 0;
-			
-		if(msg->linear.x != 0){
-			vectorialSum(msg->linear.x, msg->angular.z, total_vector_modulus, total_vector_angle, &movement_vector_modulus, &movement_vector_angle);
-			
-			twist.linear.x = movement_vector_modulus * cos(movement_vector_angle);
-			twist.angular.z = (movement_vector_angle - 90)/20;
-			                 //movement_vector_modulus * sin(movement_vector_angle);
-		}
-		else {
+
+		if(msg->linear.x == 0)
 			twist.linear.x = msg->linear.x;
-			twist.angular.z = msg->angular.z;
+		else {
+			twist.linear.x = new_velocity;
+			ROS_INFO("Actual velocity: %.2f", twist.linear.x);
 		}
 
 		twist.linear.y = msg->linear.y;
 		twist.linear.z = msg->linear.z;
 		twist.angular.x = msg->angular.x; 
 		twist.angular.y = msg->angular.y; 
+		twist.angular.z = msg->angular.z;
 		
 		vel_pub.publish(twist);
 }
@@ -91,39 +83,32 @@ void gradientCallback(const gradient_map::GradientMap::ConstPtr& msg) {
         near_cells[19] = map[(size_y/2 - 2)*size_x + (size_y/2 - 3)];
         */
         
-        /*
-        double min_back;
-        double min = 100;
-        for (int i = 1; i < 5; i ++) {
-                if (near_cells[i] < min) {
-                        min = near_cells[i];
-                        min_back = map[(size_y/2 - 2)*size_x + (size_y/2 - 3) + i];
-                }
-        }
-        //printf("%f - %f\n", min, min_back);
-        */
-        
-        //Calculation of the total repulsive force applied to robot
-        //double total_vector_modulus = 0.0;
-        //double total_vector_angle = 0.0;
-        for(int i = 0; i < 6; i++) {
-                printf("%f, %f", total_vector_modulus, total_vector_angle);
-                vectorialSum(total_vector_modulus, total_vector_angle, near_cells_scalar[i], near_cells_theta[i], &total_vector_modulus, &total_vector_angle);
-                printf("%f, %f", total_vector_modulus, total_vector_angle);
-        }
-        
-        
-        /*
-                if (min >= 16)
-                        new_vel[0] = -1;
-                else if (min <= 8 && min - min_back > 0)
-                        new_vel[0] = 0;
-                else new_vel[0] = 1;//(near_cells[3]); 
-        
-        new_vel[1] = (near_cells[8] >= 6) ? 0 : 1/20*exp(near_cells[8]-1)-1; 
-        new_vel[2] = (near_cells[13] >= 6) ? 0 : 1/20*exp(near_cells[13]-1)-1; 
-        new_vel[3] = (near_cells[18] >= 6) ? 0 : 1/20*exp(near_cells[18]-1)-1;
-        */
+        //Find the maximum repulsive force
+        double max_scalar = near_cells_scalar[0];
+        double max_theta = near_cells_theta[0];
+        for(int i=1; i<6; i++){
+			if(near_cells_scalar[i] > max_scalar){
+				max_scalar = near_cells_scalar[i];
+				max_theta = near_cells_theta[i];
+			}
+		}
+		
+		ROS_INFO("%.2f, %.2f", max_scalar, max_theta);
+		
+		
+		//Calculate the smoothed deceleration
+		if(max_scalar == 1000.0)
+			new_velocity = 0.0;
+		else if(max_scalar < 8){	//further than 8 steps there's no deceleration
+			if(max_scalar <= 2.5) new_velocity = 0.0; //if we are close to the obstacle, there's no movement on the X axis
+			else if(max_scalar <= 3.5) new_velocity = 0.1;
+			else if(max_scalar <= 4.5) new_velocity = 0.4;
+			else if(max_scalar <= 5.5) new_velocity = 0.9;
+			else if(max_scalar <= 6.5) new_velocity = 1.4;
+			else if(max_scalar <= 7.0) new_velocity = 1.8;
+		}
+		else
+			new_velocity = 2.0;
 }
 
 int main(int argc, char **argv) {
