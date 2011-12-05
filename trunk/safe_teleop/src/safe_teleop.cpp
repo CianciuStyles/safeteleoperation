@@ -4,16 +4,18 @@
 #include "gradient_map/GradientMap.h"
 #include <math.h>
 
+#define MAX_ANG 1.8
+
 using namespace std;
 using namespace ros;
 
 Subscriber gradient_sub, vel_sub;
 Publisher vel_pub;
 
-double new_velocity;
+double new_velocity, angular;
 double near_cells_scalar[20], near_cells_theta[20];
 
-/*
+
 void vectorialSum(double firstVector_m, double firstVector_a, double secondVector_m, double secondVector_a, double* resultantVector_m, double* resultantVector_a) {
 	double firstVector_x = firstVector_m * cos(firstVector_a);
 	double firstVector_y = firstVector_m * sin(firstVector_a);
@@ -31,23 +33,24 @@ void vectorialSum(double firstVector_m, double firstVector_a, double secondVecto
 		*resultantVector_a = (double)((int)(*resultantVector_a + 180) % 360);
 	}
 }
-*/
 	
 void velCallback(const geometry_msgs::Twist::ConstPtr& msg) {
 		geometry_msgs::Twist twist;
-
-		if(msg->linear.x == 0)
-			twist.linear.x = msg->linear.x;
-		else {
-			twist.linear.x = new_velocity;
-			//ROS_INFO("Actual velocity: %.2f", twist.linear.x);
-		}
-
+		twist.linear.x = msg->linear.x;
 		twist.linear.y = msg->linear.y;
 		twist.linear.z = msg->linear.z;
 		twist.angular.x = msg->angular.x; 
-		twist.angular.y = msg->angular.y; 
-		twist.angular.z = msg->angular.z;
+		twist.angular.y = msg->angular.y;
+		twist.angular.z = msg->angular.z; 
+		if(msg->linear.x == 0) {
+			twist.linear.x = 0;
+			//twist.angular.z = 0;
+		}
+		else {
+			twist.linear.x = new_velocity;
+			twist.angular.z = msg->angular.z+angular;
+			//ROS_INFO("Actual velocity: %.2f", twist.linear.x);
+		}
 		
 		vel_pub.publish(twist);
 }
@@ -86,14 +89,36 @@ void gradientCallback(const gradient_map::GradientMap::ConstPtr& msg) {
         //Find the maximum repulsive force
         double max_scalar = near_cells_scalar[0];
         double max_theta = near_cells_theta[0];
-        for(int i=1; i<6; i++){
+        /*for(int i=1; i<6; i++){
 			if(near_cells_scalar[i] > max_scalar){
 				max_scalar = near_cells_scalar[i];
 				max_theta = near_cells_theta[i];
 			}
-		}
+		}*/
 		
-		//ROS_INFO("%.2f, %.2f", max_scalar, max_theta);
+		for (int i = 1; i < 6; i++)
+			vectorialSum(max_scalar, max_theta, near_cells_scalar[i], near_cells_theta[i], &max_scalar, &max_theta);
+			
+		max_scalar = 0;
+		for (int i = 0; i < 6; i++)
+			max_scalar+=near_cells_scalar[i];
+		
+		max_scalar/=6;
+		
+		if (max_scalar <= 6) {
+			if ((max_theta > 247.5 && max_theta <= 292.5) || (max_theta > 67.5 && max_theta <= 112.5))
+				angular = 0;
+			else if ((max_theta > 292.5 && max_theta <= 337.5) || (max_theta > 22.5 && max_theta <= 67.5))
+				angular = -MAX_ANG/2;
+			else if (max_theta > 337.5 || max_theta <= 22.5)
+				angular = -MAX_ANG;
+			else if ((max_theta > 112.5 && max_theta <= 157.5) || (max_theta > 202.5 && max_theta <= 247.5))
+				angular = MAX_ANG/2;
+			else if (max_theta > 157.5 && max_theta <= 202.5)
+				angular = MAX_ANG;
+		}
+		else angular = 0;
+		//ROS_INFO("scalar: %.2f, angle: %.2f, angular: %.2f", max_scalar, max_theta, angular);
 		
 		
 		//Calculate the smoothed deceleration
