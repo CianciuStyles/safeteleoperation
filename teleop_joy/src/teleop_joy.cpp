@@ -69,13 +69,15 @@ void repeat()
 
 void TeleopTurtle::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
 {
-  geometry_msgs::Twist vel;
+  geometry_msgs::Twist vel; 
+	
   vel.angular.z = a_scale_* joy->axes[angular_];
   vel.linear.x = l_scale_* joy->axes[linear_];
   go_ahead = l_scale_* joy->axes[linear_];
   turn = a_scale_* joy->axes[angular_];
   //std::cout << "go_ahead is " << go_ahead << std::endl;
   vel_pub_.publish(vel);
+
 }
 
 
