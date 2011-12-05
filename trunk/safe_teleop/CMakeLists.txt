@@ -31,3 +31,4 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 rosbuild_add_executable(safe_teleop src/safe_teleop.cpp)
 rosbuild_add_executable(safe_teleop_distance src/safe_teleop_distance.cpp)
+rosbuild_add_executable(safe_gate src/safe_gate.cpp)
