@@ -19,7 +19,7 @@ double new_vel;
 
 void velCallback(const geometry_msgs::Twist::ConstPtr& msg) {
 		geometry_msgs::Twist twist;
-		
+	
 		if (msg->linear.x < 0)
 				twist.linear.x = 0;		
 		
