@@ -17,7 +17,7 @@ private:
   
   ros::NodeHandle nh_;
 
-  int linear_, angular_;
+  int linear_, angular_, button_;
   double l_scale_, a_scale_;
   ros::Subscriber joy_sub_;
   
@@ -27,13 +27,15 @@ ros::Publisher vel_pub_;
 
 TeleopTurtle::TeleopTurtle():
   linear_(1),
-  angular_(2)
+  angular_(2),
+  button_(2)
 {
 
   nh_.param("axis_linear", linear_, linear_);
   nh_.param("axis_angular", angular_, angular_);
   nh_.param("scale_angular", a_scale_, a_scale_);
   nh_.param("scale_linear", l_scale_, l_scale_);
+  nh_.param("button_boost", button_, button_);
 
 
   vel_pub_ = nh_.advertise<geometry_msgs::Twist>("cmd_vel", 1);

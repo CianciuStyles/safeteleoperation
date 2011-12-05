@@ -13,9 +13,12 @@ GradientMap::GradientMap(QWidget *parent, Qt::WFlags f) : QWidget(parent, f) {
 			angle[k][w] = 0;
 		}
 	/*
-	/*intensity[0][0] = -1;
-	angle[0][0] = -1;
-	intensity[1][0] = -0.75;
+	intensity[0][0] = -1;
+	angle[0][0] = 45;
+	intensity[0][1] = -1;
+	angle[0][1] = 114;
+
+	/*intensity[1][0] = -0.75;
 	angle[1][0] = 270;
 	intensity[2][0] = 255;
 	angle[2][0] = 270;
