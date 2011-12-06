@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# shared library (libjoyrumble.so)
+gcc -m32 -pthread  -c -fPIC libjoyrumble.c -o libjoyrumble.o    
+gcc -m32 -pthread  -shared -Wl,-soname,libjoyrumble.so -o libjoyrumble.so  libjoyrumble.o
+rm libjoyrumble.o
+
+# command-line tool (joyrumble)
+gcc -m32 -pthread libjoyrumble.c -o joyrumble
+
+# gcc-example
+gcc -m32 gcc-example.c -o gcc-example -ldl
