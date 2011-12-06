@@ -18,7 +18,7 @@
   	<param name="scale_angular" value="2" type="double"/>
 
 	<node name="teleop_joy" pkg="teleop_joy" type="teleop_joy">
-		<remap from="cmd_vel" to="vel_gate"/>
+		<remap from="cmd_vel" to="vel"/>
 	</node>
 
 </launch>
