@@ -9,6 +9,23 @@
 using namespace std;
 using namespace ros;
 
+class Cell
+{
+	public:
+		
+		int row;
+		int col;
+		int m_
+		
+		Cell(int r, int c)
+		{
+			row = r;
+			col = c;
+			
+			return;
+		}
+};
+
 Subscriber distance_sub, vel_sub;
 Publisher vel_pub, vel2_pub;
 
@@ -19,10 +36,8 @@ double convert(int x, int y, std::vector<double> map, int size_y) {
 }
 	
 void velCallback(const geometry_msgs::Twist::ConstPtr& msg) {
-		geometry_msgs::Twist twist;
-		
-		
-		vel2_pub.publish(msg);
+	//geometry_msgs::Twist twist;
+	vel2_pub.publish(msg);
 }
 
 void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
@@ -30,27 +45,33 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 	vector<double> map = msg->map;
 	//printf("conv: %f\n", convert(0, 0, map, size_y)); 
 
-	int manhattan[size_x][size_y];
-	manhattan[5][25] = 0;
-	for (int i = 24; i >= 0; i--)
-		manhattan[5][i] = manhattan[5][i+1] + 1;
-		
-	for (int i = 26; i < size_y; i++)
-		manhattan[5][i] = manhattan[5][i-1] + 1;
-		
+	int manhattan[size_y];
+	manhattan[25] = 0;
+	for (int i = 24; i >= 0; i--) {
+		manhattan[i] = manhattan[i+1] + 1;
+	}
+	
+	for (int i = 26; i < size_y; i++) {
+		manhattan[i] = manhattan[i-1] + 1;
+	}
+	
 	for (int j = 4; j >= 0; j--)
-		for (int i = 0; i < size_y; i++)
-			manhattan[j][i] = manhattan[j+1][i] + 1;
+		for (int i = 0; i < size_y; i++) 
+			manhattan[j][i] = manhattan[i] + (5-j);
 			
 	for (int j = 6; j < size_x; j++)
 		for (int i = 0; i < size_y; i++)
-			manhattan[j][i] = manhattan[j-1][i] + 1;
-			
-	/*for (int i = 0; i < size_x; i++) {
+			manhattan[j][i] = manhattan[i] + (j-5);
+	
+	/*
+	for (int i = 0; i < size_x; i++) {
 		printf("\n");
 		for (int j = 0; j < size_y; j++)
 			printf("%2d ", manhattan[i][j]);
-	}*/
+	}
+	*/
+	
+	
 }
 
 int main(int argc, char **argv) {

@@ -89,6 +89,10 @@ void GradientMap::paintEvent(QPaintEvent *event) {
 		painters_red.push_back(new QPainter(this));
 		painters_red[255/10 +1]->setBrush(QColor(255, 0, 0));//for drawing a QRect instead of an arrow
 		painters_red[255/10 +1]->setPen(Qt::gray);
+		
+		painters_red.push_back(new QPainter(this));
+		painters_red[255/10 +2]->setBrush(QColor(0, 255, 255));
+		painters_red[255/10 +2]->setPen(Qt::gray);
 	}
 	
 	//p.setBrush(Qt::red);
@@ -98,8 +102,13 @@ void GradientMap::paintEvent(QPaintEvent *event) {
 			int g = 0;
 			if (!(angle[k][w] < 0)) {
 				
-				if (c > 5) continue;
 				QPolygon triangle = getArrow(k, w, angle[k][w]);
+				
+				if (c > 5) {
+					//painters_red[255/10 +2]->drawPolygon(triangle);
+					continue;
+				}
+				
 				
 				int g = 256;
 				c -= 1;
