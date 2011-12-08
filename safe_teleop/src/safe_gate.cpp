@@ -202,7 +202,7 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 			printf("%2d ", manhattan[i][j]);
 	}
 	*/
-	
+
 	priority_queue<Cell, vector<Cell>, CellComparator> open_set[2];
 	vector<Cell> closed_set;
 
@@ -211,13 +211,17 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 	Cell start_cell(25, 25, 0, manhattan[25][25]);
 	open_set[pq].push(start_cell);
 	
-	int i = 0;
+	int k = 0;
 	
 	while(!open_set[pq].empty()) {
 		
-		if (i++ > 1) return;
+		if (k > 30)
+			return;
+		//printf("Iterazione %d\n", k);
+		k++;
 		
 		Cell current_cell = open_set[pq].top();
+		printf("Current cell: %d - %d\n", current_cell.get_row(), current_cell.get_col());
 		
 		if(current_cell.get_h() == 0) {
 			path_generator(&current_cell);
@@ -228,7 +232,6 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 		closed_set.push_back(current_cell);
 		
 		for (int i = 0; i < 8; i++) {
-			
 			int r;
 			int c;
 			double dist;
@@ -245,37 +248,42 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 			Cell * y = NULL;
 
 			while (!open_set[pq].empty()) {
-				
 				Cell e = open_set[pq].top();
 				open_set[pq].pop();
-				open_set[pq % 1].push(e);
+				if (pq == 0)
+					open_set[1].push(e);
+				else 
+					open_set[0].push(e);
 				
 				if (e.get_col() == c && e.get_row() == r) {
 					y = &e;
 					exists = true;
 				}
 			}
-			
-			pq = pq % 1;
+
+			if (pq == 0)
+				pq = 1;
+			else pq = 0;
 			
 			// 
 			if (!exists) {
 				y = new Cell(r, c, tentative_g, convert(r, c, map, size_y) - manhattan[r][c]);
 				better = true;
+				
 				open_set[pq].push(*y);
+
 			} else if (tentative_g < y->get_g()) {
 				better = true;
 			}
+			else better = false;
 			
 			
 			
 			if (better) {
-				
 				y->set_parent(&current_cell);
 				y->update_g(tentative_g);
-				
 			}
-			
+			closed_set.push_back(*y);
 		}
 		
 	}
@@ -291,7 +299,7 @@ int main(int argc, char **argv) {
 	vel_pub = n.advertise<geometry_msgs::Twist>("vel", 1);
 	vel2_pub = n.advertise<geometry_msgs::Twist>("cmd_vel", 1);
 
-    spin(); 
+	spin(); 
 
-        return 0;
+	return 0;
 }
