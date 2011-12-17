@@ -228,7 +228,7 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 	
 	while(!open_set[pq].empty()) {
 		
-		if (k++ > 300) {
+		if (k++ > 1000) {
 			printf("Too much iterations\n");
 			return;
 		}
@@ -246,7 +246,21 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 						current_cell->get_parent()->get_col());
 		
 		if(current_cell->get_h() == 0) {
+			
 			path_generator(current_cell);
+			
+			/* deallocate objects */
+			while (closed_set.empty()) {
+				Cell * c = closed_set.back();
+				closed_set.pop_back();
+				delete c;
+			}
+			while (open_set[pq].empty()) {
+				Cell * c = open_set[pq].top();
+				open_set[pq].pop();
+				delete c;
+			}
+			
 			return;
 		}
 				
