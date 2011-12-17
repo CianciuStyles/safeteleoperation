@@ -218,10 +218,10 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 
 	int pq = 0;
 
-	double f_s = manhattan[25][25];
+	double h_s = manhattan[25][25];
 	if (convert(25, 25, map, size_y) < SAFE_DISTANCE) 
-		f_s += SAFE_DISTANCE - convert(25, 25, map, size_y);
-	Cell * start_cell = new Cell(25, 25, 0, f_s);
+		h_s += SAFE_DISTANCE - convert(25, 25, map, size_y);
+	Cell * start_cell = new Cell(25, 25, 0, h_s);
 	open_set[pq].push(start_cell);
 	
 	int k = 0;
@@ -307,11 +307,11 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 			
 			// 
 			if (!exists) {
-				double f = manhattan[r][c];
-				if (convert(r, c, map, size_y) == 0) f += 10000000;
+				double h = manhattan[r][c];
+				if (convert(r, c, map, size_y) == 0) h += 10000000;
 				else if (convert(r, c, map, size_y) < SAFE_DISTANCE) 
-					f += SAFE_DISTANCE - convert(r, c, map, size_y);
-				y = new Cell(r, c, tentative_g, f);
+					h += SAFE_DISTANCE - convert(r, c, map, size_y);
+				y = new Cell(r, c, tentative_g, h);
 				better = true;
 				open_set[pq].push(y);
 				y->set_parent(current_cell);
