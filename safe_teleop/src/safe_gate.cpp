@@ -19,7 +19,9 @@ class Cell
 		
 		int row;
 		int col;
-		double f, g, h;
+		double f; /* Total */ 
+		double g; /* Already paid */
+		double h; /* Manhattan && distance value */
 		Cell * parent;
 	
 	public:
@@ -40,6 +42,7 @@ class Cell
 		
 		void set_parent(Cell * p)
 		{
+			if (p == NULL) printf("Passed an invalid parent\n");
 			parent = p;
 		}
 		
@@ -138,19 +141,22 @@ class Cell
 
 void path_generator(Cell * curr)
 {
-	if (curr == NULL) return;
-	printf("%d - %d\n", curr->get_row(), curr->get_col());
-	path_generator(curr->get_parent());
+	printf("\n\nPATH: ");
+	while (curr != NULL) {
+		printf("[%d,%d] ", curr->get_row(), curr->get_col());
+		curr = curr->get_parent();
+	}
+	printf("\n\n");
 }
 
 class CellComparator
 {
 	public:
-		bool operator()(Cell& c1, Cell& c2)
+		bool operator()(Cell * c1, Cell * c2)
 		{
-			if(c1.get_f() < c2.get_f())
+			if(c1->get_f() > c2->get_f())
 				return true;
-			else if((c1.get_f() == c2.get_f()) && (c1.get_h() < c2.get_h()))
+			else if((c1->get_f() == c2->get_f()) && (c1->get_h() > c2->get_h()))
 				return true;
 			
 			return false;
@@ -171,7 +177,11 @@ void velCallback(const geometry_msgs::Twist::ConstPtr& msg) {
 	vel2_pub.publish(msg);
 }
 
+int i = 0;
+#define SAFE_DISTANCE 1.5
 void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
+
+	if (i++ % 300 != 0) return;
 
 	int size_x = msg->size_x, size_y = msg->size_y;
 	vector<double> map = msg->map;
@@ -203,31 +213,43 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 	}
 	*/
 
-	priority_queue<Cell, vector<Cell>, CellComparator> open_set[2];
-	vector<Cell> closed_set;
+	priority_queue<Cell *, vector<Cell *>, CellComparator> open_set[2];
+	vector<Cell *> closed_set;
 
 	int pq = 0;
 
-	Cell start_cell(25, 25, 0, manhattan[25][25]);
+	double f_s = manhattan[25][25];
+	if (convert(25, 25, map, size_y) < SAFE_DISTANCE) 
+		f_s += SAFE_DISTANCE - convert(25, 25, map, size_y);
+	Cell * start_cell = new Cell(25, 25, 0, f_s);
 	open_set[pq].push(start_cell);
 	
 	int k = 0;
 	
 	while(!open_set[pq].empty()) {
 		
-		if (k > 30)
-			return;
-		//printf("Iterazione %d\n", k);
-		k++;
-		
-		Cell current_cell = open_set[pq].top();
-		printf("Current cell: %d - %d\n", current_cell.get_row(), current_cell.get_col());
-		
-		if(current_cell.get_h() == 0) {
-			path_generator(&current_cell);
+		if (k++ > 300) {
+			printf("Too much iterations\n");
 			return;
 		}
 		
+		Cell * current_cell = open_set[pq].top();
+		
+		printf("Current cell: ( %d , %d ) : F = %.2f - G = %.2f - H = %.2f", 
+			current_cell->get_row(), current_cell->get_col(), 
+			current_cell->get_f(), current_cell->get_g(),
+			current_cell->get_h());
+		if (current_cell == start_cell) printf(" - ORIGIN\n");
+		else if (current_cell->get_parent() == NULL) printf(" - Invalid parent\n");
+		else printf(" - PARENT = ( %d , %d )\n", 
+						current_cell->get_parent()->get_row(),
+						current_cell->get_parent()->get_col());
+		
+		if(current_cell->get_h() == 0) {
+			path_generator(current_cell);
+			return;
+		}
+				
 		open_set[pq].pop();
 		closed_set.push_back(current_cell);
 		
@@ -235,28 +257,32 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 			int r;
 			int c;
 			double dist;
-			if (!current_cell.get_neighbour(i, &r, &c, &dist)) continue;
+			if (!current_cell->get_neighbour(i, &r, &c, &dist)) continue;
 			
+			bool in_closed = false;
 			for(int j = 0; j < closed_set.size(); j++)
-				if (closed_set[j].get_col() == c && closed_set[j].get_row() == r)
-					continue;
+				if (closed_set[j]->get_col() == c && closed_set[j]->get_row() == r) {
+					in_closed = true;
+					break;
+				}
+			if (in_closed) continue;
 			
-			double tentative_g = current_cell.get_g() + dist;
+			double tentative_g = current_cell->get_g() + dist;
 			bool better = false;
 			bool exists = false;
 			
 			Cell * y = NULL;
 
 			while (!open_set[pq].empty()) {
-				Cell e = open_set[pq].top();
+				Cell * e = open_set[pq].top();
 				open_set[pq].pop();
 				if (pq == 0)
 					open_set[1].push(e);
 				else 
 					open_set[0].push(e);
 				
-				if (e.get_col() == c && e.get_row() == r) {
-					y = &e;
+				if (e->get_col() == c && e->get_row() == r) {
+					y = e;
 					exists = true;
 				}
 			}
@@ -267,27 +293,30 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 			
 			// 
 			if (!exists) {
-				y = new Cell(r, c, tentative_g, convert(r, c, map, size_y) - manhattan[r][c]);
+				double f = manhattan[r][c];
+				if (convert(r, c, map, size_y) == 0) f += 10000000;
+				else if (convert(r, c, map, size_y) < SAFE_DISTANCE) 
+					f += SAFE_DISTANCE - convert(r, c, map, size_y);
+				y = new Cell(r, c, tentative_g, f);
 				better = true;
-				
-				open_set[pq].push(*y);
+				open_set[pq].push(y);
+				y->set_parent(current_cell);
+				if (y->get_parent() == NULL) printf("Invalid setted parent\n");
 
 			} else if (tentative_g < y->get_g()) {
 				better = true;
-			}
-			else better = false;
-			
-			
+			} else better = false;
 			
 			if (better) {
-				y->set_parent(&current_cell);
+				y->set_parent(current_cell);
+				if (y->get_parent() != current_cell)
+					printf("Wrong set parent\n");
 				y->update_g(tentative_g);
 			}
-			closed_set.push_back(*y);
+			closed_set.push_back(y);
 		}
 		
 	}
-	
 	
 }
 
