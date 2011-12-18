@@ -179,6 +179,8 @@ void velCallback(const geometry_msgs::Twist::ConstPtr& msg) {
 
 int i = 0;
 #define SAFE_DISTANCE 1.5
+#define MAX_
+
 void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 
 	if (i++ % 300 != 0) return;
@@ -308,7 +310,7 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 			// 
 			if (!exists) {
 				double h = manhattan[r][c];
-				if (convert(r, c, map, size_y) == 0) h += 10000000;
+				if (convert(r, c, map, size_y) < 0.2) h += 10000000;
 				else if (convert(r, c, map, size_y) < SAFE_DISTANCE) 
 					h += SAFE_DISTANCE - convert(r, c, map, size_y);
 				y = new Cell(r, c, tentative_g, h);
