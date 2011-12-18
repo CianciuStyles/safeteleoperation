@@ -178,13 +178,17 @@ void velCallback(const geometry_msgs::Twist::ConstPtr& msg) {
 }
 
 int i = 0;
-#define SAFE_DISTANCE 1.5
-#define MAX_
+#define SAFE_DISTANCE 8
+#define MAX_PENALITY 30
 
 void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 
-	if (i++ % 300 != 0) return;
-
+	if (i++ % 300 != 0) {
+		printf(".");
+		fflush(stdout);
+		return;
+	} else printf("\n");
+	
 	int size_x = msg->size_x, size_y = msg->size_y;
 	vector<double> map = msg->map;
 	//printf("conv: %f\n", convert(0, 0, map, size_y)); 
@@ -310,9 +314,9 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 			// 
 			if (!exists) {
 				double h = manhattan[r][c];
-				if (convert(r, c, map, size_y) < 0.2) h += 10000000;
+				if (convert(r, c, map, size_y) < 2) h += 10000000;
 				else if (convert(r, c, map, size_y) < SAFE_DISTANCE) 
-					h += SAFE_DISTANCE - convert(r, c, map, size_y);
+					h += MAX_PENALITY - convert(r, c, map, size_y);
 				y = new Cell(r, c, tentative_g, h);
 				better = true;
 				open_set[pq].push(y);
