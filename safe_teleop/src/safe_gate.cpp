@@ -179,7 +179,7 @@ void velCallback(const geometry_msgs::Twist::ConstPtr& msg) {
 
 int i = 0;
 #define SAFE_DISTANCE 8
-#define MAX_PENALITY 30
+#define MAX_PENALITY 20
 
 void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 
@@ -233,11 +233,6 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 	int k = 0;
 	
 	while(!open_set[pq].empty()) {
-		
-		if (k++ > 1000) {
-			printf("Too much iterations\n");
-			return;
-		}
 		
 		Cell * current_cell = open_set[pq].top();
 		
