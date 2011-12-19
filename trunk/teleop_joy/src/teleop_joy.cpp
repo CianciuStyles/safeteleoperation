@@ -6,10 +6,10 @@
 #include <boost/date_time.hpp> 
 #include <boost/date_time/posix_time/posix_time.hpp>
 
-class TeleopTurtle
+class SafeTeleop
 {
 public:
-  TeleopTurtle();
+  SafeTeleop();
   void repeat();
   
 private:
@@ -25,7 +25,7 @@ private:
 
 ros::Publisher vel_pub_;
 
-TeleopTurtle::TeleopTurtle():
+SafeTeleop::SafeTeleop():
   linear_(1),
   angular_(2),
   button_(2)
@@ -39,7 +39,7 @@ TeleopTurtle::TeleopTurtle():
 
 
   vel_pub_ = nh_.advertise<geometry_msgs::Twist>("cmd_vel", 1);
-  joy_sub_ = nh_.subscribe<sensor_msgs::Joy>("joy", 10, &TeleopTurtle::joyCallback, this);
+  joy_sub_ = nh_.subscribe<sensor_msgs::Joy>("joy", 10, &SafeTeleop::joyCallback, this);
 
 }
 
@@ -69,7 +69,7 @@ void repeat()
 	}
 }
 
-void TeleopTurtle::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
+void SafeTeleop::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
 {
   geometry_msgs::Twist vel; 
 	
@@ -86,7 +86,7 @@ void TeleopTurtle::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
 int main(int argc, char** argv)
 {
 	ros::init(argc, argv, "teleop_turtle");
-	TeleopTurtle teleop_turtle;
+	SafeTeleop teleop_turtle;
 
 	boost::thread workerThread(repeat);  
 	ros::spin();
