@@ -1,11 +1,14 @@
 <launch>
-	<node name="stage" pkg="stage" type="stageros" args="$(find safe_teleop)/DIS/dis-1.world"/>
+	<node name="stage" pkg="stage" type="stageros" args="$(find safe_teleop)/DIS/dis-1.world">
+		<remap from="odom" to="odom_stage" />
+	</node>
 	<node name="occupancy_map" pkg="occupancy_map" type="occupancy_map_generator"/>
 	<node name="distance_map" pkg="distance_map" type="distance_map_generator"/>
 	<node name="gradient_map" pkg="gradient_map" type="gradient_map_generator"/>
 	<node name="safe_teleop" pkg="safe_teleop" type="safe_teleop_distance" output="screen"/>
-	<node name="safe_gate" pkg="safe_teleop" type="safe_gate" output="screen"/>
-	<node name="qtviewer" pkg="qtviewer" type="qtviewer" output="screen"/>
+	<node name="safe_gate" pkg="safe_teleop" type="safe_gate"  output="screen"/>
+<!--	<node name="position" pkg="position" type="position" output="screen"/> -->
+	<node name="qtviewer" pkg="qtviewer" type="qtviewer"/>
 	
 	<node respawn="true" pkg="joy" type="joy_node" name="joy" >
     		<param name="dev" type="string" value="/opt/joystick" />

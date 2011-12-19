@@ -10,6 +10,8 @@
   <url>http://ros.org/wiki/safe_teleop</url>
   <depend package="teleop_joy" />
   <depend package="gradient_map"/>
+  <depend package="sensor_msgs"/>
+  <depend package="tf"/>
 
 </package>
 
