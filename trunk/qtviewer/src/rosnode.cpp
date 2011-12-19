@@ -25,6 +25,7 @@ void RosNode::init() {
 	occ_sub = n.subscribe("occupancy_map", 1, &RosNode::occupancyCallback, this);
 	dist_sub = n.subscribe("distance_map", 1, &RosNode::distanceCallback, this);
 	grad_sub = n.subscribe("gradient_map", 1, &RosNode::gradientCallback, this);
+	traj_sub = n.subscribe("trajectory_map", 1, &RosNode::trajectoryCallback, this);
 	start();
 }
 
@@ -45,6 +46,11 @@ void RosNode::setDistMap(DistanceMap * map)
 void RosNode::setGradMap(GradientMap * map)
 {
 	grad_map = map;
+}
+
+void RosNode::setTrajMap(TrajectoryMap * map)
+{
+	traj_map = map;
 }
 
 void RosNode::occupancyCallback(const occupancy_map::OccupancyMap::ConstPtr &msg) {
@@ -98,4 +104,13 @@ void RosNode::gradientCallback(const gradient_map::GradientMap::ConstPtr &msg) {
 	//ROS_INFO("Min: %f", min);
 	//ROS_INFO("Max: %f", max);
 	grad_map->update();
+}
+
+void RosNode::trajectoryCallback(const safe_teleop::TrajectoryMap::ConstPtr &msg) {
+	for (int i = 0; i < msg->size_y; i++)
+		for (int j = 0; j < msg->size_x; j++) {
+			traj_map->setPixel(i, j, msg->map[i*msg->size_x+j]);
+			//emit setDistancePixel(j, msg->size_y -1 - i, msg->map[i*msg->size_x+j]);
+		}
+	traj_map->update();
 }

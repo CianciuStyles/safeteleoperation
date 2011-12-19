@@ -38,7 +38,7 @@ eros_prepare_qt4(QtCore QtGui) # Add the appropriate components to the component
 QT4_ADD_RESOURCES(QT_RESOURCES_CPP ${QT_RESOURCES})
 QT4_WRAP_UI(QT_FORMS_HPP ${QT_FORMS})
 QT4_WRAP_CPP(QT_MOC_HPP ${QT_MOC})
-QT4_AUTOMOC(src/rosnode.cpp src/occupancy_map.cpp src/distance_map.cpp src/gradient_map.cpp)
+QT4_AUTOMOC(src/rosnode.cpp src/occupancy_map.cpp src/distance_map.cpp src/gradient_map.cpp src/trajectory_map.cpp)
 
 ##############################################################################
 # Sources

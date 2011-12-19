@@ -6,10 +6,12 @@
 #include "occupancy_map.h"
 #include "distance_map.h"
 #include "gradient_map.h"
+#include "trajectory_map.h"
 #include "rosnode.h"
 
 static RosNode *rn;
 //static Mappa *mappa1;
+static TrajectoryMap *trajectoryMap;
 static OccupancyMap *occupancyMap;
 static DistanceMap *distanceMap;
 static GradientMap *gradientMap;
@@ -22,15 +24,16 @@ class Finestra: public QWidget {
 Finestra::Finestra(QWidget *parent, Qt::WFlags f) : QWidget(parent, f) {
 	//QPushButton *quit = new QPushButton("Quit", this);
 	//mappa1 = new Mappa(this, 0);
+	trajectoryMap = new TrajectoryMap(this, 0);
 	occupancyMap = new OccupancyMap(this, 0);
 	distanceMap = new DistanceMap(this, 0);
 	gradientMap = new GradientMap(this, 0);
 
 	//connect(quit, SIGNAL(clicked()), qApp, SLOT(quit()));
-	connect(rn, SIGNAL(setOccupancyPixel(int, int)), occupancyMap, SLOT(drawPixel(int, int)));
+	/*connect(rn, SIGNAL(setOccupancyPixel(int, int)), occupancyMap, SLOT(drawPixel(int, int)));
 	connect(rn, SIGNAL(unsetOccupancyPixel(int, int)), occupancyMap, SLOT(undrawPixel(int, int)));
 	connect(rn, SIGNAL(setDistancePixel(int, int, double)), distanceMap, SLOT(drawDistancePixel(int, int, double)));
-	//connect(rn, SIGNAL(unsetDistancePixel(int, int)), distanceMap, SLOT(undrawPixel(int, int)));
+	//connect(rn, SIGNAL(unsetDistancePixel(int, int)), distanceMap, SLOT(undrawPixel(int, int)));*/
 	//connect(rn, SIGNAL(setGradientPixel(int, int)), gradientMap, SLOT(drawPixel(int, int)));
 	//connect(rn, SIGNAL(unsetGradientPixel(int, int)), gradientMap, SLOT(undrawPixel(int, int)));
 
@@ -38,6 +41,7 @@ Finestra::Finestra(QWidget *parent, Qt::WFlags f) : QWidget(parent, f) {
 
 	//grid->addWidget(quit, 0, 0);
 	//grid->addWidget(mappa1, 0, 0 );
+	grid->addWidget(trajectoryMap, 0, 0);
 	grid->addWidget(occupancyMap, 0, 1 );
 	grid->addWidget(distanceMap, 1, 0 );
 	grid->addWidget(gradientMap, 1, 1 );
@@ -57,6 +61,7 @@ int main(int argc, char **argv) {
 	f.setMaximumSize(MAP_WIDTH*2 + 20, MAP_HEIGHT*2 + 20);
 	f.show();
 	
+	rn->setTrajMap(trajectoryMap);
 	rn->setOccMap(occupancyMap);
 	rn->setDistMap(distanceMap);
 	rn->setGradMap(gradientMap);
