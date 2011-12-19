@@ -2,6 +2,8 @@
 #include "ros/ros.h"
 #include "geometry_msgs/Twist.h"
 #include "distance_map/DistanceMap.h"
+#include "occupancy_map/OccupancyMap.h"
+#include "safe_teleop/TrajectoryMap.h"
 #include <math.h>
 #include <queue>
 
@@ -12,6 +14,13 @@ using namespace ros;
 
 int size_x = 50;
 int size_y = 50;
+
+Subscriber distance_sub, occupancy_sub, vel_sub;
+Publisher vel_pub, vel2_pub, traj_pub;
+
+bool enabled = false;
+
+int occupancy[50][50];
 
 class Cell
 {
@@ -143,10 +152,24 @@ void path_generator(Cell * curr)
 {
 	printf("\n\nPATH: ");
 	while (curr != NULL) {
+		occupancy[curr->get_col()][curr->get_row()] = 10;
 		printf("[%d,%d] ", curr->get_row(), curr->get_col());
 		curr = curr->get_parent();
 	}
 	printf("\n\n");
+	
+	std::vector<int> matrix(size_x*size_y);
+	for (int j = 0; j < size_y; j++)
+		for (int i = 0; i < size_x; i++)
+			matrix[j*size_x+i] = occupancy[j][i];
+	
+	safe_teleop::TrajectoryMap msg;
+	msg.size_x = size_x;
+	msg.size_y = size_y;
+	msg.map = matrix;
+
+	traj_pub.publish(msg);
+	
 }
 
 class CellComparator
@@ -162,11 +185,6 @@ class CellComparator
 			return false;
 		}
 };
-
-Subscriber distance_sub, vel_sub;
-Publisher vel_pub, vel2_pub;
-
-bool enabled = false;
 
 double convert(int x, int y, std::vector<double> map, int size_y) {
 	return map[size_y*(size_y - 1 - x) + y];
@@ -335,13 +353,24 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 	
 }
 
+void occupancyCallback(const occupancy_map::OccupancyMap::ConstPtr& msg) {
+	for (int i = 0; i < msg->size_y; i++)
+		for (int j = 0; j < msg->size_x; j++) {
+			if (msg->map[i*msg->size_x+j])
+				occupancy[j][msg->size_y -1 - i] = 1;
+			else occupancy[j][msg->size_y -1 - i] = 0;
+		}
+}
+
 int main(int argc, char **argv) {
 	init(argc, argv, "safe_teleop");
 	NodeHandle n;
 	distance_sub = n.subscribe("distance_map", 1, distanceCallback);
+	occupancy_sub = n.subscribe("occupancy_map", 1, occupancyCallback);
 	vel_sub = n.subscribe("vel_gate", 1, velCallback); 
 	vel_pub = n.advertise<geometry_msgs::Twist>("vel", 1);
 	vel2_pub = n.advertise<geometry_msgs::Twist>("cmd_vel", 1);
+	traj_pub = n.advertise<safe_teleop::TrajectoryMap>("trajectory_map", 1);
 
 	spin(); 
 

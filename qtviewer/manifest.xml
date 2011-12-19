@@ -19,7 +19,7 @@
   <depend package="occupancy_map"/>
   <depend package="distance_map"/>
   <depend package="gradient_map"/>
-  
+  <depend package="safe_teleop"/>  
   <rosdep name="qt4"/>
   
 </package>

@@ -5,11 +5,13 @@
 #include <occupancy_map/OccupancyMap.h>
 #include <distance_map/DistanceMap.h>
 #include <gradient_map/GradientMap.h>
+#include <safe_teleop/TrajectoryMap.h>
 #include <QThread>
 #include <QObject>
 #include "occupancy_map.h"
 #include "distance_map.h"
 #include "gradient_map.h"
+#include "trajectory_map.h"
 
 class RosNode : public QThread {
 	Q_OBJECT
@@ -20,19 +22,23 @@ class RosNode : public QThread {
 		void setOccMap(OccupancyMap * map);
 		void setDistMap(DistanceMap * map);
 		void setGradMap(GradientMap * map);
+		void setTrajMap(TrajectoryMap * map);
 		void run();
 		void occupancyCallback(const occupancy_map::OccupancyMap::ConstPtr &msg);
 		void distanceCallback(const distance_map::DistanceMap::ConstPtr &msg);
 		void gradientCallback(const gradient_map::GradientMap::ConstPtr &msg);
+		void trajectoryCallback(const safe_teleop::TrajectoryMap::ConstPtr &msg);
 	private:
 		int init_argc;
 		char **init_argv;
 		ros::Subscriber occ_sub;
 		ros::Subscriber dist_sub;
 		ros::Subscriber grad_sub;
+		ros::Subscriber traj_sub;
 		OccupancyMap * occ_map;
 		DistanceMap * dist_map;
 		GradientMap * grad_map;
+		TrajectoryMap * traj_map;
 	signals:
 		void setOccupancyPixel(int x, int y);
 		void unsetOccupancyPixel(int x, int y);
