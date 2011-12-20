@@ -224,7 +224,7 @@ void velCallback(const geometry_msgs::Twist::ConstPtr& msg) {
 int i = 0;
 #define SAFE_DISTANCE 4
 #define MAX_PENALITY 12
-#define CELL_RESOLUTION 0.1
+#define CELL_RESOLUTION 10
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -233,11 +233,10 @@ int i = 0;
 void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 
 	if (!enabled) return;
-	
-	
-	
+	return;
+
 	double dx = current_x - start_x;
-	double dy = current_y - start_y;
+	double dy = 0; //current_y - start_y;
 	double dz = current_z - start_z;
 
 	if (dx == 0 && dy == 0 && dz == 0) return;
@@ -258,45 +257,50 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 	target_row = target_row + (old_ty - t_y); //row
 	target_col = target_col + (t_x - old_tx); //col
 	
-	//target_row = target_row + (dx / CELL_RESOLUTION);
-	//target_col = target_col + (dy / CELL_RESOLUTION);
+	target_row = target_row + dx;
+	target_col = target_col + dy;
+	old_tx = t_x - dy;
+	old_ty = t_y - dx;
 	
 	start_x = current_x;
 	start_y = current_y;
 	start_z = current_z;
 	
-	old_tx = t_x;
-	old_ty = t_y;
-	
 	ROS_INFO("Di: %f %f %f - TARGET: %.1f %.1f - DISTANCE %.1f", dx, dy, dz, target_row, target_col, 
 				sqrt((25-target_row)*(25-target_row)+(25-target_col)*(25-target_col)));
+	
+	int a_row = (int) round(target_row);
+	int a_col = (int) round(target_col);
 	
 	if (target_row < 0 || target_row > 49 || target_col < 0 || target_col > 49)
 		exit(1);
 	
-	return;
+	Cell * start_cell = new Cell(a_row, a_col, 0);
+	path_generator(start_cell);
+	
+	#if 0
 	
 	int size_x = msg->size_x, size_y = msg->size_y;
 	vector<double> map = msg->map;
 	//printf("conv: %f\n", convert(0, 0, map, size_y)); 
 
 	int manhattan[size_x][size_y];
-	manhattan[(int)target_row][(int)target_col] = 0;
-	for (int i = target_col -1; i >= 0; i--) {
-		manhattan[(int)target_row][i] = manhattan[5][i+1] + 1;
+	manhattan[a_row][a_col] = 0;
+	for (int i = a_col -1; i >= 0; i--) {
+		manhattan[a_row][i] = manhattan[5][i+1] + 1;
 	}
 	
-	for (int i = target_col + 1; i < size_y; i++) {
-		manhattan[(int)target_row][i] = manhattan[(int)target_row][i-1] + 1;
+	for (int i = a_col + 1; i < size_y; i++) {
+		manhattan[a_row][i] = manhattan[a_row][i-1] + 1;
 	}
 	
-	for (int j = target_row - 1; j >= 0; j--)
+	for (int j = a_row - 1; j >= 0; j--)
 		for (int i = 0; i < size_y; i++) 
-			manhattan[j][i] = manhattan[(int)target_row][i] + (target_row-j);
+			manhattan[j][i] = manhattan[a_row][i] + (a_row-j);
 			
-	for (int j = target_row + 1; j < size_x; j++)
+	for (int j = a_row + 1; j < size_x; j++)
 		for (int i = 0; i < size_y; i++)
-			manhattan[j][i] = manhattan[(int)target_row][i] + (j-target_row);
+			manhattan[j][i] = manhattan[a_row][i] + (j-a_row);
 	
 	/*
 	for (int i = 0; i < size_x; i++) {
@@ -420,6 +424,7 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 		}
 		
 	}
+	#endif
 	
 }
 
@@ -464,11 +469,11 @@ void updateOdomCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 		btMatrix3x3 mat =  laserPose.getBasis();
 		mat.getEulerZYX(yaw, pitch, roll);
 		
-		current_x = laserPose.getOrigin().x();
-		current_y = laserPose.getOrigin().y();
+		current_x = (laserPose.getOrigin().x()) * CELL_RESOLUTION;
+		current_y = (laserPose.getOrigin().y()) * CELL_RESOLUTION;
 		current_z = yaw;
 		
-		//ROS_INFO("Position: %f %f %f", current_x, current_y, current_z);
+		ROS_INFO("Position: %f %f %f", current_x, current_y, current_z);
 		
   } else {
     std::cerr << error << std::endl; 
@@ -494,12 +499,12 @@ void buttonCallback(const sensor_msgs::Joy::ConstPtr& msg)
 			mat.getEulerZYX(yaw, pitch, roll);
 			
 			/* set relative origin */
-			start_x = laserPose.getOrigin().x();
-			start_y = laserPose.getOrigin().y();
+			start_x = (laserPose.getOrigin().x()) * CELL_RESOLUTION;
+			start_y = (laserPose.getOrigin().y()) * CELL_RESOLUTION;
 			start_z = yaw;
 			
-			current_x = laserPose.getOrigin().x();
-			current_y = laserPose.getOrigin().y();
+			current_x = (laserPose.getOrigin().x()) * CELL_RESOLUTION;
+			current_y = (laserPose.getOrigin().y()) * CELL_RESOLUTION;
 			current_z = yaw;
 			
 			/* set target */
