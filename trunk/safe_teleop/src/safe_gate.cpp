@@ -23,13 +23,18 @@ double start_x, start_y, start_z;
 
 /* Current odom value */
 double current_x, current_y, current_z;
+double old_tx = 0, old_ty = 20;
 
 /* Arrival point (approximation) */
-int target_x, target_y;
+double target_row, target_col;
+
+/* Robot frame id */
+string robot_frame; 
 
 Subscriber distance_sub, occupancy_sub, vel_sub, button_sub, odom_sub;
 Publisher vel_pub, vel2_pub, traj_pub;
 tf::TransformListener * listener = 0;
+
 
 bool enabled = false;
 
@@ -229,27 +234,44 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 
 	if (!enabled) return;
 	
+	
+	
 	double dx = current_x - start_x;
 	double dy = current_y - start_y;
 	double dz = current_z - start_z;
-	
+
 	if (dx == 0 && dy == 0 && dz == 0) return;
+	dz = -dz;
+
+	ROS_INFO("Current: %f %f %f - START: %f %f %f", 
+					current_x, current_y, current_z,
+					start_x, start_y, start_z);
 	
-	double t_x = (25-target_x)*cos(dz) - (25-target_y)*sin(dz);
-	double t_y = (25-target_x)*sin(dz) + (25-target_y)*cos(dz);
 	
-	target_x = 25 - t_x;
-	target_y = 25 + t_y;
-	//target_x = target_x + (dx / CELL_RESOLUTION);
-	//target_y = target_y + (dy / CELL_RESOLUTION);
+	double t_x = (target_col-25)*cos(dz) - (25-target_row)*sin(dz);
+	double t_y = (target_col-25)*sin(dz) + (25-target_row)*cos(dz);
+	
+	ROS_INFO("TARGET INITIAL: %f %f %f %f", (target_col-25), (25-target_row), target_col, target_row);
+	ROS_INFO("T_x: %f = %f - %f", t_x, (target_col-25)*cos(dz), (25-target_row)*sin(dz));
+	ROS_INFO("T_y: %f = %f + %f", t_y, (target_col-25)*sin(dz), (25-target_row)*cos(dz));
+	
+	target_row = target_row + (old_ty - t_y); //row
+	target_col = target_col + (t_x - old_tx); //col
+	
+	//target_row = target_row + (dx / CELL_RESOLUTION);
+	//target_col = target_col + (dy / CELL_RESOLUTION);
 	
 	start_x = current_x;
 	start_y = current_y;
 	start_z = current_z;
 	
-	ROS_INFO("Di: %f %f %f - TARGET: %d %d", dx, dy, dz, target_x, target_y);
+	old_tx = t_x;
+	old_ty = t_y;
 	
-	if (target_x < 0 || target_x > 49 || target_y < 0 || target_y > 49)
+	ROS_INFO("Di: %f %f %f - TARGET: %.1f %.1f - DISTANCE %.1f", dx, dy, dz, target_row, target_col, 
+				sqrt((25-target_row)*(25-target_row)+(25-target_col)*(25-target_col)));
+	
+	if (target_row < 0 || target_row > 49 || target_col < 0 || target_col > 49)
 		exit(1);
 	
 	return;
@@ -259,22 +281,22 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 	//printf("conv: %f\n", convert(0, 0, map, size_y)); 
 
 	int manhattan[size_x][size_y];
-	manhattan[target_x][target_y] = 0;
-	for (int i = target_y -1; i >= 0; i--) {
-		manhattan[target_x][i] = manhattan[5][i+1] + 1;
+	manhattan[(int)target_row][(int)target_col] = 0;
+	for (int i = target_col -1; i >= 0; i--) {
+		manhattan[(int)target_row][i] = manhattan[5][i+1] + 1;
 	}
 	
-	for (int i = target_y + 1; i < size_y; i++) {
-		manhattan[target_x][i] = manhattan[target_x][i-1] + 1;
+	for (int i = target_col + 1; i < size_y; i++) {
+		manhattan[(int)target_row][i] = manhattan[(int)target_row][i-1] + 1;
 	}
 	
-	for (int j = target_x - 1; j >= 0; j--)
+	for (int j = target_row - 1; j >= 0; j--)
 		for (int i = 0; i < size_y; i++) 
-			manhattan[j][i] = manhattan[target_x][i] + (target_x-j);
+			manhattan[j][i] = manhattan[(int)target_row][i] + (target_row-j);
 			
-	for (int j = target_x + 1; j < size_x; j++)
+	for (int j = target_row + 1; j < size_x; j++)
 		for (int i = 0; i < size_y; i++)
-			manhattan[j][i] = manhattan[target_x][i] + (j-target_x);
+			manhattan[j][i] = manhattan[(int)target_row][i] + (j-target_row);
 	
 	/*
 	for (int i = 0; i < size_x; i++) {
@@ -431,6 +453,7 @@ void occupancyCallback(const occupancy_map::OccupancyMap::ConstPtr& msg) {
 void updateOdomCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 {
 	std::string frame_id = msg->header.frame_id;
+	robot_frame = msg->header.frame_id;
 	ros::Time t = msg->header.stamp;
 	tf::StampedTransform laserPose;
 	std::string error = "Error :(";
@@ -445,6 +468,8 @@ void updateOdomCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 		current_y = laserPose.getOrigin().y();
 		current_z = yaw;
 		
+		//ROS_INFO("Position: %f %f %f", current_x, current_y, current_z);
+		
   } else {
     std::cerr << error << std::endl; 
   }
@@ -457,13 +482,13 @@ void buttonCallback(const sensor_msgs::Joy::ConstPtr& msg)
 		printf("Enabled autopilot\n");
 		enabled = true;
 		
-		std::string frame_id = msg->header.frame_id;
+		std::string frame_id = robot_frame;
 		ros::Time t = msg->header.stamp;
 		tf::StampedTransform laserPose;
 		std::string error = "Error :(";
-		if (listener->waitForTransform ("/odom", "base_link", t, ros::Duration(0.5), ros::Duration(0.01), &error)){
+		if (listener->waitForTransform ("/odom", "base_link", ros::Time(0), ros::Duration(0.5), ros::Duration(0.01), &error)){
 			
-			listener->lookupTransform("/odom", "/base_link", t, laserPose);
+			listener->lookupTransform("/odom", "/base_link", ros::Time(0), laserPose);
 			double yaw,pitch,roll;
 			btMatrix3x3 mat =  laserPose.getBasis();
 			mat.getEulerZYX(yaw, pitch, roll);
@@ -478,8 +503,8 @@ void buttonCallback(const sensor_msgs::Joy::ConstPtr& msg)
 			current_z = yaw;
 			
 			/* set target */
-			target_x = 5;
-			target_y = 25;
+			target_row = 5;
+			target_col = 25;
 			
 			ROS_INFO("Position: %f %f %f", start_x, start_y, start_z);
 			
