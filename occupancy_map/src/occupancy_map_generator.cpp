@@ -85,8 +85,8 @@ void laserCallback(const sensor_msgs::LaserScan& msg)
 		x_rel /= CELL_RESOLUTION;
 		y_rel /= CELL_RESOLUTION;
 		
-		int x = - ((int) x_rel);
-		int y = (int) y_rel;
+		int x = round(-x_rel);
+		int y = round(y_rel);
 		
 		/*
 		if (x > -50 && x < 50 && y > -50 && y < 50) 
