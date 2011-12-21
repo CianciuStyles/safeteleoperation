@@ -35,13 +35,18 @@ Subscriber distance_sub, occupancy_sub, vel_sub, button_sub, odom_sub;
 Publisher vel_pub, vel2_pub, traj_pub;
 tf::TransformListener * listener = 0;
 
-double dx = 0;
-double dy = 0;
-double dz = 0;
-
 bool enabled = false;
-
 int occupancy[50][50];
+
+#define SAFE_DISTANCE 4
+#define MAX_PENALITY 12
+#define CELL_RESOLUTION 10
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
+int i = 0;
 
 class Cell
 {
@@ -171,6 +176,7 @@ class Cell
 
 void path_generator(Cell * curr)
 {
+	if (curr == NULL) return;
 	
 	//printf("\n\nPATH: ");
 	Cell * next_move = curr;
@@ -188,8 +194,9 @@ void path_generator(Cell * curr)
 	if (last->get_h() <= 1) {
 		ROS_INFO("Autopilot terminated [2]");
 		enabled = false;
-		dx = 0;
-		dz = 0;
+		i = 0;
+		old_tx = 0;
+		old_ty = 20;
 		return;
 	}
 	
@@ -210,15 +217,9 @@ void path_generator(Cell * curr)
 		cmd2.linear.x = 1.0;
 		double_msg = true;
 		
-		dz = 0.785;
-		dx = 2;
-		
 	} else if (dr == 2 && dc == 0) {
 		
 		cmd.linear.x = 1.0;
-		
-		dx = 2;
-		dz = 0;
 		
 	} else if ((dr == 2 && (dc == -1 || dc == -2)) || (dr == 1 && dc == -2)) {
 		
@@ -226,17 +227,11 @@ void path_generator(Cell * curr)
 		cmd2.linear.x = 1.0;
 		double_msg = true;
 		
-		dz = -0.785;
-		dx = 2;
-		
 	} else if (dc == 2 && dr == 0) {
 		
 		cmd.angular.z = 7.85;
 		cmd2.linear.x = 1.0;
 		double_msg = true;
-		
-		dx = 2;
-		dz = 1.57;
 		
 	} else if (dc == -2 && dr == 0) {
 		
@@ -244,17 +239,11 @@ void path_generator(Cell * curr)
 		cmd2.linear.x = 1.0;
 		double_msg = true;
 		
-		dx = 2;
-		dz = -1.57;
-		
 	} else if ((dr == -2 && (dc == 1 || dc == 2)) || (dr == -1 && dc == 2)) {
 		
 		cmd.angular.z = 11.8;
 		cmd2.linear.x = 1.0;
 		double_msg = true;
-		
-		dx = 2;
-		dz = 2.36;
 		
 	} else if (dc == 0 && dr == -2) {
 		
@@ -262,17 +251,11 @@ void path_generator(Cell * curr)
 		cmd2.linear.x = 1.0;
 		double_msg = true;
 		
-		dx = 2;
-		dz = 3.14;
-		
 	} else  if ((dr == -2 && (dc == -1 || dc == -2)) || (dr == -1 && dc == -2)) {
 		
 		cmd.angular.z = -11.8;
 		cmd2.linear.x = 1.0;
 		double_msg = true;
-		
-		dx = 2;
-		dz = -2.36;
 		
 	} else {
 		
@@ -281,8 +264,9 @@ void path_generator(Cell * curr)
 
 		ROS_INFO("Autopilot terminated [2]");
 		enabled = false;
-		dx = 0;
-		dz = 0;
+		i = 0;
+		old_tx = 0;
+		old_ty = 20;
 		return;
 		
 	}
@@ -330,25 +314,14 @@ void velCallback(const geometry_msgs::Twist::ConstPtr& msg) {
 	vel2_pub.publish(msg);
 }
 
-#define SAFE_DISTANCE 4
-#define MAX_PENALITY 12
-#define CELL_RESOLUTION 10
-
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
-
-
-int i = 0;
 void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 
 	if (!enabled) return;
 
-	/*
-	double dx = current_x - start_x;
-	double dy = 0; //current_y - start_y;
+	double dx = sqrt( (current_x-start_x)*(current_x-start_x) + (current_y-start_y)*(current_y-start_y) );
+	double dy = 0; 
 	double dz = current_z - start_z;
-	*/
+	
 	if (i++ > 0 && dx == 0 && dy == 0 && dz == 0) return;
 	dz = -dz;
 
@@ -427,9 +400,10 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 	
 	if (manhattan[25][25] <= 1) {
 		enabled = false;
-		dx = 0;
-		dz = 0;
-		ROS_INFO("Autopolit terminated [1]");
+		i = 0;
+		old_tx = 0;
+		old_ty = 20;
+		ROS_INFO("Autopilot terminated [1]");
 		return;
 	}
 	
