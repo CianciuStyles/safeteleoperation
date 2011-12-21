@@ -35,6 +35,9 @@ Subscriber distance_sub, occupancy_sub, vel_sub, button_sub, odom_sub;
 Publisher vel_pub, vel2_pub, traj_pub;
 tf::TransformListener * listener = 0;
 
+double dx = 0;
+double dy = 0;
+double dz = 0;
 
 bool enabled = false;
 
@@ -171,17 +174,126 @@ void path_generator(Cell * curr)
 	
 	//printf("\n\nPATH: ");
 	Cell * next_move = curr;
+	Cell * last = NULL;
 	while (curr != NULL) {
+		last = curr;
 		occupancy[curr->get_col()][curr->get_row()] = 10;
-		//printf("[%d,%d] ", curr->get_row(), curr->get_col());
+		printf("[%d,%d] ", curr->get_row(), curr->get_col());
 		curr = curr->get_parent();
-		if (curr != NULL && curr->get_parent() != NULL)
+		if (curr != NULL && curr->get_parent() != NULL && curr->get_parent()->get_parent() != NULL)
 			next_move = curr;
 	}
-	//printf("\n\n");
+	printf("\n\n");
+	
+	if (last->get_h() <= 1) {
+		ROS_INFO("Autopilot terminated [2]");
+		enabled = false;
+		dx = 0;
+		dz = 0;
+		return;
+	}
+	
 	
 	ROS_INFO("Next move: %d %d", next_move->get_row(), next_move->get_col());
 	
+	geometry_msgs::Twist cmd;
+	geometry_msgs::Twist cmd2;
+	bool double_msg = false;
+	
+	// diff col/row
+	int dr = 25 - next_move->get_row();
+	int dc = 25 - next_move->get_col();
+	
+	if ((dr == 2 && (dc == 1 || dc == 2)) || (dr == 1 && dc == 2)) {
+		
+		cmd.angular.z = 3.95;
+		cmd2.linear.x = 1.0;
+		double_msg = true;
+		
+		dz = 0.785;
+		dx = 2;
+		
+	} else if (dr == 2 && dc == 0) {
+		
+		cmd.linear.x = 1.0;
+		
+		dx = 2;
+		dz = 0;
+		
+	} else if ((dr == 2 && (dc == -1 || dc == -2)) || (dr == 1 && dc == -2)) {
+		
+		cmd.angular.z = -3.95;
+		cmd2.linear.x = 1.0;
+		double_msg = true;
+		
+		dz = -0.785;
+		dx = 2;
+		
+	} else if (dc == 2 && dr == 0) {
+		
+		cmd.angular.z = 7.85;
+		cmd2.linear.x = 1.0;
+		double_msg = true;
+		
+		dx = 2;
+		dz = 1.57;
+		
+	} else if (dc == -2 && dr == 0) {
+		
+		cmd.angular.z = -7.85;
+		cmd2.linear.x = 1.0;
+		double_msg = true;
+		
+		dx = 2;
+		dz = -1.57;
+		
+	} else if ((dr == -2 && (dc == 1 || dc == 2)) || (dr == -1 && dc == 2)) {
+		
+		cmd.angular.z = 11.8;
+		cmd2.linear.x = 1.0;
+		double_msg = true;
+		
+		dx = 2;
+		dz = 2.36;
+		
+	} else if (dc == 0 && dr == -2) {
+		
+		cmd.angular.z = 15.7;
+		cmd2.linear.x = 1.0;
+		double_msg = true;
+		
+		dx = 2;
+		dz = 3.14;
+		
+	} else  if ((dr == -2 && (dc == -1 || dc == -2)) || (dr == -1 && dc == -2)) {
+		
+		cmd.angular.z = -11.8;
+		cmd2.linear.x = 1.0;
+		double_msg = true;
+		
+		dx = 2;
+		dz = -2.36;
+		
+	} else {
+		
+		//ROS_INFO("Error with next move diff: %d %d", dr, dc);
+		//exit(1);
+
+		ROS_INFO("Autopilot terminated [2]");
+		enabled = false;
+		dx = 0;
+		dz = 0;
+		return;
+		
+	}
+	
+	vel2_pub.publish(cmd);
+	sleep(1);
+	if (double_msg) {
+		vel2_pub.publish(cmd2);
+		sleep(1);
+	}
+
 	std::vector<int> matrix(size_x*size_y);
 	for (int j = 0; j < size_y; j++)
 		for (int i = 0; i < size_x; i++)
@@ -191,10 +303,7 @@ void path_generator(Cell * curr)
 	msg.size_x = size_x;
 	msg.size_y = size_y;
 	msg.map = matrix;
-	traj_pub.publish(msg);
-	
-	/* genera comando */
-	
+	traj_pub.publish(msg);	
 	
 }
 
@@ -221,7 +330,6 @@ void velCallback(const geometry_msgs::Twist::ConstPtr& msg) {
 	vel2_pub.publish(msg);
 }
 
-int i = 0;
 #define SAFE_DISTANCE 4
 #define MAX_PENALITY 12
 #define CELL_RESOLUTION 10
@@ -230,16 +338,18 @@ int i = 0;
 #define M_PI 3.14159265358979323846
 #endif
 
+
+int i = 0;
 void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 
 	if (!enabled) return;
-	return;
 
+	/*
 	double dx = current_x - start_x;
 	double dy = 0; //current_y - start_y;
 	double dz = current_z - start_z;
-
-	if (dx == 0 && dy == 0 && dz == 0) return;
+	*/
+	if (i++ > 0 && dx == 0 && dy == 0 && dz == 0) return;
 	dz = -dz;
 
 	ROS_INFO("Current: %f %f %f - START: %f %f %f", 
@@ -274,11 +384,6 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 	
 	if (target_row < 0 || target_row > 49 || target_col < 0 || target_col > 49)
 		exit(1);
-	
-	Cell * start_cell = new Cell(a_row, a_col, 0);
-	path_generator(start_cell);
-	
-	#if 0
 	
 	int size_x = msg->size_x, size_y = msg->size_y;
 	vector<double> map = msg->map;
@@ -319,6 +424,15 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 	if (convert(25, 25, map, size_y) < SAFE_DISTANCE) 
 		h_s += SAFE_DISTANCE - convert(25, 25, map, size_y);
 	Cell * start_cell = new Cell(25, 25, 0, h_s);
+	
+	if (manhattan[25][25] <= 1) {
+		enabled = false;
+		dx = 0;
+		dz = 0;
+		ROS_INFO("Autopolit terminated [1]");
+		return;
+	}
+	
 	open_set[pq].push(start_cell);
 	
 	int k = 0;
@@ -424,7 +538,6 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 		}
 		
 	}
-	#endif
 	
 }
 
@@ -473,7 +586,7 @@ void updateOdomCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 		current_y = (laserPose.getOrigin().y()) * CELL_RESOLUTION;
 		current_z = yaw;
 		
-		ROS_INFO("Position: %f %f %f", current_x, current_y, current_z);
+		//ROS_INFO("Position: %f %f %f", current_x, current_y, current_z);
 		
   } else {
     std::cerr << error << std::endl; 
