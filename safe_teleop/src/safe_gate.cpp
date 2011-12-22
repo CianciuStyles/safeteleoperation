@@ -562,9 +562,9 @@ void updateOdomCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 		
 		//ROS_INFO("Position: %f %f %f", current_x, current_y, current_z);
 		
-  } else {
-    std::cerr << error << std::endl; 
-  }
+	} else {
+		std::cerr << error << std::endl; 
+	}
 }
 
 void buttonCallback(const sensor_msgs::Joy::ConstPtr& msg)
