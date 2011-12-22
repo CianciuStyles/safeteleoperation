@@ -19,8 +19,9 @@ class Wall
 		{
 			row = xx;
 			col = yy;
-			tx = 25 - row;
-			ty = 25 - col; 
+			
+			tx = col - 25;
+			ty = 25 - row;
 		}
 };
 
@@ -34,36 +35,21 @@ class Wall
 
 ros::Publisher obstacle;
 tf::TransformListener * listener = 0;
-std::vector<Wall*> walls;
+std::list<Wall*> walls;
 double start_x, start_y, start_z;
 
-#if 0
-
-/* cell (0,0) is top-left corner of the matrix */
-void set_abs_cell(int x, int y, bool obstacle)
-{
-	if (x < 0 || x >= X_SIZE) return;
-	if (y < 0 || y >= Y_SIZE) return;
-	map[y*X_SIZE+x] = obstacle;
-}
-
-/* cell (0,0) is the center of the matrix */
-void set_rel_cell(int x, int y, bool obstacle)
-{
-	set_abs_cell(x+(X_SIZE/2), y+(Y_SIZE/2), obstacle);
-}
-
-#endif
+int k = 0;
 
 void laserCallback(const sensor_msgs::LaserScan& msg)
 {
 	
-	double current_x, current_y, current_z;
+	double current_x = 0, current_y = 0, current_z = 0;
 	tf::StampedTransform laserPose;
+	ros::Time t = msg.header.stamp;
 	std::string error = "Error :(";
-	if (listener->waitForTransform ("/odom", "base_link", ros::Time(0), ros::Duration(0.5), ros::Duration(0.01), &error)){
+	if (listener->waitForTransform ("/odom", "base_link", t, ros::Duration(0.5), ros::Duration(0.01), &error)){
 		
-		listener->lookupTransform("/odom", "/base_link", ros::Time(0), laserPose);
+		listener->lookupTransform("/odom", "/base_link", t, laserPose);
 		double yaw,pitch,roll;
 		btMatrix3x3 mat =  laserPose.getBasis();
 		mat.getEulerZYX(yaw, pitch, roll);
@@ -80,29 +66,66 @@ void laserCallback(const sensor_msgs::LaserScan& msg)
 	double dy = 0; 
 	double dz = current_z - start_z;
 	
-	if (false && dx == 0 && dy == 0 && dz == 0) {
+	//ROS_INFO("Angle: %.1f", current_z);
 	
+	if (current_z > -1.57 && current_z <= 0) {
+		if ((current_x - start_x < 0 && current_y - start_y >= 0))
+			dx = -dx;
+	} else if (current_z < -1.57 && current_z >= -3.14) {
+		if ((current_x - start_x > 0 && current_y - start_y > 0))
+			dx = -dx;
+	} else if (current_z > 0 && current_z <= 1.57) {
+		if ((current_x - start_x < 0 && current_y - start_y < 0))
+			dx = -dx;
+	} else {
+		if ((current_x - start_x > 0 && current_y - start_y < 0))
+			dx = -dx;
+	}
+	
+	if (!(dx == 0 && dy == 0 && dz == 0)) {
+		
+		//ROS_INFO("Di: %.1f %.1f %.1f", dx, dy, dz);
+		
 		dz = -dz;
-		for (int i = 0; i < walls.size(); i++) {
+		std::list<Wall*> temp;
+		std::list<Wall*>::iterator it;
+		for(it = walls.begin(); it != walls.end(); it++) {
 			
-			double t_x = (walls[i]->col-25)*cos(dz) - (25-walls[i]->row)*sin(dz);
-			double t_y = (walls[i]->col-25)*sin(dz) + (25-walls[i]->row)*cos(dz);
+			//ROS_INFO("Wall: %.1f %.1f", (*it)->row, (*it)->col);
 			
-			walls[i]->row = walls[i]->row + (walls[i]->ty - t_y); //row
-			walls[i]->col = walls[i]->col + (t_x - walls[i]->tx); //col
+			double t_x = ((*it)->col-25)*cos(dz) - (25-(*it)->row)*sin(dz);
+			double t_y = ((*it)->col-25)*sin(dz) + (25-(*it)->row)*cos(dz);
 			
-			walls[i]->row = walls[i]->row + dx;
-			walls[i]->col = walls[i]->col + dy;
-			walls[i]->tx = t_x - dy;
-			walls[i]->ty = t_y - dx;
+			(*it)->row = (*it)->row + ((*it)->ty - t_y); //row
+			(*it)->col = (*it)->col + (t_x - (*it)->tx); //col
 			
+			(*it)->row = (*it)->row + dx;
+			(*it)->col = (*it)->col + dy;
+			(*it)->tx = t_x - dy;
+			(*it)->ty = t_y - dx;
+			
+			//ROS_INFO("Wall2: R %.1f  C %.1f TX %.1f TY %.1f DZ %.1f ", (*it)->row, (*it)->col, t_x, t_y, dz);
+		
+			//if ((*it)->row < -10 || (*it)->row > 59 || (*it)->col < 10 || (*it)->col > 59) {
+			if ((*it)->row < 0 || (*it)->row > 49 || (*it)->col < 0 || (*it)->col > 49) {
+				temp.push_back(*it);
+			}
+
 		}
 		
-		start_x = current_x;
-		start_y = current_y;
-		start_z = current_z;
+		for(it = temp.begin(); it != temp.end(); it++) {
+			walls.remove(*it);
+			//ROS_INFO("Remove wall...");
+			fflush(stdout);
+			delete *it;
+		}
 		
+		//ROS_INFO("Finished traslation");
 	}
+	
+	start_x = current_x;
+	start_y = current_y;
+	start_z = current_z;
 	
 	/* Number of scan samples */
 	int n = (msg.angle_max - msg.angle_min) / msg.angle_increment;
@@ -113,6 +136,19 @@ void laserCallback(const sensor_msgs::LaserScan& msg)
 	
 	for (int i = 0; i < n; i++) {
 		
+		/*
+		if (k > 0) break;
+		
+		walls.push_back(new Wall(20, 20));
+		walls.push_back(new Wall(20, 25));
+		walls.push_back(new Wall(20, 30));
+		walls.push_back(new Wall(25, 20));
+		walls.push_back(new Wall(25, 30));
+		walls.push_back(new Wall(30, 20));
+		walls.push_back(new Wall(30, 25));
+		walls.push_back(new Wall(30, 30));
+		break;
+		*/
 		double x_rel = -(msg.ranges[i] * sin(angle)) * CELL_RESOLUTION; /* centimetres */
 		double y_rel = (msg.ranges[i] * cos(angle)) * CELL_RESOLUTION; /* centimetres */
 		double row = 25-y_rel;
@@ -120,14 +156,22 @@ void laserCallback(const sensor_msgs::LaserScan& msg)
 		
 		angle += msg.angle_increment;
 		if (row < 0 || row > 49 || col < 0 || col > 49) continue;
+		//if (row < -20 || row > 69 || col < -20 || col > 69) continue;
 		
 		//ROS_INFO("Wall at %f %f -- %f %f -- %f %f", x_rel, y_rel, row, col, angle, msg.ranges[i]);
 		
 		bool skip = false;
-		for(int i = 0; i < walls.size(); i++) {
-			double dr = row - walls[i]->row;
-			double dc = col - walls[i]->col;
-			if (dr < 0.1 && dr > -0.1 && dc < 0.1 && dc > -0.1) {
+		std::list<Wall*>::iterator it;
+		for(it = walls.begin(); it != walls.end(); it++) {
+			double dr = row - (*it)->row;
+			double dc = col - (*it)->col;
+			if (dr < 0.8 && dr > -0.8 && dc < 0.8 && dc > -0.8) {
+				/*
+				(*it)->row = row;
+				(*it)->col = col;
+				(*it)->tx = col - 25;
+				(*it)->ty = 25 - row;
+				*/
 				skip = true;
 				break;
 			}
@@ -142,14 +186,18 @@ void laserCallback(const sensor_msgs::LaserScan& msg)
 		
 	}
 	
+	k++;
+	
 	std::vector<uint8_t> matrix(X_SIZE*Y_SIZE);
-	for(int i = 0; i < walls.size(); i++) {
-		int row = round(walls[i]->row), col = round(walls[i]->col);
+	std::list<Wall*>::iterator it;
+	for(it = walls.begin(); it != walls.end(); it++) {
+		int row = round((*it)->row), col = round((*it)->col);
 		//ROS_INFO("Wall2: %d %d", row, col);
 		if (row < 0 || row > 49 || col < 0 || col > 49) {
-			ROS_INFO("Invalid index");
+			//ROS_INFO("Invalid index");
 			//fflush(stdout);
-			exit(1);
+			//exit(1);
+			continue;
 		}
 		matrix[(Y_SIZE -1 - row) * X_SIZE + col] = true;
 	}
