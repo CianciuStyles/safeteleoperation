@@ -58,10 +58,12 @@ void RosNode::occupancyCallback(const occupancy_map::OccupancyMap::ConstPtr &msg
 		for (int j = 0; j < msg->size_x; j++) {
 			if (msg->map[i*msg->size_x+j]) 
 				occ_map->setPixel(j, msg->size_y -1 - i, true);
+				//occ_map->setPixel(j, i, true);
 				//emit setOccupancyPixel(j, msg->size_y -1 - i);
 			else
 				//emit unsetOccupancyPixel(j, msg->size_y -1 -i);
 				occ_map->setPixel(j, msg->size_y -1 - i, false);
+				//occ_map->setPixel(j, i, false);
 		}
 	occ_map->update();
 }

@@ -57,6 +57,7 @@ void set_rel_cell(int x, int y, bool obstacle)
 
 void laserCallback(const sensor_msgs::LaserScan& msg)
 {
+	
 	double current_x, current_y, current_z;
 	tf::StampedTransform laserPose;
 	std::string error = "Error :(";
@@ -79,31 +80,29 @@ void laserCallback(const sensor_msgs::LaserScan& msg)
 	double dy = 0; 
 	double dz = current_z - start_z;
 	
-	//if (dx == 0 && dy == 0 && dz == 0) return;
-	dz = -dz;
+	if (false && dx == 0 && dy == 0 && dz == 0) {
 	
-	
-	for (int i = 0; i < walls.size(); i++) {
+		dz = -dz;
+		for (int i = 0; i < walls.size(); i++) {
+			
+			double t_x = (walls[i]->col-25)*cos(dz) - (25-walls[i]->row)*sin(dz);
+			double t_y = (walls[i]->col-25)*sin(dz) + (25-walls[i]->row)*cos(dz);
+			
+			walls[i]->row = walls[i]->row + (walls[i]->ty - t_y); //row
+			walls[i]->col = walls[i]->col + (t_x - walls[i]->tx); //col
+			
+			walls[i]->row = walls[i]->row + dx;
+			walls[i]->col = walls[i]->col + dy;
+			walls[i]->tx = t_x - dy;
+			walls[i]->ty = t_y - dx;
+			
+		}
 		
-		double t_x = (walls[i]->col-25)*cos(dz) - (25-walls[i]->row)*sin(dz);
-		double t_y = (walls[i]->col-25)*sin(dz) + (25-walls[i]->row)*cos(dz);
-		
-		walls[i]->row = walls[i]->row + (walls[i]->ty - t_y); //row
-		walls[i]->col = walls[i]->col + (t_x - walls[i]->tx); //col
-		
-		walls[i]->row = walls[i]->row + dx;
-		walls[i]->col = walls[i]->col + dy;
-		walls[i]->tx = t_x - dy;
-		walls[i]->ty = t_y - dx;
+		start_x = current_x;
+		start_y = current_y;
+		start_z = current_z;
 		
 	}
-	
-	start_x = current_x;
-	start_y = current_y;
-	start_z = current_z;
-	
-	/* Clear map */
-	//init_map();
 	
 	/* Number of scan samples */
 	int n = (msg.angle_max - msg.angle_min) / msg.angle_increment;
@@ -114,65 +113,45 @@ void laserCallback(const sensor_msgs::LaserScan& msg)
 	
 	for (int i = 0; i < n; i++) {
 		
-		double x_rel = (msg.ranges[i] * sin(angle)) * CELL_RESOLUTION; /* centimetres */
+		double x_rel = -(msg.ranges[i] * sin(angle)) * CELL_RESOLUTION; /* centimetres */
 		double y_rel = (msg.ranges[i] * cos(angle)) * CELL_RESOLUTION; /* centimetres */
+		double row = 25-y_rel;
+		double col = 25+x_rel;
 		
-		/*
-		if (angle < 0 && x_rel >= 0) 
-			printf("(%f, %f) : (%f, %f)\n", x_rel, y_rel, angle, msg.ranges[i]); 
-		*/
+		angle += msg.angle_increment;
+		if (row < 0 || row > 49 || col < 0 || col > 49) continue;
 		
-		Wall* new_wall = new Wall(25-y_rel, 25-x_rel);
+		//ROS_INFO("Wall at %f %f -- %f %f -- %f %f", x_rel, y_rel, row, col, angle, msg.ranges[i]);
+		
+		bool skip = false;
+		for(int i = 0; i < walls.size(); i++) {
+			double dr = row - walls[i]->row;
+			double dc = col - walls[i]->col;
+			if (dr < 0.1 && dr > -0.1 && dc < 0.1 && dc > -0.1) {
+				skip = true;
+				break;
+			}
+		}
+		if (skip) continue;
+		
+		//ROS_INFO("Add wall");
+		
+		Wall* new_wall = new Wall(row, col);
 		//TODO: verificare se cella già esiste
 		walls.push_back(new_wall);
-		
-		/* scale (x,y) to cell resolution */
-		//x_rel /= CELL_RESOLUTION;
-		//y_rel /= CELL_RESOLUTION;
-		
-		
-		
-		//int x = round(-x_rel);
-		//int y = round(y_rel);
-		
-		/*;;
-		//y_rel /= CELL_RESOLUTION;
-		
-		int x = round(-x_rel);
-		int y = round(y_rel);
-		
-		/*
-		if (x > -50 && x < 50 && y > -50 && y < 50) 
-			printf("(%d, %d) : (%f, %f)\n", x, y, angle, msg.ranges[i]); 
-		*/
-
-		//y_rel /= CELL_RESOLUTION;
-		
-		//int x = round(-x_rel);
-		//int y = round(y_rel);
-		
-		/*
-		if (x > -50 && x < 50 && y > -50 && y < 50) 
-			printf("(%d, %d) : (%f, %f)\n", x, y, angle, msg.ranges[i]); 
-		*/
-
-		/*
-		if (x > -50 && x < 50 && y > -50 && y < 50) 
-			printf("(%d, %d) : (%f, %f)\n", x, y, angle, msg.ranges[i]); 
-		*/
-		
-		/* Insert it in the map */
-		//set_rel_cell(x, y, true);
-
-		//angle += increment; // degree
-		//angle += msg.angle_increment;
 		
 	}
 	
 	std::vector<uint8_t> matrix(X_SIZE*Y_SIZE);
 	for(int i = 0; i < walls.size(); i++) {
-		int row = round(walls[i]->row), col = round(X_SIZE-walls[i]->col);
-		matrix[(Y_SIZE-1 - row) * X_SIZE + col] = true;
+		int row = round(walls[i]->row), col = round(walls[i]->col);
+		//ROS_INFO("Wall2: %d %d", row, col);
+		if (row < 0 || row > 49 || col < 0 || col > 49) {
+			ROS_INFO("Invalid index");
+			//fflush(stdout);
+			exit(1);
+		}
+		matrix[(Y_SIZE -1 - row) * X_SIZE + col] = true;
 	}
 	
 	occupancy_map::OccupancyMap msg_o;
