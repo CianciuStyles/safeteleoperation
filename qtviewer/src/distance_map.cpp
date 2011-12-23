@@ -2,7 +2,7 @@
 #include <QColor>
 #include <stdio.h>
 #include "distance_map.h"
-#include "distance_map.moc"
+//#include "distance_map.moc"
 #include "settings.h"
 
 int qwerty = 0;

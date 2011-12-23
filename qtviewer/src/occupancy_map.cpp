@@ -1,7 +1,7 @@
 #include <QPainter>
 #include <stdio.h>
 #include "occupancy_map.h"
-#include "occupancy_map.moc"
+//#include "occupancy_map.moc"
 
 OccupancyMap::OccupancyMap(QWidget *parent, Qt::WFlags f) : QWidget(parent, f) {
 	for (int k = 0; k < MAP_HEIGHT/PIXEL_SIZE; k++)

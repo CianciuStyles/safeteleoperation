@@ -50,128 +50,128 @@ int i = 0;
 
 class Cell
 {
-	private:
-		
-		int row;
-		int col;
-		double f; /* Total */ 
-		double g; /* Already paid */
-		double h; /* Manhattan && distance value */
-		Cell * parent;
-	
-	public:
-	
-		Cell(int r, int c, double gg = 0, double hh = 0) : g(gg), h(hh)
-		{
-			row = r;
-			col = c;
-			parent = NULL;
-			f = g + h;
-			
-			return;
-		}
-		
-		double get_f() {return f;}
-		double get_g() {return g;}
-		double get_h() {return h;}
-		
-		void set_parent(Cell * p)
-		{
-			if (p == NULL) printf("Passed an invalid parent\n");
-			parent = p;
-		}
-		
-		Cell * get_parent() 
-		{
-			return parent;
-		}
-		
-		void update_g(double g1)
-		{
-			g = g1;
-			f = h + g1;
-		}
-		
-		int get_row() 
-		{
-			return row;
-		}
-		
-		int get_col()
-		{
-			return col;
-		}
-		
-		bool get_neighbour(int index, int* x, int* y, double* dist) {
-			switch(index) {
-				case 0:
-					if(row > 0 && col > 0) {
-						*x = row - 1;
-						*y = col - 1;
-						*dist = 1.41;
-						return true;
-					} else return false;
-				
-				case 1:
-					if(row > 0) {
-						*x = row - 1;
-						*y = col;
-						*dist = 1;
-						return true;
-					} else return false;
-				
-				case 2:
-					if(row > 0 && col < (size_y - 1)) {
-						*x = row - 1;
-						*y = col + 1;
-						*dist = 1.41;
-						return true;
-					} else return false;
+        private:
+                
+                int row;
+                int col;
+                double f; /* Total */ 
+                double g; /* Already paid */
+                double h; /* Manhattan && distance value */
+                Cell * parent;
+        
+        public:
+        
+                Cell(int r, int c, double gg = 0, double hh = 0) : g(gg), h(hh)
+                {
+                        row = r;
+                        col = c;
+                        parent = NULL;
+                        f = g + h;
+                        
+                        return;
+                }
+                
+                double get_f() {return f;}
+                double get_g() {return g;}
+                double get_h() {return h;}
+                
+                void set_parent(Cell * p)
+                {
+                        if (p == NULL) printf("Passed an invalid parent\n");
+                        parent = p;
+                }
+                
+                Cell * get_parent() 
+                {
+                        return parent;
+                }
+                
+                void update_g(double g1)
+                {
+                        g = g1;
+                        f = h + g1;
+                }
+                
+                int get_row() 
+                {
+                        return row;
+                }
+                
+                int get_col()
+                {
+                        return col;
+                }
+                
+                bool get_neighbour(int index, int* x, int* y, double* dist) {
+                        switch(index) {
+                                case 0:
+                                        if(row > 0 && col > 0) {
+                                                *x = row - 1;
+                                                *y = col - 1;
+                                                *dist = 1.41;
+                                                return true;
+                                        } else return false;
+                                
+                                case 1:
+                                        if(row > 0) {
+                                                *x = row - 1;
+                                                *y = col;
+                                                *dist = 1;
+                                                return true;
+                                        } else return false;
+                                
+                                case 2:
+                                        if(row > 0 && col < (size_y - 1)) {
+                                                *x = row - 1;
+                                                *y = col + 1;
+                                                *dist = 1.41;
+                                                return true;
+                                        } else return false;
 
-				case 3:
-					if(col < (size_y - 1)) {
-						*x = row;
-						*y = col + 1;
-						*dist = 1;
-						return true;
-					} else return false;
-				
-				case 4:
-					if(row < (size_x -1) && col < (size_y - 1)) {
-						*x = row + 1;
-						*y = col + 1;
-						*dist = 1.41;
-						return true;
-					} else return false;
-				
-				case 5:
-					if(row < (size_x -1)) {
-						*x = row + 1;
-						*y = col;
-						*dist = 1;
-						return true;
-					} else return false;
-				
-				case 6:
-					if(row < (size_x -1) && col > 0) {
-						*x = row + 1;
-						*y = col - 1;
-						*dist = 1.41;
-						return true;
-					} else return false;
-				
-				case 7:
-					if(col > 0) {
-						*x = row;
-						*y = col - 1;
-						*dist = 1;
-						return true;
-					} else return false;
+                                case 3:
+                                        if(col < (size_y - 1)) {
+                                                *x = row;
+                                                *y = col + 1;
+                                                *dist = 1;
+                                                return true;
+                                        } else return false;
+                                
+                                case 4:
+                                        if(row < (size_x -1) && col < (size_y - 1)) {
+                                                *x = row + 1;
+                                                *y = col + 1;
+                                                *dist = 1.41;
+                                                return true;
+                                        } else return false;
+                                
+                                case 5:
+                                        if(row < (size_x -1)) {
+                                                *x = row + 1;
+                                                *y = col;
+                                                *dist = 1;
+                                                return true;
+                                        } else return false;
+                                
+                                case 6:
+                                        if(row < (size_x -1) && col > 0) {
+                                                *x = row + 1;
+                                                *y = col - 1;
+                                                *dist = 1.41;
+                                                return true;
+                                        } else return false;
+                                
+                                case 7:
+                                        if(col > 0) {
+                                                *x = row;
+                                                *y = col - 1;
+                                                *dist = 1;
+                                                return true;
+                                        } else return false;
 
-				default:
-					return false;
-			}
-		} 
+                                default:
+                                        return false;
+                        }
+                } 
 };
 
 void path_generator(Cell * curr)
@@ -293,25 +293,25 @@ void path_generator(Cell * curr)
 
 class CellComparator
 {
-	public:
-		bool operator()(Cell * c1, Cell * c2)
-		{
-			if(c1->get_f() > c2->get_f())
-				return true;
-			else if((c1->get_f() == c2->get_f()) && (c1->get_h() > c2->get_h()))
-				return true;
-			
-			return false;
-		}
+        public:
+                bool operator()(Cell * c1, Cell * c2)
+                {
+                        if(c1->get_f() > c2->get_f())
+                                return true;
+                        else if((c1->get_f() == c2->get_f()) && (c1->get_h() > c2->get_h()))
+                                return true;
+                        
+                        return false;
+                }
 };
 
 double convert(int x, int y, std::vector<double> map, int size_y) {
-	return map[size_y*(size_y - 1 - x) + y];
+        return map[size_y*(size_y - 1 - x) + y];
 }
-	
+        
 void velCallback(const geometry_msgs::Twist::ConstPtr& msg) {
-	//geometry_msgs::Twist twist;
-	vel2_pub.publish(msg);
+        //geometry_msgs::Twist twist;
+        vel2_pub.publish(msg);
 }
 
 void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
@@ -388,10 +388,10 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 	}
 	*/
 
-	priority_queue<Cell *, vector<Cell *>, CellComparator> open_set[2];
-	vector<Cell *> closed_set;
+        priority_queue<Cell *, vector<Cell *>, CellComparator> open_set[2];
+        vector<Cell *> closed_set;
 
-	int pq = 0;
+        int pq = 0;
 
 	double h_s = manhattan[25][25];
 	if (convert(25, 25, map, size_y) < SAFE_DISTANCE) 
@@ -468,35 +468,35 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 			
 			Cell * y = NULL;
 
-			while (!open_set[pq].empty()) {
-				Cell * e = open_set[pq].top();
-				open_set[pq].pop();
-				if (pq == 0)
-					open_set[1].push(e);
-				else 
-					open_set[0].push(e);
-				
-				if (e->get_col() == c && e->get_row() == r) {
-					y = e;
-					exists = true;
-				}
-			}
+                        while (!open_set[pq].empty()) {
+                                Cell * e = open_set[pq].top();
+                                open_set[pq].pop();
+                                if (pq == 0)
+                                        open_set[1].push(e);
+                                else 
+                                        open_set[0].push(e);
+                                
+                                if (e->get_col() == c && e->get_row() == r) {
+                                        y = e;
+                                        exists = true;
+                                }
+                        }
 
-			if (pq == 0)
-				pq = 1;
-			else pq = 0;
-			
-			// 
-			if (!exists) {
-				double h = manhattan[r][c];
-				if (convert(r, c, map, size_y) < 2) h += 10000000;
-				else if (convert(r, c, map, size_y) < SAFE_DISTANCE) 
-					h += MAX_PENALITY - convert(r, c, map, size_y);
-				y = new Cell(r, c, tentative_g, h);
-				better = true;
-				open_set[pq].push(y);
-				y->set_parent(current_cell);
-				if (y->get_parent() == NULL) printf("Invalid setted parent\n");
+                        if (pq == 0)
+                                pq = 1;
+                        else pq = 0;
+                        
+                        // 
+                        if (!exists) {
+                                double h = manhattan[r][c];
+                                if (convert(r, c, map, size_y) < 2) h += 10000000;
+                                else if (convert(r, c, map, size_y) < SAFE_DISTANCE) 
+                                        h += MAX_PENALITY - convert(r, c, map, size_y);
+                                y = new Cell(r, c, tentative_g, h);
+                                better = true;
+                                open_set[pq].push(y);
+                                y->set_parent(current_cell);
+                                if (y->get_parent() == NULL) printf("Invalid setted parent\n");
 
 			} else if (tentative_g < y->get_g()) {
 				better = true;
@@ -516,29 +516,29 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 }
 
 void occupancyCallback(const occupancy_map::OccupancyMap::ConstPtr& msg) {
-	
-	for (int i = 0; i < msg->size_y; i++)
-		for (int j = 0; j < msg->size_x; j++) {
-			if (msg->map[i*msg->size_x+j])
-				occupancy[j][msg->size_y -1 - i] = 1;
-			else occupancy[j][msg->size_y -1 - i] = 0;
-		}
-	
-	if (!enabled) {
-		
-		std::vector<int> matrix(size_x*size_y);
-		for (int j = 0; j < size_y; j++)
-			for (int i = 0; i < size_x; i++)
-				matrix[j*size_x+i] = occupancy[j][i];
-		
-		safe_teleop::TrajectoryMap msg;
-		msg.size_x = size_x;
-		msg.size_y = size_y;
-		msg.map = matrix;
+        
+        for (int i = 0; i < msg->size_y; i++)
+                for (int j = 0; j < msg->size_x; j++) {
+                        if (msg->map[i*msg->size_x+j])
+                                occupancy[j][msg->size_y -1 - i] = 1;
+                        else occupancy[j][msg->size_y -1 - i] = 0;
+                }
+        
+        if (!enabled) {
+                
+                std::vector<int> matrix(size_x*size_y);
+                for (int j = 0; j < size_y; j++)
+                        for (int i = 0; i < size_x; i++)
+                                matrix[j*size_x+i] = occupancy[j][i];
+                
+                safe_teleop::TrajectoryMap msg;
+                msg.size_x = size_x;
+                msg.size_y = size_y;
+                msg.map = matrix;
 
-		traj_pub.publish(msg);
-			
-	}
+                traj_pub.publish(msg);
+                        
+        }
 
 }
 
@@ -608,20 +608,20 @@ void buttonCallback(const sensor_msgs::Joy::ConstPtr& msg)
 }
 
 int main(int argc, char **argv) {
-	init(argc, argv, "safe_teleop");
-	NodeHandle n;
-	distance_sub = n.subscribe("distance_map", 1, distanceCallback);
-	occupancy_sub = n.subscribe("occupancy_map", 1, occupancyCallback);
-	vel_sub = n.subscribe("vel_gate", 1, velCallback); 
-	vel_pub = n.advertise<geometry_msgs::Twist>("vel", 1);
-	vel2_pub = n.advertise<geometry_msgs::Twist>("cmd_vel", 1);
-	traj_pub = n.advertise<safe_teleop::TrajectoryMap>("trajectory_map", 1);
-	button_sub = n.subscribe("joy", 1, buttonCallback); 
-	odom_sub = n.subscribe("/base_scan", 100, updateOdomCallback);
-	
-	listener = new tf::TransformListener;
-	
-	spin(); 
+        init(argc, argv, "safe_teleop");
+        NodeHandle n;
+        distance_sub = n.subscribe("distance_map", 1, distanceCallback);
+        occupancy_sub = n.subscribe("occupancy_map", 1, occupancyCallback);
+        vel_sub = n.subscribe("vel_gate", 1, velCallback); 
+        vel_pub = n.advertise<geometry_msgs::Twist>("vel", 1);
+        vel2_pub = n.advertise<geometry_msgs::Twist>("cmd_vel", 1);
+        traj_pub = n.advertise<safe_teleop::TrajectoryMap>("trajectory_map", 1);
+        button_sub = n.subscribe("joy", 1, buttonCallback); 
+        odom_sub = n.subscribe("/base_scan", 100, updateOdomCallback);
+        
+        listener = new tf::TransformListener;
+        
+        spin(); 
 
-	return 0;
+        return 0;
 }

@@ -6,7 +6,7 @@
 #include <stdio.h>
 
 #include "rosnode.h"
-#include "rosnode.moc"
+//#include "rosnode.moc"
 
 RosNode::RosNode(int argc, char** argv ) :
 	init_argc(argc),
@@ -65,7 +65,7 @@ void RosNode::occupancyCallback(const occupancy_map::OccupancyMap::ConstPtr &msg
 				occ_map->setPixel(j, msg->size_y -1 - i, false);
 				//occ_map->setPixel(j, i, false);
 		}
-	occ_map->update();
+	//occ_map->update();
 }
 
 void RosNode::distanceCallback(const distance_map::DistanceMap::ConstPtr &msg) {
@@ -74,7 +74,7 @@ void RosNode::distanceCallback(const distance_map::DistanceMap::ConstPtr &msg) {
 			dist_map->setPixel(j, msg->size_y -1 - i, msg->map[i*msg->size_x+j]);
 			//emit setDistancePixel(j, msg->size_y -1 - i, msg->map[i*msg->size_x+j]);
 		}
-	dist_map->update();
+	//distance_map->update();
 }
 
 void RosNode::gradientCallback(const gradient_map::GradientMap::ConstPtr &msg) {
@@ -105,14 +105,14 @@ void RosNode::gradientCallback(const gradient_map::GradientMap::ConstPtr &msg) {
 		}
 	//ROS_INFO("Min: %f", min);
 	//ROS_INFO("Max: %f", max);
-	grad_map->update();
+	//grad_map->update();
 }
 
 void RosNode::trajectoryCallback(const safe_teleop::TrajectoryMap::ConstPtr &msg) {
-	for (int i = 0; i < msg->size_y; i++)
-		for (int j = 0; j < msg->size_x; j++) {
-			traj_map->setPixel(i, j, msg->map[i*msg->size_x+j]);
-			//emit setDistancePixel(j, msg->size_y -1 - i, msg->map[i*msg->size_x+j]);
-		}
-	traj_map->update();
+		for (int i = 0; i < msg->size_y; i++)
+			for (int j = 0; j < msg->size_x; j++) {
+				traj_map->setPixel(i, j, msg->map[i*msg->size_x+j]);
+				//emit setDistancePixel(j, msg->size_y -1 - i, msg->map[i*msg->size_x+j]);
+			}
+		traj_map->update();
 }
