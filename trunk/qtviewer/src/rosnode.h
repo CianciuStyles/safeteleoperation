@@ -14,7 +14,7 @@
 #include "trajectory_map.h"
 
 class RosNode : public QThread {
-	Q_OBJECT
+	//Q_OBJECT
 	public:
 		RosNode(int argc, char **argv);
 		~RosNode();
@@ -39,12 +39,12 @@ class RosNode : public QThread {
 		DistanceMap * dist_map;
 		GradientMap * grad_map;
 		TrajectoryMap * traj_map;
-	signals:
+	/*signals:
 		void setOccupancyPixel(int x, int y);
 		void unsetOccupancyPixel(int x, int y);
 		void setDistancePixel(int x, int y, double color);
 		void setGradientPixel(int x, int y);
-		void unsetGradientPixel(int x, int y);
+		void unsetGradientPixel(int x, int y);*/
 };
 
 #endif

@@ -2,7 +2,7 @@
 #include <QColor>
 #include <QPolygon>
 #include "gradient_map.h"
-#include "gradient_map.moc"
+//#include "gradient_map.moc"
 #include "settings.h"
 #include <stdio.h>
 

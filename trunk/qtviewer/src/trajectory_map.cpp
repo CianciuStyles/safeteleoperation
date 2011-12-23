@@ -2,7 +2,7 @@
 #include <QColor>
 #include <stdio.h>
 #include "trajectory_map.h"
-#include "trajectory_map.moc"
+//#include "trajectory_map.moc"
 #include "settings.h"
 
 TrajectoryMap::TrajectoryMap(QWidget *parent, Qt::WFlags f) : QWidget(parent, f) {
@@ -43,7 +43,7 @@ void TrajectoryMap::paintEvent(QPaintEvent *event) {
 	
 	/* draw the robot in the center */
 	p.setBrush(Qt::blue);
-	QRect robot = QRect((rows/2 - 2)*PIXEL_SIZE, (cols/2 -2)*PIXEL_SIZE, 4*PIXEL_SIZE, 4*PIXEL_SIZE);
+	QRect robot = QRect((rows/2 - 2)*PIXEL_SIZE, (cols/2 - 2)*PIXEL_SIZE, 4*PIXEL_SIZE, 4*PIXEL_SIZE);
 	p.drawRect(robot);
 }
 
