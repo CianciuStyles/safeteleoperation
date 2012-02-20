@@ -50,7 +50,7 @@ void DistanceMap::paintEvent(QPaintEvent *event) {
 	pw.setPen(Qt::gray);
 	
 	/* draw pixels according to distances */
-	for (int k = 0; k < rows; k++)
+	for (int k = 0; k < rows; k++) {
 		for (int w = 0; w < cols; w++) {
 			QRect rect = QRect(k*PIXEL_SIZE, w*PIXEL_SIZE, PIXEL_SIZE, PIXEL_SIZE);
 			double c = pixels[k][w];
@@ -68,11 +68,15 @@ void DistanceMap::paintEvent(QPaintEvent *event) {
 				painters[g/10]->drawRect(rect);
 			}
 		}
-	
+	}
+		
 	/* draw the robot in the center */
 	p.setBrush(Qt::blue);
 	QRect robot = QRect((rows/2 - 2)*PIXEL_SIZE, (cols/2 -2)*PIXEL_SIZE, 4*PIXEL_SIZE, 4*PIXEL_SIZE);
 	p.drawRect(robot);
+	
+	//printf("Draw robot");
+	
 }
 
 void DistanceMap::drawDistancePixel(int x, int y, double color) {

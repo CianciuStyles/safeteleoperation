@@ -51,7 +51,7 @@ int main(int argc, char *argv[]){
    printf("Will rumble now...\n");
    
    /* Make it rumble */
-   joyrumble(1,100,100,1000);
+   joyrumble(2,100,100,1000);
 
    sleep(2);
 

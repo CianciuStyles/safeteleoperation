@@ -38,7 +38,7 @@ tf::TransformListener * listener = 0;
 bool enabled = false;
 int occupancy[50][50];
 
-#define SAFE_DISTANCE 4
+#define SAFE_DISTANCE 5
 #define MAX_PENALITY 12
 #define CELL_RESOLUTION 10
 
@@ -184,7 +184,7 @@ void path_generator(Cell * curr)
 	while (curr != NULL) {
 		last = curr;
 		occupancy[curr->get_col()][curr->get_row()] = 10;
-		printf("[%d,%d] ", curr->get_row(), curr->get_col());
+		//printf("[%d,%d] ", curr->get_row(), curr->get_col());
 		curr = curr->get_parent();
 		if (curr != NULL && curr->get_parent() != NULL && curr->get_parent()->get_parent() != NULL)
 			next_move = curr;
@@ -310,10 +310,12 @@ double convert(int x, int y, std::vector<double> map, int size_y) {
 }
         
 void velCallback(const geometry_msgs::Twist::ConstPtr& msg) {
-        //geometry_msgs::Twist twist;
-        vel2_pub.publish(msg);
+    if (!enabled) // Autopilot?
+		vel_pub.publish(msg);
 }
 
+int skipped = 0;
+bool last_skipped = false;
 void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 
 	if (!enabled) return;
@@ -322,20 +324,36 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 	double dy = 0; 
 	double dz = current_z - start_z;
 	
-	if (i++ > 0 && dx == 0 && dy == 0 && dz == 0) return;
+	if (last_skipped && skipped > 20) {
+		
+		enabled = false;
+		i = 0;
+		old_tx = 0;
+		old_ty = 20;
+		ROS_INFO("Autopilot failed[4] :(");
+		return;
+		
+	}
+	
+	if (i++ > 0 && dx == 0 && dy == 0 && dz == 0) {
+		skipped++;
+		last_skipped = true;
+		return;
+	}
 	dz = -dz;
+	last_skipped = false;
 
-	ROS_INFO("Current: %f %f %f - START: %f %f %f", 
-					current_x, current_y, current_z,
-					start_x, start_y, start_z);
+	//ROS_INFO("Current: %f %f %f - START: %f %f %f", 
+	//				current_x, current_y, current_z,
+	//				start_x, start_y, start_z);
 	
 	
 	double t_x = (target_col-25)*cos(dz) - (25-target_row)*sin(dz);
 	double t_y = (target_col-25)*sin(dz) + (25-target_row)*cos(dz);
 	
-	ROS_INFO("TARGET INITIAL: %f %f %f %f", (target_col-25), (25-target_row), target_col, target_row);
-	ROS_INFO("T_x: %f = %f - %f", t_x, (target_col-25)*cos(dz), (25-target_row)*sin(dz));
-	ROS_INFO("T_y: %f = %f + %f", t_y, (target_col-25)*sin(dz), (25-target_row)*cos(dz));
+	//ROS_INFO("TARGET INITIAL: %f %f %f %f", (target_col-25), (25-target_row), target_col, target_row);
+	//ROS_INFO("T_x: %f = %f - %f", t_x, (target_col-25)*cos(dz), (25-target_row)*sin(dz));
+	//ROS_INFO("T_y: %f = %f + %f", t_y, (target_col-25)*sin(dz), (25-target_row)*cos(dz));
 	
 	target_row = target_row + (old_ty - t_y); //row
 	target_col = target_col + (t_x - old_tx); //col
@@ -349,14 +367,22 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 	start_y = current_y;
 	start_z = current_z;
 	
-	ROS_INFO("Di: %f %f %f - TARGET: %.1f %.1f - DISTANCE %.1f", dx, dy, dz, target_row, target_col, 
-				sqrt((25-target_row)*(25-target_row)+(25-target_col)*(25-target_col)));
+	//ROS_INFO("Di: %f %f %f - TARGET: %.1f %.1f - DISTANCE %.1f", dx, dy, dz, target_row, target_col, 
+	//			sqrt((25-target_row)*(25-target_row)+(25-target_col)*(25-target_col)));
 	
 	int a_row = (int) round(target_row);
 	int a_col = (int) round(target_col);
 	
-	if (target_row < 0 || target_row > 49 || target_col < 0 || target_col > 49)
-		exit(1);
+	if (target_row < 0 || target_row > 49 || target_col < 0 || target_col > 49) {
+		//exit(1);
+		enabled = false;
+		i = 0;
+		old_tx = 0;
+		old_ty = 20;
+		ROS_INFO("Autopilot failed[5] :(");
+		return;
+	}
+	
 	
 	int size_x = msg->size_x, size_y = msg->size_y;
 	vector<double> map = msg->map;
@@ -410,8 +436,21 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 	open_set[pq].push(start_cell);
 	
 	int k = 0;
+	int curr_iter = 0;
+	int max_iter = 15000;
 	
 	while(!open_set[pq].empty()) {
+		
+		ROS_INFO("A* iteration: %d", ++curr_iter);
+		
+		if (curr_iter >= max_iter) {
+			enabled = false;
+			i = 0;
+			old_tx = 0;
+			old_ty = 20;
+			ROS_INFO("Autopilot failed :(");
+			return;
+		} 
 		
 		Cell * current_cell = open_set[pq].top();
 		
@@ -489,7 +528,7 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
                         // 
                         if (!exists) {
                                 double h = manhattan[r][c];
-                                if (convert(r, c, map, size_y) < 2) h += 10000000;
+                                if (convert(r, c, map, size_y) <= 2) h += 10000000;
                                 else if (convert(r, c, map, size_y) < SAFE_DISTANCE) 
                                         h += MAX_PENALITY - convert(r, c, map, size_y);
                                 y = new Cell(r, c, tentative_g, h);
@@ -513,6 +552,14 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 		
 	}
 	
+	/*
+	enabled = false;
+	i = 0;
+	old_tx = 0;
+	old_ty = 20;
+	ROS_INFO("Autopilot failed[2] :(");
+	return;
+	*/
 }
 
 void occupancyCallback(const occupancy_map::OccupancyMap::ConstPtr& msg) {
@@ -569,10 +616,16 @@ void updateOdomCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 
 void buttonCallback(const sensor_msgs::Joy::ConstPtr& msg)
 {
+
+	if (msg->buttons[2] > 0 && enabled)
+		return;
+	
 	if (msg->buttons[2] > 0) {
 		
 		printf("Enabled autopilot\n");
 		enabled = true;
+		skipped = 0;
+		last_skipped = false;
 		
 		std::string frame_id = robot_frame;
 		ros::Time t = msg->header.stamp;
