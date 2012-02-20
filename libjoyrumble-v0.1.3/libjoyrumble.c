@@ -51,9 +51,9 @@
 */
 
 /* Uncomment this if you want to add debug messages. */
-/*
+
 #define DEBUG 1
-*/
+
 
 /*  Includes */
 #include <stdio.h>
@@ -64,6 +64,7 @@
 #include <pthread.h> 
 #include <sys/ioctl.h>
 #include <linux/input.h>
+#include <errno.h>
 
 /* test_bit  : Courtesy of Johan Deneux */
 #define BITS_PER_LONG (sizeof(long) * 8)
@@ -158,15 +159,15 @@ void __attribute__ ((constructor)) joyrumble_init(void)
 				/* Store the full path of the event file in the eventfile[] array */
 				sprintf(tmp,"/dev/input/event%d",j);
 				eventfile[count]=(char *)calloc(sizeof(tmp),sizeof(char));
-				sprintf(eventfile[count],tmp);
+				sprintf(eventfile[count], "%s", tmp);
 				#ifdef DEBUG
-					printf(eventfile[count]);
+					printf("%s", eventfile[count]);
 					printf("\n");
 				#endif
 				}
 			}
 		
-		}
+		} // else printf("Joystick does not exist!");
 		
 	}
 	
@@ -227,7 +228,7 @@ void __attribute__ ((constructor)) joyrumble_init(void)
 	}
 
 	#ifdef DEBUG
-		printf(eventfile[count]);
+		printf("%s", eventfile[count]);
 	
 		if (hasrumble[count]){
 			printf(" can rumble.\n");
@@ -260,12 +261,12 @@ void *joyrumble_internal(void *arg)
 	#endif
 	
 	#ifdef DEBUG
-		printf(eventfile[joy]);
+		printf("%s", eventfile[joy]);
 		printf("\n");
 		printf("Joy#:%d\n",joy);
-		printf("Strong:%d\n",int_strong[joy]));
-		printf("Weak:%d\n",int_weak[joy]));
-		printf("Duration:%d\n",int_duration[joy]));
+		printf("Strong:%d\n",int_strong[joy]);
+		printf("Weak:%d\n",int_weak[joy]);
+		printf("Duration:%d\n",int_duration[joy]);
 	#endif
 	
 	/* Open the event file */
@@ -291,7 +292,7 @@ void *joyrumble_internal(void *arg)
 	/* Send the effect to the driver */
 	if (ioctl(event_fd, EVIOCSFF, &effects[joy]) == -1) {
 		#ifdef DEBUG
-			fprintf(stderr, "%s: failed to upload effect: %s\n", 
+			fprintf(stderr, "%s: failed to upload effect: %d\n", 
 				eventfile[joy], strerror(errno));
 		#endif
 	}
@@ -383,7 +384,7 @@ int main(int argc, char *argv[]){
 	
   if (argc < 5)
     {
-	  printf("JOYRUMBLE\nUsage: joyrumble [ joystick (1-8) ]  [strong motor magnitude (%) ]  [weak motor magnitude (%) ]  [duration (miliseconds) ]\n");
+	  printf("JOYRUMBLE\nUsage: joyrumble [ joystick (1-8) ]  [strong motor magnitude (%%) ]  [weak motor magnitude (%%) ]  [duration (miliseconds) ]\n");
 	return 0;
     }
 

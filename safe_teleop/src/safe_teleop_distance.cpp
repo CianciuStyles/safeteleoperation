@@ -44,12 +44,12 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 	//Vector of cells of the distance map just received.
 	std::vector<double> map = msg->map;
 	
-	near_cells[0] = map[(size_y/2 + 2)*size_x + (size_y/2 - 3)];
+	//near_cells[0] = map[(size_y/2 + 2)*size_x + (size_y/2 - 3)];
 	near_cells[1] = map[(size_y/2 + 2)*size_x + (size_y/2 - 2)];
 	near_cells[2] = map[(size_y/2 + 2)*size_x + (size_y/2 - 1)];
 	near_cells[3] = map[(size_y/2 + 2)*size_x + (size_y/2)];
 	near_cells[4] = map[(size_y/2 + 2)*size_x + (size_y/2 + 1)];
-	near_cells[5] = map[(size_y/2 + 2)*size_x + (size_y/2 + 2)];
+	//near_cells[5] = map[(size_y/2 + 2)*size_x + (size_y/2 + 2)];
 	
 /*
 	near_cells[6] = map[(size_y/2 + 1)*size_x + (size_y/2 + 2)];
@@ -73,7 +73,7 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 	double min_back;
 	double min = 100;
 	int index = 0;
-	for (int i = 1; i < 5; i ++) {
+	for (int i = 2; i < 4; i ++) { //modified
 		if (near_cells[i] < min) {
 			min = near_cells[i];
 			index = i;		
@@ -100,11 +100,11 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 
 		//if(min <= 2) new_vel=0;		
 		
-		new_vel = pow(1.1,min-2)-1; 
+		new_vel = pow(1.25,min-2)-1; //modified 
 		
 		if(new_vel < 0) new_vel=0;
 		//Maximum vel fixed at 1.3 m/s		
-		else if(new_vel >=1.1) new_vel=1.1;
+		else if(new_vel >=1.2) new_vel=1.2; //modified
 		
 }
 
