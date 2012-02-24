@@ -38,8 +38,9 @@ tf::TransformListener * listener = 0;
 bool enabled = false;
 int occupancy[50][50];
 
-#define SAFE_DISTANCE 5
-#define MAX_PENALITY 12
+#define SAFE_DISTANCE 2.5 // Cell with a distance value less than this is not feasible for a path
+#define PENALTY_DISTANCE 5 // Cell with a distance value less than this, has a h value penalized
+#define MAX_PENALTY 12
 #define CELL_RESOLUTION 10
 
 #ifndef M_PI
@@ -50,133 +51,158 @@ int i = 0;
 
 class Cell
 {
-        private:
-                
-                int row;
-                int col;
-                double f; /* Total */ 
-                double g; /* Already paid */
-                double h; /* Manhattan && distance value */
-                Cell * parent;
-        
-        public:
-        
-                Cell(int r, int c, double gg = 0, double hh = 0) : g(gg), h(hh)
-                {
-                        row = r;
-                        col = c;
-                        parent = NULL;
-                        f = g + h;
-                        
-                        return;
-                }
-                
-                double get_f() {return f;}
-                double get_g() {return g;}
-                double get_h() {return h;}
-                
-                void set_parent(Cell * p)
-                {
-                        if (p == NULL) printf("Passed an invalid parent\n");
-                        parent = p;
-                }
-                
-                Cell * get_parent() 
-                {
-                        return parent;
-                }
-                
-                void update_g(double g1)
-                {
-                        g = g1;
-                        f = h + g1;
-                }
-                
-                int get_row() 
-                {
-                        return row;
-                }
-                
-                int get_col()
-                {
-                        return col;
-                }
-                
-                bool get_neighbour(int index, int* x, int* y, double* dist) {
-                        switch(index) {
-                                case 0:
-                                        if(row > 0 && col > 0) {
-                                                *x = row - 1;
-                                                *y = col - 1;
-                                                *dist = 1.41;
-                                                return true;
-                                        } else return false;
-                                
-                                case 1:
-                                        if(row > 0) {
-                                                *x = row - 1;
-                                                *y = col;
-                                                *dist = 1;
-                                                return true;
-                                        } else return false;
-                                
-                                case 2:
-                                        if(row > 0 && col < (size_y - 1)) {
-                                                *x = row - 1;
-                                                *y = col + 1;
-                                                *dist = 1.41;
-                                                return true;
-                                        } else return false;
+	private:
+			
+		int row;
+		int col;
+		double f; /* Total */ 
+		double g; /* Already paid */
+		double h; /* Manhattan && distance value */
+		Cell * parent;
+	
+	public:
 
-                                case 3:
-                                        if(col < (size_y - 1)) {
-                                                *x = row;
-                                                *y = col + 1;
-                                                *dist = 1;
-                                                return true;
-                                        } else return false;
-                                
-                                case 4:
-                                        if(row < (size_x -1) && col < (size_y - 1)) {
-                                                *x = row + 1;
-                                                *y = col + 1;
-                                                *dist = 1.41;
-                                                return true;
-                                        } else return false;
-                                
-                                case 5:
-                                        if(row < (size_x -1)) {
-                                                *x = row + 1;
-                                                *y = col;
-                                                *dist = 1;
-                                                return true;
-                                        } else return false;
-                                
-                                case 6:
-                                        if(row < (size_x -1) && col > 0) {
-                                                *x = row + 1;
-                                                *y = col - 1;
-                                                *dist = 1.41;
-                                                return true;
-                                        } else return false;
-                                
-                                case 7:
-                                        if(col > 0) {
-                                                *x = row;
-                                                *y = col - 1;
-                                                *dist = 1;
-                                                return true;
-                                        } else return false;
+		Cell(int r, int c, double gg = 0, double hh = 0) : g(gg), h(hh)
+		{
+			row = r;
+			col = c;
+			parent = NULL;
+			f = g + h;
+			
+			return;
+		}
+		
+		double get_f() {return f;}
+		double get_g() {return g;}
+		double get_h() {return h;}
+		
+		void set_parent(Cell * p)
+		{
+			if (p == NULL) printf("Passed an invalid parent\n");
+			parent = p;
+		}
+		
+		Cell * get_parent() 
+		{
+			return parent;
+		}
+		
+		void update_g(double g1)
+		{
+			g = g1;
+			f = h + g1;
+		}
+		
+		int get_row() 
+		{
+			return row;
+		}
+		
+		int get_col()
+		{
+			return col;
+		}
+		
+		bool get_neighbour(int index, int* x, int* y, double* dist) {
+			switch(index) {
+					case 0:
+							if(row > 0 && col > 0) {
+									*x = row - 1;
+									*y = col - 1;
+									*dist = 1.41;
+									return true;
+							} else return false;
+					
+					case 1:
+							if(row > 0) {
+									*x = row - 1;
+									*y = col;
+									*dist = 1;
+									return true;
+							} else return false;
+					
+					case 2:
+							if(row > 0 && col < (size_y - 1)) {
+									*x = row - 1;
+									*y = col + 1;
+									*dist = 1.41;
+									return true;
+							} else return false;
 
-                                default:
-                                        return false;
-                        }
-                } 
+					case 3:
+							if(col < (size_y - 1)) {
+									*x = row;
+									*y = col + 1;
+									*dist = 1;
+									return true;
+							} else return false;
+					
+					case 4:
+							if(row < (size_x -1) && col < (size_y - 1)) {
+									*x = row + 1;
+									*y = col + 1;
+									*dist = 1.41;
+									return true;
+							} else return false;
+					
+					case 5:
+							if(row < (size_x -1)) {
+									*x = row + 1;
+									*y = col;
+									*dist = 1;
+									return true;
+							} else return false;
+					
+					case 6:
+							if(row < (size_x -1) && col > 0) {
+									*x = row + 1;
+									*y = col - 1;
+									*dist = 1.41;
+									return true;
+							} else return false;
+					
+					case 7:
+							if(col > 0) {
+									*x = row;
+									*y = col - 1;
+									*dist = 1;
+									return true;
+							} else return false;
+
+					default:
+							return false;
+			}
+		} 
 };
+
+void reset_astar() {
+	
+	enabled = false;
+	i = 0;
+	old_tx = 0;
+	old_ty = 20;
+	
+}
 
 void path_generator(Cell * curr)
 {
 	if (curr == NULL) return;
+	
+	/*
+	Cell * curr2 = curr;
+	while (curr2 != NULL) { // safe path?
+		
+		if (curr2->get_h() > 10000) { // Invalid cell
+			
+			reset_astar();
+			ROS_INFO("Chosen cell too close to a wall, it's not safe to move");
+			return;
+			
+		} 
+		
+		curr2 = curr2->get_parent();
+	}
+	*/
 	
 	//printf("\n\nPATH: ");
 	Cell * next_move = curr;
@@ -189,19 +215,25 @@ void path_generator(Cell * curr)
 		if (curr != NULL && curr->get_parent() != NULL && curr->get_parent()->get_parent() != NULL)
 			next_move = curr;
 	}
-	printf("\n\n");
+	//printf("\n\n");
 	
-	if (last->get_h() <= 1) {
-		ROS_INFO("Autopilot terminated [2]");
-		enabled = false;
-		i = 0;
-		old_tx = 0;
-		old_ty = 20;
+	// Illegal move?
+	if (next_move->get_h() > 10000) {
+		
+		ROS_INFO("Next move is not safe... we stop here, we did our best!");
+		reset_astar();
+		return;
+		
+	}
+	
+	if (last->get_h() <= 2) {
+		ROS_INFO("Autopilot completed :)");
+		reset_astar();
 		return;
 	}
 	
 	
-	ROS_INFO("Next move: %d %d", next_move->get_row(), next_move->get_col());
+	//ROS_INFO("Next move: %d %d", next_move->get_row(), next_move->get_col());
 	
 	geometry_msgs::Twist cmd;
 	geometry_msgs::Twist cmd2;
@@ -261,12 +293,13 @@ void path_generator(Cell * curr)
 		
 		//ROS_INFO("Error with next move diff: %d %d", dr, dc);
 		//exit(1);
-
-		ROS_INFO("Autopilot terminated [2]");
-		enabled = false;
-		i = 0;
-		old_tx = 0;
-		old_ty = 20;
+		if (next_move->get_h() <= 2) {
+			ROS_INFO("Autopilot completed :)");
+		} else {
+			ROS_INFO("Next move is not near current position!");
+		}
+		
+		reset_astar();
 		return;
 		
 	}
@@ -324,17 +357,15 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 	double dy = 0; 
 	double dz = current_z - start_z;
 	
-	if (last_skipped && skipped > 20) {
+	if (last_skipped && skipped > 40) {
 		
-		enabled = false;
-		i = 0;
-		old_tx = 0;
-		old_ty = 20;
-		ROS_INFO("Autopilot failed[4] :(");
+		reset_astar();
+		ROS_INFO("A* does not find a feasible path :(");
 		return;
 		
 	}
 	
+	// We need to wait for the robot to execute the move action...
 	if (i++ > 0 && dx == 0 && dy == 0 && dz == 0) {
 		skipped++;
 		last_skipped = true;
@@ -342,6 +373,7 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 	}
 	dz = -dz;
 	last_skipped = false;
+	skipped = 0;
 
 	//ROS_INFO("Current: %f %f %f - START: %f %f %f", 
 	//				current_x, current_y, current_z,
@@ -375,14 +407,10 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 	
 	if (target_row < 0 || target_row > 49 || target_col < 0 || target_col > 49) {
 		//exit(1);
-		enabled = false;
-		i = 0;
-		old_tx = 0;
-		old_ty = 20;
-		ROS_INFO("Autopilot failed[5] :(");
+		reset_astar();
+		ROS_INFO("Target out of view :(");
 		return;
 	}
-	
 	
 	int size_x = msg->size_x, size_y = msg->size_y;
 	vector<double> map = msg->map;
@@ -414,22 +442,21 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 	}
 	*/
 
-        priority_queue<Cell *, vector<Cell *>, CellComparator> open_set[2];
-        vector<Cell *> closed_set;
+	priority_queue<Cell *, vector<Cell *>, CellComparator> open_set[2];
+	vector<Cell *> closed_set;
 
-        int pq = 0;
+	int pq = 0;
 
 	double h_s = manhattan[25][25];
+	/*
 	if (convert(25, 25, map, size_y) < SAFE_DISTANCE) 
 		h_s += SAFE_DISTANCE - convert(25, 25, map, size_y);
+	*/
 	Cell * start_cell = new Cell(25, 25, 0, h_s);
 	
-	if (manhattan[25][25] <= 1) {
-		enabled = false;
-		i = 0;
-		old_tx = 0;
-		old_ty = 20;
-		ROS_INFO("Autopilot terminated [1]");
+	if (manhattan[25][25] <= 3) {
+		reset_astar();
+		ROS_INFO("Autopilot completed :)");
 		return;
 	}
 	
@@ -441,14 +468,11 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 	
 	while(!open_set[pq].empty()) {
 		
-		ROS_INFO("A* iteration: %d", ++curr_iter);
+		//ROS_INFO("A* iteration: %d", ++curr_iter);
 		
 		if (curr_iter >= max_iter) {
-			enabled = false;
-			i = 0;
-			old_tx = 0;
-			old_ty = 20;
-			ROS_INFO("Autopilot failed :(");
+			reset_astar();
+			ROS_INFO("Too much iterations... :/");
 			return;
 		} 
 		
@@ -465,7 +489,7 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 						current_cell->get_parent()->get_row(),
 						current_cell->get_parent()->get_col());
 		*/
-		if(current_cell->get_h() == 0) {
+		if(current_cell->get_h() == 0) { // Goal!
 			
 			path_generator(current_cell);
 			
@@ -482,12 +506,14 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 			}
 			
 			return;
-		}
+		
+		} 
 				
 		open_set[pq].pop();
 		closed_set.push_back(current_cell);
 		
 		for (int i = 0; i < 8; i++) {
+			
 			int r;
 			int c;
 			double dist;
@@ -507,35 +533,38 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 			
 			Cell * y = NULL;
 
-                        while (!open_set[pq].empty()) {
-                                Cell * e = open_set[pq].top();
-                                open_set[pq].pop();
-                                if (pq == 0)
-                                        open_set[1].push(e);
-                                else 
-                                        open_set[0].push(e);
-                                
-                                if (e->get_col() == c && e->get_row() == r) {
-                                        y = e;
-                                        exists = true;
-                                }
-                        }
+			while (!open_set[pq].empty()) {
+				Cell * e = open_set[pq].top();
+				open_set[pq].pop();
+				if (pq == 0)
+					open_set[1].push(e);
+				else 
+					open_set[0].push(e);
+				
+				if (e->get_col() == c && e->get_row() == r) {
+					y = e;
+					exists = true;
+				}
+			}
 
-                        if (pq == 0)
-                                pq = 1;
-                        else pq = 0;
-                        
-                        // 
-                        if (!exists) {
-                                double h = manhattan[r][c];
-                                if (convert(r, c, map, size_y) <= 2) h += 10000000;
-                                else if (convert(r, c, map, size_y) < SAFE_DISTANCE) 
-                                        h += MAX_PENALITY - convert(r, c, map, size_y);
-                                y = new Cell(r, c, tentative_g, h);
-                                better = true;
-                                open_set[pq].push(y);
-                                y->set_parent(current_cell);
-                                if (y->get_parent() == NULL) printf("Invalid setted parent\n");
+			if (pq == 0)
+				pq = 1;
+			else pq = 0;
+			
+			// 
+			if (!exists) {
+				
+				double h = manhattan[r][c];
+				if (h > 0) {
+					if (convert(r, c, map, size_y) <= SAFE_DISTANCE) h += 100000;
+					else if (convert(r, c, map, size_y) < PENALTY_DISTANCE) 
+						h += MAX_PENALTY - convert(r, c, map, size_y);
+				}
+				y = new Cell(r, c, tentative_g, h);
+				better = true;
+				open_set[pq].push(y);
+				y->set_parent(current_cell);
+				if (y->get_parent() == NULL) printf("Invalid setted parent\n");
 
 			} else if (tentative_g < y->get_g()) {
 				better = true;
@@ -547,7 +576,7 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 					printf("Wrong set parent\n");
 				y->update_g(tentative_g);
 			}
-			closed_set.push_back(y);
+			//closed_set.push_back(y);
 		}
 		
 	}
@@ -651,7 +680,7 @@ void buttonCallback(const sensor_msgs::Joy::ConstPtr& msg)
 			target_row = 5;
 			target_col = 25;
 			
-			ROS_INFO("Position: %f %f %f", start_x, start_y, start_z);
+			//ROS_INFO("Position: %f %f %f", start_x, start_y, start_z);
 			
 		} else {
 			std::cerr << error << std::endl; 
@@ -670,7 +699,7 @@ int main(int argc, char **argv) {
         vel2_pub = n.advertise<geometry_msgs::Twist>("cmd_vel", 1);
         traj_pub = n.advertise<safe_teleop::TrajectoryMap>("trajectory_map", 1);
         button_sub = n.subscribe("joy", 1, buttonCallback); 
-        odom_sub = n.subscribe("/base_scan", 100, updateOdomCallback);
+        odom_sub = n.subscribe("/base_scan", 1, updateOdomCallback);
         
         listener = new tf::TransformListener;
         

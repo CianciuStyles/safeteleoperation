@@ -366,6 +366,8 @@ void vectorialSum(double firstVector_m, double firstVector_a, double secondVecto
 
 void rumble(int level) {
 	
+	if (atoi(joy_dev_.c_str()) == 0) return;  
+	
 	if (level == 1) // soft
 		joyrumble (atoi(joy_dev_.c_str()), 10, 20, 1000);
 	else if (level == 2) // hard
