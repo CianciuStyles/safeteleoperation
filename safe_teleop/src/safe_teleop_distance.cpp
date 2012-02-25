@@ -104,7 +104,7 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 		
 		if(new_vel < 0) new_vel=0;
 		//Maximum vel fixed at 1.3 m/s		
-		else if(new_vel >=1.2) new_vel=1.2; //modified
+		else if(new_vel >=0.8) new_vel=0.8; //modified
 		
 }
 
