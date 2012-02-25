@@ -39,7 +39,8 @@ bool enabled = false;
 int occupancy[50][50];
 
 #define SAFE_DISTANCE 2.5 // Cell with a distance value less than this is not feasible for a path
-#define PENALTY_DISTANCE 5 // Cell with a distance value less than this, has a h value penalized
+#define PENALTY_DISTANCE 7 // Cell with a distance value less than this, has a h value penalized
+#define PENALTY 10
 #define MAX_PENALTY 12
 #define CELL_RESOLUTION 10
 
@@ -226,7 +227,7 @@ void path_generator(Cell * curr)
 		
 	}
 	
-	if (last->get_h() <= 2) {
+	if (last->get_h() <= 3.5) {
 		ROS_INFO("Autopilot completed :)");
 		reset_astar();
 		return;
@@ -558,7 +559,8 @@ void distanceCallback(const distance_map::DistanceMap::ConstPtr& msg) {
 				if (h > 0) {
 					if (convert(r, c, map, size_y) <= SAFE_DISTANCE) h += 100000;
 					else if (convert(r, c, map, size_y) < PENALTY_DISTANCE) 
-						h += MAX_PENALTY - convert(r, c, map, size_y);
+						//h += MAX_PENALTY - convert(r, c, map, size_y);
+						h += (PENALTY_DISTANCE - convert(r, c, map, size_y)) * PENALTY;
 				}
 				y = new Cell(r, c, tentative_g, h);
 				better = true;
@@ -645,9 +647,16 @@ void updateOdomCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 
 void buttonCallback(const sensor_msgs::Joy::ConstPtr& msg)
 {
-
-	if (msg->buttons[2] > 0 && enabled)
+	
+	if (msg->buttons[2] > 0 && enabled) {
+		
+		/*
+		reset_astar();
+		ROS_INFO("Disabled autopilot");
+		*/
 		return;
+	}
+	
 	
 	if (msg->buttons[2] > 0) {
 		
