@@ -30,7 +30,15 @@ void DistanceMap::paintEvent(QPaintEvent *event) {
 	
 	//printf("Redraw...\n");
 	QPainter p(this);
+ 	
+	QPainter pb(this);
+	pb.setBrush(Qt::black);
+	pb.setPen(Qt::gray);
 	
+	QPainter pw(this);
+	pw.setBrush(Qt::transparent);
+	pw.setPen(Qt::gray);
+
 	int rows = MAP_WIDTH/PIXEL_SIZE;
 	int cols = MAP_HEIGHT/PIXEL_SIZE;
 	
@@ -40,14 +48,6 @@ void DistanceMap::paintEvent(QPaintEvent *event) {
 			p.drawLine (i, 0, i, MAP_HEIGHT);
 	for (int j = 0; j <= MAP_HEIGHT; j+=PIXEL_SIZE)
 			p.drawLine (0, j, MAP_WIDTH, j);
-	
-	QPainter pb(this);
-	pb.setBrush(Qt::black);
-	pb.setPen(Qt::gray);
-	
-	QPainter pw(this);
-	pw.setBrush(Qt::transparent);
-	pw.setPen(Qt::gray);
 	
 	/* draw pixels according to distances */
 	for (int k = 0; k < rows; k++) {
