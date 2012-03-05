@@ -4,6 +4,7 @@
 	<node name="distance_map" pkg="distance_map" type="distance_map_generator"/>
 	<node name="gradient_map" pkg="gradient_map" type="gradient_map_generator"/>
 	<node name="safe_teleop" pkg="safe_teleop" type="safe_teleop" output="screen">
+    <!-- insert N+1 according to your joystick device /dev/input/jsN (e.g. js1 => value=2) - 0 disables rumbling -->
 		<param name="dev" type="string" value="2" />
 	</node>
 	<node name="safe_gate" pkg="safe_teleop" type="safe_gate"  output="screen"/>
